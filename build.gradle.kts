@@ -21,6 +21,13 @@ repositories {
 }
 
 dependencies {
+    // Plugins
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    compileOnly("com.palmergames.bukkit.towny:towny:0.98.1.0")
+    compileOnly("me.clip:placeholderapi:2.11.6")
+
+    // Internal
+    compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
@@ -28,11 +35,7 @@ dependencies {
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
     implementation("org.bstats:bstats-bukkit:3.0.2")
 
-    compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
-    compileOnly("com.palmergames.bukkit.towny:towny:0.98.1.0")
-    compileOnly("me.clip:placeholderapi:2.11.6")
-
+    // Tests
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
     testImplementation(platform("org.junit:junit-bom:5.11.4"))
     testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.0.0")
