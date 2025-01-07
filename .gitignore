@@ -135,3 +135,7 @@ server*
 # direnv
 .envrc
 .direnv
+/gradlew
+/gradlew.bat
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties
