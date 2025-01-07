@@ -1,50 +1,21 @@
-package confusedalex.thegoldeconomy;
+package confusedalex.thegoldeconomy
 
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion
+import org.bukkit.OfflinePlayer
 
-public class Placeholders extends PlaceholderExpansion {
-  private final TheGoldEconomy plugin;
+class Placeholders(private val plugin: TheGoldEconomy) : PlaceholderExpansion() {
+    override fun getIdentifier() = "thegoldeconomy"
 
-  public Placeholders(TheGoldEconomy plugin) {
-    this.plugin = plugin;
-  }
+    override fun getAuthor() = "confusedalex"
 
-  @Override
-  public @NotNull String getIdentifier() {
-    return "thegoldeconomy";
-  }
+    override fun getVersion() = plugin.description.version
 
-  @Override
-  public @NotNull String getAuthor() {
-    return "confusedalex";
-  }
+    override fun persist() = true
 
-  @Override
-  public @NotNull String getVersion() {
-    return plugin.getDescription().getVersion();
-  }
-
-  @Override
-  public boolean persist() {
-    return true;
-  }
-
-  @Override
-  public String onRequest(OfflinePlayer player, @NotNull String params) {
-    if (params.equalsIgnoreCase("inventoryBalance")) {
-      return Integer.toString(plugin.eco.converter.getInventoryValue(player.getPlayer()));
+    override fun onRequest(player: OfflinePlayer, params: String) = when (params.lowercase()) {
+        "inventorybalance" -> plugin.eco.converter.getInventoryValue(player.player).toString()
+        "bankbalance" -> plugin.eco.bank.getAccountBalance(player.uniqueId).toString()
+        "totalbalance" -> plugin.eco.bank.getTotalPlayerBalance(player.uniqueId).toString()
+        else -> null
     }
-
-    if (params.equalsIgnoreCase("bankBalance")) {
-      return Integer.toString(plugin.eco.bank.getAccountBalance(player.getUniqueId()));
-    }
-
-    if (params.equalsIgnoreCase("totalBalance")) {
-      return Integer.toString(plugin.eco.bank.getTotalPlayerBalance(player.getUniqueId()));
-    }
-
-    return null;
-  }
 }
