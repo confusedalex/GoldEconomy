@@ -104,3 +104,4 @@ configurations {
         extendsFrom(configurations.compileOnly.get())
         exclude("org.spigotmc", "spigot-api")
     }
+}
