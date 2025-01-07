@@ -2,7 +2,6 @@ package confusedalex.thegoldeconomy;
 
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
-import org.apache.commons.lang.LocaleUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,11 +9,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public final class TheGoldEconomy extends JavaPlugin {
+public class TheGoldEconomy extends JavaPlugin {
   EconomyImplementer eco;
-  private VaultHook vaultHook;
   Util util;
   ResourceBundle bundle;
+    private VaultHook vaultHook;
 
   @Override
   public void onEnable() {
