@@ -85,7 +85,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
                 util.sendMessageToPlayer(bundle.getString("error.payyourself"), sender)
                 return
             }
-            Util.isOfflinePlayer(target.name).isEmpty -> {
+            util.isOfflinePlayer(target.name.toString()).isEmpty -> {
                 util.sendMessageToPlayer(bundle.getString("error.noplayer"), sender)
                 return
             }
