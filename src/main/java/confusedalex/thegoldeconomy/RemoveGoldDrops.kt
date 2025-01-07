@@ -1,37 +1,18 @@
-package confusedalex.thegoldeconomy;
+package confusedalex.thegoldeconomy
 
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.Material
+import org.bukkit.entity.EntityType
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDeathEvent
 
-public class RemoveGoldDrops implements Listener {
+class RemoveGoldDrops : Listener {
+    private fun shouldRemove(material: Material) = material.name.startsWith("GOLD")
 
-  private boolean shouldRemove(Material material) {
-    switch (material) {
-      case GOLD_BLOCK:
-      case GOLD_INGOT:
-      case GOLD_NUGGET:
-      case GOLDEN_BOOTS:
-      case GOLDEN_LEGGINGS:
-      case GOLDEN_CHESTPLATE:
-      case GOLDEN_HELMET:
-      case GOLDEN_AXE:
-      case GOLDEN_PICKAXE:
-      case GOLDEN_SHOVEL:
-      case GOLDEN_HOE:
-      case GOLDEN_SWORD:
-        return true;
-      default:
-        return false;
+    @EventHandler
+    fun entityDeathEvent(e: EntityDeathEvent) {
+        if (e.entityType != EntityType.PLAYER) {
+            e.drops.removeIf { shouldRemove(it.type) }
+        }
     }
-  }
-
-  @EventHandler
-  public void entityDeathEvent(EntityDeathEvent e) {
-    if (e.getEntityType().equals(EntityType.PLAYER)) return;
-
-    e.getDrops().removeIf(item -> shouldRemove(item.getType()));
-  }
 }
