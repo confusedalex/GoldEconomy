@@ -89,6 +89,10 @@ tasks {
         from("LICENSE")
         minimize()
     }
+
+    test {
+        useJUnitPlatform()
+    }
 }
 
 configurations {
