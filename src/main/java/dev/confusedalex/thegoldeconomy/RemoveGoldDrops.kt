@@ -1,4 +1,4 @@
-package confusedalex.thegoldeconomy
+package dev.confusedalex.thegoldeconomy
 
 import org.bukkit.Material
 import org.bukkit.entity.EntityType

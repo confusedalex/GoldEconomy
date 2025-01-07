@@ -1,4 +1,4 @@
-package confusedalex.thegoldeconomy
+package dev.confusedalex.thegoldeconomy
 
 import co.aikar.commands.BaseCommand
 import co.aikar.commands.CommandHelp

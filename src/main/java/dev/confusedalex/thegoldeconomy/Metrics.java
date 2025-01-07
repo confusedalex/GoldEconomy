@@ -13,7 +13,7 @@
  * Violations will result in a ban of your plugin and account from bStats.
  */
 
-package confusedalex.thegoldeconomy;
+package dev.confusedalex.thegoldeconomy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;

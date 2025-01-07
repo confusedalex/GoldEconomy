@@ -1,4 +1,4 @@
-package confusedalex.thegoldeconomy
+package dev.confusedalex.thegoldeconomy
 
 import com.palmergames.bukkit.towny.TownyAPI
 import com.palmergames.bukkit.towny.`object`.TownBlockType

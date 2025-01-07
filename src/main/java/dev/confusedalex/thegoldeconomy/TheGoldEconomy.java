@@ -1,4 +1,4 @@
-package confusedalex.thegoldeconomy;
+package dev.confusedalex.thegoldeconomy;
 
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;

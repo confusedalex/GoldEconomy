@@ -1,4 +1,4 @@
-package confusedalex.thegoldeconomy
+package dev.confusedalex.thegoldeconomy
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.OfflinePlayer

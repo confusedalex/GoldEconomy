@@ -1,4 +1,4 @@
-package confusedalex.thegoldeconomy;
+package dev.confusedalex.thegoldeconomy;
 
 // 102242
 

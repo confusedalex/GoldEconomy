@@ -6,7 +6,7 @@ author: ConfusedAlex
 api-version: 1.18
 
 # Data
-main: confusedalex.thegoldeconomy.TheGoldEconomy
+main: dev.confusedalex.thegoldeconomy.TheGoldEconomy
 softdepend: [PlaceholderAPI]
 loadbefore: [Towny]
 depend: [Vault]

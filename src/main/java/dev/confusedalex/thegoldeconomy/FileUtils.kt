@@ -1,4 +1,4 @@
-package confusedalex.thegoldeconomy
+package dev.confusedalex.thegoldeconomy
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
