@@ -11,13 +11,13 @@ version = "1.8.1"
 
 repositories {
     mavenCentral()
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://jitpack.io")
-    maven("https://repo.glaremasters.me/repository/towny/")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // SpigotAPI
+    maven("https://jitpack.io") // VaultAPI
+    maven("https://repo.glaremasters.me/repository/towny/") // Towny
     maven("https://oss.sonatype.org/content/groups/public/")
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://repo.aikar.co/content/groups/aikar/")
-    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") // PlaceholderAPI
+    maven("https://repo.aikar.co/content/groups/aikar/") // ACF
+    maven("https://repo.papermc.io/repository/maven-public/") // MockBukkit
 }
 
 dependencies {
@@ -33,7 +33,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
-    implementation("org.bstats:bstats-bukkit:3.0.2")
 
     // Tests
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
