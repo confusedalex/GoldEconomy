@@ -26,6 +26,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
+    implementation("org.bstats:bstats-bukkit:3.0.2")
 
     compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
@@ -81,8 +82,18 @@ tasks {
     }
 
     shadowJar {
-        relocate("co.aikar.commands", "confusedalex.thegoldeconomy.acf")
-        relocate("co.aikar.locales", "confusedalex.thegoldeconomy.locales")
         archiveClassifier.set("")
+        enableRelocation = true
+        relocationPrefix = "confusedalex.thegoldeconomy.libs"
+        exclude("META-INF/**")
+        from("LICENSE")
+        minimize()
+    }
+}
+
+configurations {
+    configurations.testImplementation.get().apply {
+        extendsFrom(configurations.compileOnly.get())
+        exclude("org.spigotmc", "spigot-api")
     }
 }
