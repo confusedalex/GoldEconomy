@@ -1,28 +1,23 @@
-package confusedalex.thegoldeconomy;
+package confusedalex.thegoldeconomy
 
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.ServicePriority;
+import net.milkbowl.vault.economy.Economy
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.plugin.ServicePriority
+import java.util.logging.Level
 
-import static java.util.logging.Level.INFO;
+class VaultHook(var plugin: TheGoldEconomy, private var provider: Economy) {
+    fun hook() {
+        Bukkit.getServicesManager().register(Economy::class.java, this.provider, plugin, ServicePriority.Normal)
+        plugin.logger.log(
+            Level.INFO, ChatColor.GREEN.toString() + "VaultAPI hooked into " + ChatColor.AQUA + plugin.name
+        )
+    }
 
-public class VaultHook {
-  TheGoldEconomy plugin;
-  Economy provider;
-
-  public VaultHook(TheGoldEconomy plugin, Economy provider) {
-    this.plugin = plugin;
-    this.provider = provider;
-  }
-
-  public void hook() {
-    Bukkit.getServicesManager().register(Economy.class, this.provider, plugin, ServicePriority.Normal);
-    plugin.getLogger().log(INFO, ChatColor.GREEN + "VaultAPI hooked into " + ChatColor.AQUA + plugin.getName());
-  }
-
-  public void unhook() {
-    Bukkit.getServicesManager().unregister(Economy.class, this.provider);
-    plugin.getLogger().log(INFO, ChatColor.GREEN + "VaultAPI unhooked from " + ChatColor.AQUA + plugin.getName());
-  }
+    fun unhook() {
+        Bukkit.getServicesManager().unregister(Economy::class.java, this.provider)
+        plugin.logger.log(
+            Level.INFO, ChatColor.GREEN.toString() + "VaultAPI unhooked from " + ChatColor.AQUA + plugin.name
+        )
+    }
 }
