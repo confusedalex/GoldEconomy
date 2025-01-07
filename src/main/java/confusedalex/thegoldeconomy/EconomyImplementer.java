@@ -63,7 +63,7 @@ public class EconomyImplementer implements Economy {
 
   @Override
   public boolean hasAccount(String s) {
-    if (Util.isOfflinePlayer(s).isPresent()) return true;
+    if (util.isOfflinePlayer(s).isPresent()) return true;
     if (bank.getFakeAccounts().containsKey(s)) return true;
 
     bank.setFakeAccountBalance(s, 0);
@@ -77,7 +77,7 @@ public class EconomyImplementer implements Economy {
 
   @Override
   public boolean hasAccount(String s, String s1) {
-    if (Util.isOfflinePlayer(s).isPresent()) return true;
+    if (util.isOfflinePlayer(s).isPresent()) return true;
     if (bank.getFakeAccounts().containsKey(s)) return true;
 
     bank.setFakeAccountBalance(s, 0);
@@ -97,7 +97,7 @@ public class EconomyImplementer implements Economy {
     } catch (IllegalArgumentException e) {
       // String is not UUID
     }
-    Optional<OfflinePlayer> playerOptional = Util.isOfflinePlayer(s);
+    Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(s);
       return playerOptional.map(offlinePlayer -> bank.getTotalPlayerBalance(offlinePlayer.getUniqueId())).orElseGet(() -> bank.getFakeBalance(s));
   }
 
@@ -115,7 +115,7 @@ public class EconomyImplementer implements Economy {
     } catch (IllegalArgumentException e) {
       // String is not UUID
     }
-    if (Util.isOfflinePlayer(s).isPresent())
+    if (util.isOfflinePlayer(s).isPresent())
       return bank.getTotalPlayerBalance(Bukkit.getOfflinePlayer(s).getUniqueId());
     return bank.getFakeBalance(s);
   }
@@ -128,7 +128,7 @@ public class EconomyImplementer implements Economy {
 
   @Override
   public boolean has(String s, double v) {
-    if (Util.isOfflinePlayer(s).isPresent())
+    if (util.isOfflinePlayer(s).isPresent())
       return v < bank.getTotalPlayerBalance(Bukkit.getOfflinePlayer(s).getUniqueId());
     else return v < bank.getFakeBalance(s);
   }
@@ -140,7 +140,7 @@ public class EconomyImplementer implements Economy {
 
   @Override
   public boolean has(String s, String s1, double v) {
-    if (Util.isOfflinePlayer(s).isPresent())
+    if (util.isOfflinePlayer(s).isPresent())
       return v < bank.getTotalPlayerBalance(Bukkit.getOfflinePlayer(s).getUniqueId());
     else return v < bank.getFakeBalance(s);
   }
@@ -157,7 +157,7 @@ public class EconomyImplementer implements Economy {
     // if amount is negative return
     if (amount < 0) return new EconomyResponse(amount, oldBalance, EconomyResponse.ResponseType.FAILURE, "error");
 
-    Optional<OfflinePlayer> playerOptional = Util.isOfflinePlayer(s);
+    Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(s);
     if (playerOptional.isPresent()) {
       OfflinePlayer offlinePlayer = playerOptional.get();
       UUID uuid = offlinePlayer.getUniqueId();
@@ -255,7 +255,7 @@ public class EconomyImplementer implements Economy {
     // if amount is negative return
     if (amount < 0) return new EconomyResponse(amount, oldBalance, EconomyResponse.ResponseType.FAILURE, "error");
 
-    Optional<OfflinePlayer> playerOptional = Util.isOfflinePlayer(s);
+    Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(s);
     if (playerOptional.isPresent()) {
       OfflinePlayer offlinePlayer = playerOptional.get();
       UUID uuid = offlinePlayer.getUniqueId();
@@ -354,7 +354,7 @@ public class EconomyImplementer implements Economy {
     // If amount is negative -> return
     if (amount < 0) return new EconomyResponse(amount, oldBalance, EconomyResponse.ResponseType.FAILURE, "error");
 
-    Optional<OfflinePlayer> playerOptional = Util.isOfflinePlayer(s);
+    Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(s);
     if (playerOptional.isPresent()) {
       OfflinePlayer player = playerOptional.get();
       UUID uuid = player.getUniqueId();
@@ -392,7 +392,7 @@ public class EconomyImplementer implements Economy {
     // If amount is negative -> return
     if (amount < 0) return new EconomyResponse(amount, oldBalance, EconomyResponse.ResponseType.FAILURE, "error");
 
-    Optional<OfflinePlayer> playerOptional = Util.isOfflinePlayer(s);
+    Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(s);
     if (playerOptional.isPresent()) {
       OfflinePlayer player = playerOptional.get();
       UUID uuid = player.getUniqueId();
