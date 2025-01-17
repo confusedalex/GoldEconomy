@@ -19,6 +19,7 @@
             jdt-language-server
             maven
             gradle
+            git-cliff
           ];
         };
       }
