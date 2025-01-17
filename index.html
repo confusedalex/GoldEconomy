@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark">
+  <head>
+    <title>TheGoldEconomy</title>
+    
+      <meta property="og:url" content="https://thegoldeconomy.confusedalex.dev" />
+    
+    
+      <link rel="icon" href="/favicon.ico" />
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+      <meta name="description" content="A simple gold based Economy plugin that just works" />
+      <meta property="og:description" content="A simple gold based Economy plugin that just works" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="TheGoldEconomy" />
+    
+    
+    
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="stylesheet" href="/oranda-v0.6.1.css" />
+    
+      <link rel="stylesheet" href="/custom.css" />
+    
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-body">
+        
+
+        <main>
+          <header>
+            
+            <h1 class="title">TheGoldEconomy</h1>
+            
+  <nav class="nav">
+    <ul>
+      <li><a href="/">Home</a></li>
+
+      
+
+      
+
+      
+
+      
+        <li><a href="/funding/">Funding</a></li>
+      
+
+      
+    </ul>
+  </nav>
+
+          </header>
+
+          
+
+
+    <div class="oranda-hide">
+<p><img src="https://img.shields.io/spiget/downloads/102242" alt="Spiget Downloads">
+<img src="https://img.shields.io/spiget/rating/102242" alt="Spiget Rating">
+<img src="https://img.shields.io/spiget/tested-versions/102242" alt="Spiget tested server versions">
+<img src="https://img.shields.io/weblate/progress/thegoldeconomy" alt="Weblate project translated">
+<a href="https://app.fossa.com/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy?ref=badge_shield" rel="noopener noreferrer"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy.svg?type=shield" alt="FOSSA Status"></a></p>
+<p><img src="https://github.com/user-attachments/assets/dd12ed0c-3058-4b1f-b12f-478c780730f4" alt="TheGoldEconomy Logo"></p>
+</div>
+<h2>Introduction</h2>
+<p>TheGoldEconomy is a powerful economy plugin that allows servers to manage their gold-based currency through a bank system. Players can deposit and withdraw gold and send money to each other. With support for both gold nuggets, ingots and raw gold this plugin is designed to be lightweight, easy to configure, and fully compatible with popular plugins like Vault and Towny.</p>
+<h2>Table of Contents</h2>
+
+<ul>
+<li><a href="#features" rel="noopener noreferrer">Features</a></li>
+<li><a href="#how-to-install" rel="noopener noreferrer">How to Install</a></li>
+<li><a href="#commands" rel="noopener noreferrer">Commands</a></li>
+<li><a href="#permissions" rel="noopener noreferrer">Permissions</a></li>
+<li><a href="#placeholders" rel="noopener noreferrer">Placeholders</a></li>
+<li><a href="#config-file" rel="noopener noreferrer">Config</a></li>
+</ul>
+
+<h2>Features</h2>
+<ul>
+<li>Easy to use.</li>
+<li>Use nuggets or ingots as your base!</li>
+<li>PlaceholderAPI Integration!</li>
+<li>Towny and Vault support.</li>
+<li>TownyAPI Integration!</li>
+<li>Optional removing of Gold Drops by Mobs to reduce inflation.</li>
+<li>Multiple Language support!</li>
+</ul>
+<h2>How to Install</h2>
+<ol>
+<li><strong>Install Vault</strong>: Ensure you have <a href="https://www.spigotmc.org/resources/vault.34315/" rel="noopener noreferrer">Vault</a> installed on your server. Vault is compatible with Minecraft versions newer than 1.17.</li>
+<li><strong>Download TheGoldEconomy</strong>: Get the latest version of TheGoldEconomy <a href="https://modrinth.com/plugin/thegoldeconomy" rel="noopener noreferrer">here</a>.</li>
+<li><strong>Place the Plugin</strong>: Move the downloaded <code>.jar</code> file into your server's <code>plugins</code> folder.</li>
+<li><strong>Enjoy playing!</strong></li>
+</ol>
+<h2>Commands</h2>
+<h3>Player</h3>
+<ul>
+<li><strong>/bank balance</strong><br>
+Displays your current bank balance (e.g, <code>/bank balance</code>).</li>
+<li><strong>/bank balance </strong><br>
+Shows the balance of the specified player (e.g., <code>/bank balance Steve</code>).</li>
+<li><strong>/bank deposit </strong><br>
+Deposits the specified amount of gold from your inventory into your bank account (e.g., <code>/bank deposit 10</code>). To deposit everything use <code>/bank deposit</code> without an amount.</li>
+<li><strong>/bank withdraw </strong><br>
+Withdraws the specified amount of gold from your bank account into your inventory (e.g., <code>/bank withdraw 5</code>). To deposit everything use <code>/bank deposit</code> without an amount.</li>
+<li><strong>/bank pay  </strong><br>
+Transfers the specified amount of gold to another player (e.g., <code>/bank pay Alex 20</code>).</li>
+</ul>
+<h2>Permissions</h2>
+<h3>Default Permissions</h3>
+<ul>
+<li><code>thegoldeconomy.balance</code><br>
+/bank balance</li>
+<li><code>thegoldeconomy.balance.others</code><br>
+/bank balance </li>
+<li><code>thegoldeconomy.deposit</code><br>
+/bank deposit</li>
+<li><code>thegoldeconomy.withdraw</code><br>
+/bank withdraw</li>
+<li><code>thegoldeconomy.pay</code><br>
+/bank pay</li>
+</ul>
+<h3>Non-default Permissions</h3>
+<ul>
+<li><code>thegoldeconomy.set</code><br>
+/bank set</li>
+<li><code>thegoldeconomy.add</code><br>
+/bank add</li>
+<li><code>thegoldeconomy.remove</code><br>
+/bank remove</li>
+</ul>
+<h2>Placeholders</h2>
+<p>The following placeholders are available if using PlaceholderAPI</p>
+<ul>
+<li><code>thegoldeconomy_inventoryBalance</code></li>
+<li><code>thegoldeconomy_bankbalance</code></li>
+<li><code>thegoldeconomy_totalBalance</code></li>
+</ul>
+<h2>Config File</h2>
+<pre style="background-color:#263238;"><span style="font-style:italic;color:#546e7a;"># Remove Gold Drops from Mobs like Piglins? (default: true)
+</span><span style="color:#f07178;">removeGoldDrop</span><span style="color:#89ddff;">: </span><span style="color:#f78c6c;">true
+</span><span style="font-style:italic;color:#546e7a;"># Should the plugin check for updated? (default: true)
+</span><span style="color:#f07178;">updateCheck</span><span style="color:#89ddff;">: </span><span style="color:#f78c6c;">true
+</span><span style="font-style:italic;color:#546e7a;"># Valid language are:
+</span><span style="font-style:italic;color:#546e7a;"># German: de_DE
+</span><span style="font-style:italic;color:#546e7a;"># English: en_US
+</span><span style="font-style:italic;color:#546e7a;"># Spanish: es_ES
+</span><span style="font-style:italic;color:#546e7a;"># Simplified Chinese: zh_CN
+</span><span style="font-style:italic;color:#546e7a;"># Turkish: tr_TR
+</span><span style="font-style:italic;color:#546e7a;"># Brazilian Portuguese: pt_BR
+</span><span style="font-style:italic;color:#546e7a;"># Norwegian: nb_NO
+</span><span style="font-style:italic;color:#546e7a;"># Ukrainian: uk
+</span><span style="color:#f07178;">language</span><span style="color:#89ddff;">: "</span><span style="color:#c3e88d;">en_US</span><span style="color:#89ddff;">"
+</span><span style="font-style:italic;color:#546e7a;"># Do you want to restrict bank commands to bank plots (requires Towny)
+</span><span style="color:#f07178;">restrictToBankPlot</span><span style="color:#89ddff;">: </span><span style="color:#f78c6c;">false
+</span><span style="font-style:italic;color:#546e7a;"># Prefix
+</span><span style="color:#f07178;">prefix</span><span style="color:#89ddff;">: "</span><span style="color:#c3e88d;">TheGoldEconomy</span><span style="color:#89ddff;">"
+</span><span style="font-style:italic;color:#546e7a;"># This value sets the base domination of the economy
+</span><span style="font-style:italic;color:#546e7a;"># 'nuggets' = 1 nugget is 1 currency, 1 ingot is 9, 1 block is 81
+</span><span style="font-style:italic;color:#546e7a;"># 'ingots'  = 1 ingots is 1 currency, 1 block is 9
+</span><span style="font-style:italic;color:#546e7a;"># 'raw' = 1 raw gold is 1 currency, 1 block is 9
+</span><span style="color:#f07178;">base</span><span style="color:#89ddff;">: "</span><span style="color:#c3e88d;">nuggets</span><span style="color:#89ddff;">"
+</span></pre>
+
+<h2>License</h2>
+<p><a href="https://app.fossa.com/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy?ref=badge_large" rel="noopener noreferrer"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy.svg?type=large" alt="FOSSA Status"></a></p>
+
+
+
+        </main>
+      </div>
+
+      <footer>
+        
+        <span>
+          TheGoldEconomy, GPL-3
+        </span>
+      </footer>
+    </div>
+
+    
+    
+
+    
+
+
+  </body>
+</html>
