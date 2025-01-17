@@ -10,6 +10,8 @@ permissions:
 # All of these work independently and can be removed / commented out
 # if you don't want oranda/mdbook running in that situation
 on:
+  # Manually
+  workflow_dispatch:
   # Check that a PR didn't break docs!
   #
   # Note that the "Deploy to Github Pages" step won't run in this mode,
