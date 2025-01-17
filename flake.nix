@@ -20,7 +20,6 @@
             maven
             gradle
             git-cliff
-            oranda
           ];
         };
       }
