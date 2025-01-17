@@ -1,4 +1,7 @@
 {
+  "build": {
+    "path_prefix": "GoldEconomy"
+  },
   "project": {
     "name": "TheGoldEconomy",
     "version": "1.8.2",
@@ -7,7 +10,10 @@
     "license": "GPL-3"
   },
   "styles": {
-    "favicon": "./assets/favicon.ico"
+    "favicon": "./assets/favicon.ico",
+    "additional_css": [
+      "./assets/style.css"
+    ]
   },
   "components": {
     "funding": {
