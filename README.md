@@ -44,17 +44,6 @@ TheGoldEconomy is a powerful economy plugin that allows servers to manage their 
 ### Player
 
 - **/bank balance**  
-  Shows your balance
-- **/bank balance <player>**
-  Shows the balance of the given player
-- **/bank deposit <gold>**  
-  Deposits gold from you inventory into your account.
-- **/bank withdraw <gold>**  
-  Withdraws gold from you account into your inventory.
-- **/bank pay <player> <gold>**  
-  Pay a player gold.
-
-- **/bank balance**  
   Displays your current bank balance (e.g, `/bank balance`).
 - **/bank balance <player>**  
   Shows the balance of the specified player (e.g., `/bank balance Steve`).
@@ -126,4 +115,5 @@ base: "nuggets"
 ```
 
 ## License
+
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy?ref=badge_large)
