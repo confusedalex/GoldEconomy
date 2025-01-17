@@ -54,7 +54,7 @@ TheGoldEconomy is a powerful economy plugin that allows servers to manage their 
 - **/bank deposit <gold>**  
   Deposits the specified amount of gold from your inventory into your bank account (e.g., `/bank deposit 10`). To deposit everything use `/bank deposit` without an amount.
 - **/bank withdraw <gold>**  
-  Withdraws the specified amount of gold from your bank account into your inventory (e.g., `/bank withdraw 5`). To deposit everything use `/bank deposit` without an amount.
+  Withdraws the specified amount of gold from your bank account into your inventory (e.g., `/bank withdraw 5`). To withdraw everything use `/bank withdraw` without an amount.
 - **/bank pay <player> <gold>**  
   Transfers the specified amount of gold to another player (e.g., `/bank pay Alex 20`).
 
