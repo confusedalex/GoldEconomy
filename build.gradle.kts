@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     // Plugins
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7") { isTransitive = false }
     compileOnly("com.palmergames.bukkit.towny:towny:0.98.1.0")
     compileOnly("me.clip:placeholderapi:2.11.6")
 
@@ -35,7 +35,11 @@ dependencies {
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
     // Tests
-    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.24.1")
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.24.1") {
+        // Exclude the JetBrains annotations to prevent conflicts
+        exclude(group = "org.jetbrains", module = "annotations")
+    }
+    testImplementation("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
     testImplementation(platform("org.junit:junit-bom:5.11.4"))
 }
