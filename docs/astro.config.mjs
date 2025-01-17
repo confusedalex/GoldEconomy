@@ -21,6 +21,7 @@ export default defineConfig({
 			sidebar: [
 				'installation', 'configuration', 'commands', 'permissions',
 			],
+			lastUpdated: true,
 		}),
 	],
 
