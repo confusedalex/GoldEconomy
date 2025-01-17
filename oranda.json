@@ -1,7 +1,4 @@
 {
-  "build": {
-    "path_prefix": "GoldEconomy"
-  },
   "project": {
     "name": "TheGoldEconomy",
     "version": "1.8.2",
