@@ -19,10 +19,7 @@ export default defineConfig({
 				github: 'https://github.com/confusedalex/goldeconomy',
 			},
 			sidebar: [
-				{
-					label: 'Start Here',
-					autogenerate: { directory: 'start-here' }
-				}
+				'installation', 'configuration', 'commands', 'permissions',
 			],
 		}),
 	],
