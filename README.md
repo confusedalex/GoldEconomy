@@ -4,7 +4,7 @@
 ![Weblate project translated](https://img.shields.io/weblate/progress/thegoldeconomy)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy?ref=badge_shield)
 
-![TheGoldEconomy Logo](./assets/logo-long.png)
+![TheGoldEconomy Logo](https://github.com/user-attachments/assets/dd12ed0c-3058-4b1f-b12f-478c780730f4)
 
 ## Introduction
 
