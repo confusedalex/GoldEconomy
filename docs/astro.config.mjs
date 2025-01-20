@@ -8,7 +8,7 @@ export default defineConfig({
 			title: 'TheGoldEconomy',
 			description: 'TheGoldEconomy is a simple, easy to use, and powerful economy plugin for Minecraft servers.',
 			editLink: {
-				baseUrl: 'https://github.com/confusedalex/goldeconomy-docs/edit/main/docs',
+				baseUrl: 'https://github.com/confusedalex/goldeconomy/edit/main/docs',
 			},
 			logo: {
 				src: './src/assets/logo.svg',
