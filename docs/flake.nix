@@ -11,11 +11,7 @@
     in
     {
       devShells = eachSystem (pkgs: {
-        default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            nodejs_23
-          ];
-        };
+        default = pkgs.mkShell { buildInputs = with pkgs; [ nodejs_23 ]; };
       });
     };
 }
