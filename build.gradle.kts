@@ -23,7 +23,7 @@ repositories {
 dependencies {
     // Plugins
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1") { isTransitive = false }
-    compileOnly("com.palmergames.bukkit.towny:towny:0.98.1.0")
+    compileOnly("com.palmergames.bukkit.towny:towny:0.101.1.1")
     compileOnly("me.clip:placeholderapi:2.11.6")
 
     // Internal
