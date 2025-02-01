@@ -4,7 +4,6 @@ import kotlinx.serialization.json.Json
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
-import kotlin.collections.HashMap
 
 class Bank(private val converter: Converter) {
     val playerAccounts : HashMap<String, Int> = Json.decodeFromString(createPlayersFile().readText())

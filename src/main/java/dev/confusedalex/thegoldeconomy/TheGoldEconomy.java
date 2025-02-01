@@ -50,7 +50,7 @@ public class TheGoldEconomy extends JavaPlugin {
     }
 
     String base = getConfig().getString("base");
-    if (!base.equals("nuggets") && !base.equals("ingots") && !base.equals("raw")) {
+    if (!base.equals("nuggets") && !base.equals("ingots") && !base.equals("raw") && !base.equals("copper")) {
       getLogger().severe(bundle.getString("error.invalidbase"));
       getServer().shutdown();
     }

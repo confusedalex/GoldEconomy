@@ -39,6 +39,11 @@ public class Converter {
         case RAW_GOLD_BLOCK -> 9;
         default -> 0;
       };
+      case "copper" -> switch (material) {
+        case COPPER_INGOT -> 1;
+        case COPPER_BLOCK -> 9;
+        default -> 0;
+      };
       default -> 0;
     };
   }
@@ -51,6 +56,10 @@ public class Converter {
       };
       case "raw" -> switch (material) {
         case RAW_GOLD, RAW_GOLD_BLOCK -> true;
+        default -> false;
+      };
+      case "copper" -> switch (material) {
+        case COPPER_INGOT, COPPER_BLOCK -> true;
         default -> false;
       };
       default -> false;
@@ -124,6 +133,11 @@ public class Converter {
       ingotValue = getValue(Material.RAW_GOLD);
       block = Material.RAW_GOLD_BLOCK;
       ingot = Material.RAW_GOLD;
+    } else if (base.equals("copper")) {
+      ingot = Material.COPPER_INGOT;
+      block = Material.COPPER_BLOCK;
+      ingotValue = getValue(ingot);
+      blockValue = getValue(block);
     } else {
       return;
     }
