@@ -39,7 +39,7 @@ class Util(private val plugin: TheGoldEconomy) {
         return if (commandSender is Player) {
             Optional.of(commandSender)
         } else {
-            commandSender.sendMessage(plugin.bundle.getString("error.notaplayer"))
+            commandSender.sendMessage(plugin.bundle.getString("error.notAPlayer"))
             Optional.empty()
         }
     }
