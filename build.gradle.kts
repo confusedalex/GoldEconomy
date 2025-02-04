@@ -35,7 +35,7 @@ dependencies {
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
     // Tests
-    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.31.0") {
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.31.1") {
         // Exclude the JetBrains annotations to prevent conflicts
         exclude(group = "org.jetbrains", module = "annotations")
     }
