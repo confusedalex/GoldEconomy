@@ -97,24 +97,25 @@ public class Converter {
   public void give(Player player, int value) {
     boolean warning = false;
 
-    int blockValue;
-    int ingotValue;
-    Material block;
-    Material ingot;
+    int blockValue, ingotValue;
+    Material block, ingot;
 
-    if (base.equals("ingots") || base.equals("nuggets")) {
-      blockValue = getValue(Material.GOLD_BLOCK);
-      ingotValue = getValue(Material.GOLD_INGOT);
-      block = Material.GOLD_BLOCK;
-      ingot = Material.GOLD_INGOT;
-    } else if (base.equals("raw")) {
-      blockValue = getValue(Material.RAW_GOLD_BLOCK);
-      ingotValue = getValue(Material.RAW_GOLD);
-      block = Material.RAW_GOLD_BLOCK;
-      ingot = Material.RAW_GOLD;
-    } else {
-      return;
+    switch (base) {
+      case "ingots", "nuggets" -> {
+        block = Material.GOLD_BLOCK;
+        ingot = Material.GOLD_INGOT;
+      }
+      case "raw" -> {
+        block = Material.RAW_GOLD_BLOCK;
+        ingot = Material.RAW_GOLD;
+      }
+      default -> {
+          return;
+      }
     }
+
+    blockValue = getValue(block);
+    ingotValue = getValue(ingot);
 
     // Set max. stack size to 64, otherwise the stacks will go up to 99
     player.getInventory().setMaxStackSize(64);
