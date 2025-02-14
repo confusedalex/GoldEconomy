@@ -75,19 +75,7 @@ public class Converter {
   }
 
   public void remove(Player player, int amount) {
-    int value = 0;
-
-    // calculating the value of all the gold in the inventory to nuggets
-    for (ItemStack item : player.getInventory()) {
-      if (item == null)
-        continue;
-      Material material = item.getType();
-
-      if (!isGold(material))
-        continue;
-
-      value += (getValue(material) * item.getAmount());
-    }
+    int value = getInventoryValue(player);
     // Checks if the Value of the items is greater than the amount to deposit
     if (value < amount)
       return;
