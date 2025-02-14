@@ -60,7 +60,7 @@ public class Converter {
   public int getInventoryValue(Player player) {
     int value = 0;
 
-    // calculating the value of all the gold in the inventory to the base
+    // Calculating the value of all the gold in the inventory to the base
     for (ItemStack item : player.getInventory()) {
       if (item == null)
         continue;
@@ -76,7 +76,7 @@ public class Converter {
 
   public void remove(Player player, int amount) {
     int value = getInventoryValue(player);
-    // Checks if the Value of the items is greater than the amount to deposit
+    // Checks if the value of the items is greater than the amount to deposit
     if (value < amount)
       return;
 
@@ -161,8 +161,8 @@ public class Converter {
   public void withdrawAll(Player player) {
     UUID uuid = player.getUniqueId();
 
-    // searches in the Hashmap for the balance, so that a player can't withdraw gold
-    // from his Inventory
+    // Searches in the hashmap for the balance, so that a player can't withdraw gold
+    // from his inventory
     int value = eco.bank.getAccountBalance(player.getUniqueId());
     eco.bank.setAccountBalance(uuid, (0));
 
@@ -173,7 +173,7 @@ public class Converter {
     UUID uuid = player.getUniqueId();
     int oldBalance = eco.bank.getAccountBalance(player.getUniqueId());
 
-    // Checks balance in HashMap
+    // Checks balance in hashmap
     if (nuggets > eco.bank.getAccountBalance(uuid)) {
       eco.util.sendMessageToPlayer(bundle.getString("error.notEnoughMoneyWithdraw"), player);
       return;
