@@ -13,47 +13,45 @@ import java.util.UUID;
 public class Converter {
     EconomyImplementer eco;
     ResourceBundle bundle;
-    String base;
+    Base base;
 
     public Converter(EconomyImplementer economyImplementer, ResourceBundle bundle) {
         this.eco = economyImplementer;
         this.bundle = bundle;
-        this.base = eco.plugin.getConfig().getString("base");
+        this.base = eco.plugin.base;
     }
 
     public int getValue(Material material) {
         return switch (base) {
-            case "nuggets" -> switch (material) {
+            case NUGGETS -> switch (material) {
                 case GOLD_NUGGET -> 1;
                 case GOLD_INGOT -> 9;
                 case GOLD_BLOCK -> 81;
                 default -> 0;
             };
-            case "ingots" -> switch (material) {
+            case INGOTS -> switch (material) {
                 case GOLD_INGOT -> 1;
                 case GOLD_BLOCK -> 9;
                 default -> 0;
             };
-            case "raw" -> switch (material) {
+            case RAW -> switch (material) {
                 case RAW_GOLD -> 1;
                 case RAW_GOLD_BLOCK -> 9;
                 default -> 0;
             };
-            default -> 0;
         };
     }
 
     public boolean isGold(Material material) {
         return switch (base) {
-            case "ingots", "nuggets" -> switch (material) {
+            case INGOTS, NUGGETS -> switch (material) {
                 case GOLD_BLOCK, GOLD_INGOT, GOLD_NUGGET -> true;
                 default -> false;
             };
-            case "raw" -> switch (material) {
+            case RAW -> switch (material) {
                 case RAW_GOLD, RAW_GOLD_BLOCK -> true;
                 default -> false;
             };
-            default -> false;
         };
     }
 
@@ -96,11 +94,11 @@ public class Converter {
         Material block, ingot;
 
         switch (base) {
-            case "ingots", "nuggets" -> {
+            case INGOTS, NUGGETS -> {
                 block = Material.GOLD_BLOCK;
                 ingot = Material.GOLD_INGOT;
             }
-            case "raw" -> {
+            case RAW -> {
                 block = Material.RAW_GOLD_BLOCK;
                 ingot = Material.RAW_GOLD;
             }
@@ -139,7 +137,7 @@ public class Converter {
 
         value -= (value / ingotValue) * ingotValue;
 
-        if (base.equals("nuggets") && value > 0) {
+        if (base == Base.NUGGETS && value > 0) {
             HashMap<Integer, ItemStack> nuggets = player.getInventory().addItem(new ItemStack(Material.GOLD_NUGGET, value));
             for (ItemStack item : nuggets.values()) {
                 if (item != null && item.getType() == Material.GOLD_NUGGET && item.getAmount() > 0) {
