@@ -29,7 +29,7 @@ dependencies {
 
     // Internal
     compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     implementation("org.apache.commons:commons-lang3:3.17.0")
