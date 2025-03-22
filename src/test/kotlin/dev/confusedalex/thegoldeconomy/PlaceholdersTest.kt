@@ -41,7 +41,7 @@ class PlaceholdersTest {
     @Test
     fun getVersion() {
         val placeholders = Placeholders(plugin)
-        assertEquals(plugin.description.version, placeholders.version)
+        assertEquals(plugin.pluginMeta.version, placeholders.version)
     }
 
     @Test
