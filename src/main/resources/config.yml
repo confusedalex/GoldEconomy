@@ -11,6 +11,7 @@ updateCheck: true
 # Brazilian Portuguese: pt_BR
 # Norwegian: nb_NO
 # Ukrainian: uk
+# Japanese: jp_JP
 language: "en_US"
 # Do you want to restrict bank commands to bank plots (requires Towny)
 restrictToBankPlot: false

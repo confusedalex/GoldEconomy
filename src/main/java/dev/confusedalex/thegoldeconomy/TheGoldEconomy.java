@@ -36,6 +36,9 @@ public class TheGoldEconomy extends JavaPlugin {
         localeMap.put("pt_BR", Locales.PORTUGUESE);
         localeMap.put("nb_NO", Locales.NORWEGIAN_BOKMAAL);
         localeMap.put("uk", Locales.UKRANIAN);
+        localeMap.put("jp_JP", Locales.JAPANESE);
+        // Don't enable the tamil language, because encoding seems broken.
+        // localeMap.put("ta", new Locale("ta"));
 
         if (localeMap.containsKey(language)) {
             Locale locale = localeMap.get(language);
