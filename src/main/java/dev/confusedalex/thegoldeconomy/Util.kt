@@ -16,7 +16,7 @@ class Util(private val plugin: TheGoldEconomy) {
     }
 
     fun formatMessage(message: String, prefix: String): String =
-        ChatColor.GOLD.toString() + "[$prefix" + "] " + ChatColor.WHITE + ChatColor.translateAlternateColorCodes(
+        ChatColor.GOLD.toString() + "[$prefix] " + ChatColor.WHITE + ChatColor.translateAlternateColorCodes(
             '&', message
         )
 
