@@ -7,9 +7,9 @@ api-version: 1.18
 
 # Data
 main: dev.confusedalex.thegoldeconomy.TheGoldEconomy
-softdepend: [PlaceholderAPI]
-loadbefore: [Towny]
-depend: [Vault]
+softdepend: [ PlaceholderAPI ]
+loadbefore: [ Towny ]
+depend: [ Vault ]
 
 permissions:
   thegoldeconomy.balance:
