@@ -15,14 +15,13 @@ class Util(private val plugin: TheGoldEconomy) {
             ?: Optional.empty()
     }
 
-    fun sendMessageToPlayer(message: String, player: Player?) {
-        val prefix = plugin.config.getString("prefix")
-        val formattedString =
-            ChatColor.GOLD.toString() + "[$prefix" + "] " + ChatColor.WHITE + ChatColor.translateAlternateColorCodes(
-                '&', message
-            )
-        player?.sendMessage(formattedString)
-    }
+    fun formatMessage(message: String, prefix: String): String =
+        ChatColor.GOLD.toString() + "[$prefix" + "] " + ChatColor.WHITE + ChatColor.translateAlternateColorCodes(
+            '&', message
+        )
+
+    fun sendMessageToPlayer(message: String, player: Player?) =
+        player?.sendMessage(formatMessage(message, plugin.config.getString("prefix") ?: "TheGoldEconomy"))
 
     fun isBankingRestrictedToPlot(player: Player): Boolean {
         if (plugin.config.getBoolean("restrictToBankPlot")) {
