@@ -168,7 +168,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
         if (nuggets == null || nuggets == "all") {
             val accountBalance = eco.bank.getAccountBalance(player.uniqueId)
             util.sendMessageToPlayer(String.format(bundle.getString("info.withdraw"), accountBalance), player)
-            eco.converter.withdraw(player, eco.converter.getInventoryValue(player, base), base)
+            eco.converter.withdraw(player, eco.bank.getAccountBalance(player.uniqueId), base)
             return
         }
 
