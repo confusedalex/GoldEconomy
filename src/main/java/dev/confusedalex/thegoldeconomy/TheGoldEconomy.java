@@ -13,7 +13,7 @@ public class TheGoldEconomy extends JavaPlugin {
     EconomyImplementer eco;
     Util util;
     ResourceBundle bundle;
-    Base base;
+    public static Base base;
     private VaultHook vaultHook;
 
     @Override

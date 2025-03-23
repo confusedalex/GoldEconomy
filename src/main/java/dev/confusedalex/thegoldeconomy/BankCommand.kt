@@ -4,6 +4,7 @@ import co.aikar.commands.BaseCommand
 import co.aikar.commands.CommandHelp
 import co.aikar.commands.annotation.*
 import co.aikar.commands.annotation.Optional
+import dev.confusedalex.thegoldeconomy.TheGoldEconomy.base
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
@@ -41,7 +42,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
                     bundle.getString("info.balance"),
                     eco.getBalance(uuid.toString()).toInt(),
                     eco.bank.getAccountBalance(uuid),
-                    eco.converter.getInventoryValue(sender)
+                    eco.converter.getInventoryValue(sender, base)
                 ), sender
             )
         } else if (sender.hasPermission("thegoldeconomy.balance.others")) {
@@ -119,7 +120,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
         if (playerOptional.isEmpty) return
 
         val player = playerOptional.get()
-        val inventoryValue = eco.converter.getInventoryValue(player)
+        val inventoryValue = eco.converter.getInventoryValue(player, base)
 
         if (util.isBankingRestrictedToPlot(player)) {
             return
@@ -130,7 +131,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
                 return
             }
             util.sendMessageToPlayer(String.format(bundle.getString("info.deposit"), inventoryValue), player)
-            eco.converter.depositAll(player)
+            eco.converter.deposit(player, inventoryValue, base)
             return
         }
 
@@ -150,7 +151,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
             util.sendMessageToPlayer(bundle.getString("error.notEnough"), player)
         } else {
             util.sendMessageToPlayer(String.format(bundle.getString("info.deposit"), amount), player)
-            eco.converter.deposit(player, nuggets.toInt())
+            eco.converter.deposit(player, nuggets.toInt(), base)
         }
     }
 
@@ -167,7 +168,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
         if (nuggets == null || nuggets == "all") {
             val accountBalance = eco.bank.getAccountBalance(player.uniqueId)
             util.sendMessageToPlayer(String.format(bundle.getString("info.withdraw"), accountBalance), player)
-            eco.converter.withdrawAll(player)
+            eco.converter.withdraw(player, eco.converter.getInventoryValue(player, base), base)
             return
         }
 
@@ -187,7 +188,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
             util.sendMessageToPlayer(bundle.getString("error.notEnough"), player)
         } else {
             util.sendMessageToPlayer(String.format(bundle.getString("info.withdraw"), amount), player)
-            eco.converter.withdraw(player, amount)
+            eco.converter.withdraw(player, amount, base)
         }
     }
 
