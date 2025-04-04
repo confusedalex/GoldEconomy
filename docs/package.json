@@ -13,6 +13,6 @@
     "@astrojs/starlight": "^0.32.0",
     "astro": "^5.1.5",
     "astro-auto-import": "^0.4.4",
-    "sharp": "^0.33.0"
+    "sharp": "^0.34.0"
   }
 }
