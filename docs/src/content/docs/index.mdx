@@ -19,7 +19,8 @@ hero:
       icon: external
       variant: minimal
 ---
-
+import Testimonial from '../../components/testimonial.astro';
+import TestimonialGrid from '../../components/testimonial-grid.astro';
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
 ## Features
@@ -38,3 +39,28 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 		Open source licensed under the GPL-3.0 License. Contributions are welcome!
 	</Card>
 </CardGrid>
+
+<TestimonialGrid title='What Users say'>
+<Testimonial name="HuskyDreaming" date="2024-09-30" stars="5" cite="https://www.spigotmc.org/resources/thegoldeconomy-1-18-1-21-4-simple-gold-based-economy.102242/reviews#review-463242-1413607"> 
+Works great for our upcoming medieval server. Nice that we can also make some adjustments to make the economy as solid as possible. Thanks ;)
+</Testimonial>
+<Testimonial name="xorgone" date="2024-08-13" stars="5" cite="https://www.spigotmc.org/resources/thegoldeconomy-1-18-1-21-4-simple-gold-based-economy.102242/reviews#review-460593-172155"> 
+Honestly the best concept for an economy. Makes gold have more of a purpose. Definitely recommend
+</Testimonial>
+<Testimonial name="euclid" date="2024-07-07" stars="5" cite="https://www.spigotmc.org/resources/thegoldeconomy-1-18-1-21-4-simple-gold-based-economy.102242/reviews#review-457729-1396949"> 
+Awesome Author, awesome plugin. If you need a gold based economy that obviously fits for you! Thanks for the plugin
+</Testimonial>
+<Testimonial name="JavaLoop" date="2023-08-30" stars="5" cite="https://www.spigotmc.org/resources/thegoldeconomy-1-18-1-21-4-simple-gold-based-economy.102242/reviews#review-438659-1269467"> 
+Good straight forward plugin. It lets you make your economy based of players dedication to the server, since they must go mine, and not them just doing automated farms and sell items to shop. It also comes with an anti gold drop.
+ Also, the author of the plugin is very nice. Helped me about some translation stuff.
+</Testimonial>
+<Testimonial name="burgx" date="2023-01-31" stars="5" cite="https://www.spigotmc.org/resources/thegoldeconomy-1-18-1-21-4-simple-gold-based-economy.102242/reviews#review-423364-1648520"> 
+Simple and fulfills what is necessary, everything I was looking for for my rpg server. excellent complement
+</Testimonial>
+<Testimonial name="AmerUzily" date="2022-07-15" stars="5" cite="https://www.spigotmc.org/resources/thegoldeconomy-1-18-1-21-4-simple-gold-based-economy.102242/reviews#review-408210-1382932"> 
+Good plugin, can make the language customized? If that is so I will so appreciate that!
+</Testimonial>
+<Testimonial name="ElSantoSuper" date="2022-06-26" stars="5" cite="https://www.spigotmc.org/resources/thegoldeconomy-1-18-1-21-4-simple-gold-based-economy.102242/reviews#review-406278-1592817"> 
+I love the simplicity of this plugin for our small survival server. It literally just ties the economy to the in-game gold, with one unit of currency equal to a gold nugget. It works great!
+</Testimonial>
+</TestimonialGrid>
