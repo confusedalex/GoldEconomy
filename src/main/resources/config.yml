@@ -22,3 +22,14 @@ prefix: "TheGoldEconomy"
 # 'ingots'  = 1 ingots is 1 currency, 1 block is 9
 # 'raw' = 1 raw gold is 1 currency, 1 block is 9
 base: "nuggets"
+
+# Enables MySQL to sync banks across worlds
+MySQL: false
+
+# MySQL connection details
+mysql:
+  host: "localhost"
+  port: 3306
+  database: "gold_economy"
+  user: "gold_user"
+  password: "gold_password"

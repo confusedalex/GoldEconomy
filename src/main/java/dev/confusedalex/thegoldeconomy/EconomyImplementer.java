@@ -20,12 +20,12 @@ public class EconomyImplementer implements Economy {
     ResourceBundle bundle;
     Util util;
 
-    public EconomyImplementer(TheGoldEconomy plugin, ResourceBundle bundle, Util util) {
+    public EconomyImplementer(TheGoldEconomy plugin, ResourceBundle bundle, Util util, DatabaseManager dbManager, boolean useMySQL) {
         this.plugin = plugin;
         this.bundle = bundle;
         this.util = util;
         converter = new Converter(this, bundle);
-        bank = new Bank(converter);
+        bank = new Bank(converter, dbManager, useMySQL);
     }
 
     @Override

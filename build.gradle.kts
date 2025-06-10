@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "dev.confusedalex"
-version = "1.9.0"
+version = "1.9.1"
 
 repositories {
     mavenCentral()
@@ -32,6 +32,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.21")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("mysql:mysql-connector-java:8.0.33")
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
@@ -93,7 +94,7 @@ tasks {
         relocationPrefix = "confusedalex.thegoldeconomy.libs"
         exclude("META-INF/**")
         from("LICENSE")
-        minimize()
+        //minimize()
     }
 
     test {
