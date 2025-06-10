@@ -11,8 +11,8 @@ class Bank(
     private val dbManager: DatabaseManager? = null, // Optional, only if MySQL is enabled
     private val useMySQL: Boolean = false // Set from config
 ) {
-    val playerAccounts: HashMap<String, Int> = Json.decodeFromString(createPlayersFile().readText())
-    val fakeAccounts: HashMap<String, Int> = Json.decodeFromString(createFakeAccountsFile().readText())
+    val playerAccounts: HashMap<String, Int> = if (!useMySQL) Json.decodeFromString(createPlayersFile().readText()) else HashMap()
+    val fakeAccounts: HashMap<String, Int> = if (!useMySQL) Json.decodeFromString(createFakeAccountsFile().readText()) else HashMap()
 
     fun getTotalPlayerBalance(uuid: UUID): Int {
         val player: Player? = Bukkit.getPlayer(uuid)
@@ -26,32 +26,35 @@ class Bank(
         if (useMySQL && dbManager != null) {
             return getAccountBalanceSQL(uuid)
         }
-        if (playerAccounts.contains(uuid.toString())) return playerAccounts.getValue(uuid.toString())
-        playerAccounts[uuid.toString()] = 0
-        return 0
+        return playerAccounts.getOrDefault(uuid.toString(), 0)
     }
 
     fun setAccountBalance(uuid: UUID, amount: Int) {
+        if (amount < 0) {
+            val playerName = Bukkit.getOfflinePlayer(uuid).name ?: uuid.toString()
+            Bukkit.getLogger().warning("$playerName tried to set a negative balance of $amount!")
+            return
+        }
         if (useMySQL && dbManager != null) {
             setAccountBalanceSQL(uuid, amount)
+        } else {
+            playerAccounts[uuid.toString()] = amount
         }
-        playerAccounts[uuid.toString()] = amount // Keep the map updated for fallback/caching
     }
 
     fun setFakeAccountBalance(name: String, amount: Int) {
         if (useMySQL && dbManager != null) {
             setFakeBalanceSQL(name, amount)
+        } else {
+            fakeAccounts[name] = amount
         }
-        fakeAccounts[name] = amount
     }
 
     fun getFakeBalance(name: String): Int {
         if (useMySQL && dbManager != null) {
             return getFakeBalanceSQL(name)
         }
-        if (fakeAccounts.containsKey(name)) return fakeAccounts.getValue(name)
-        fakeAccounts[name] = 0
-        return 0
+        return fakeAccounts.getOrDefault(name, 0)
     }
 
     private fun getAccountBalanceSQL(uuid: UUID): Int {
