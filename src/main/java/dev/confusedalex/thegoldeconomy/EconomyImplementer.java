@@ -13,6 +13,9 @@ import java.util.UUID;
 
 import static dev.confusedalex.thegoldeconomy.TheGoldEconomy.base;
 
+/**
+ * Implements the Vault Economy.
+ */
 public class EconomyImplementer implements Economy {
     TheGoldEconomy plugin;
     Bank bank;
@@ -20,12 +23,20 @@ public class EconomyImplementer implements Economy {
     ResourceBundle bundle;
     Util util;
 
-    public EconomyImplementer(TheGoldEconomy plugin, ResourceBundle bundle, Util util, DatabaseManager dbManager, boolean useMySQL) {
+    /**
+     * Constructs a new EconomyImplementer instance.
+     * @param plugin The main plugin instance.
+     * @param bundle Resource bundle for localization.
+     * @param util Utility class.
+     * @param dbManager Database manager for economy data.
+     * @param useDatabase Whether to use a database for storage.
+     */
+    public EconomyImplementer(TheGoldEconomy plugin, ResourceBundle bundle, Util util, DatabaseManager dbManager, boolean useDatabase) {
         this.plugin = plugin;
         this.bundle = bundle;
         this.util = util;
         converter = new Converter(this, bundle);
-        bank = new Bank(converter, dbManager, useMySQL);
+        bank = new Bank(converter, dbManager, useDatabase);
     }
 
     @Override

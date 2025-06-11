@@ -27,6 +27,9 @@ dependencies {
     compileOnly("com.palmergames.bukkit.towny:towny:0.101.1.9")
     compileOnly("me.clip:placeholderapi:2.11.6")
 
+    //HikariCP
+    implementation("com.zaxxer:HikariCP:5.1.0")
+
     // Internal
     compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.21")

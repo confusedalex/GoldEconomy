@@ -1,39 +1,73 @@
-package dev.confusedalex.thegoldeconomy;
+package dev.confusedalex.thegoldeconomy
 
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.SQLException
-import java.util.*
+
+enum class DatabaseType {
+    MYSQL, MARIADB, POSTGRESQL
+}
 
 class DatabaseManager(
+    private val type: DatabaseType,
     private val host: String,
     private val port: String,
     private val database: String,
     private val username: String,
-    private val password: String
+    private val password: String,
+    private val poolEnabled: Boolean = true,
+    private val maxPoolSize: Int = 5,
+    private val connectionTimeout: Long = 30000,
+    private val idleTimeout: Long = 600000,
+    private val maxLifetime: Long = 1800000
 ) {
-    private var connection: Connection? = null
+    private val dataSource: HikariDataSource?
 
-    @Throws(SQLException::class)
-    fun connect() {
-        if (connection != null && !connection!!.isClosed) return
-        Class.forName("com.mysql.cj.jdbc.Driver")
-        val url = "jdbc:mysql://$host:$port/$database"
-        val props = Properties().apply {
-            setProperty("user", username)
-            setProperty("password", password)
+    init {
+        dataSource = if (poolEnabled) {
+            val config = HikariConfig().apply {
+                jdbcUrl = when (type) {
+                    DatabaseType.MYSQL -> "jdbc:mysql://$host:$port/$database"
+                    DatabaseType.MARIADB -> "jdbc:mariadb://$host:$port/$database"
+                    DatabaseType.POSTGRESQL -> "jdbc:postgresql://$host:$port/$database"
+                }
+                username = this@DatabaseManager.username
+                password = this@DatabaseManager.password
+                maximumPoolSize = this@DatabaseManager.maxPoolSize
+                connectionTimeout = this@DatabaseManager.connectionTimeout
+                idleTimeout = this@DatabaseManager.idleTimeout
+                maxLifetime = this@DatabaseManager.maxLifetime
+                if (type == DatabaseType.MYSQL || type == DatabaseType.MARIADB) {
+                    addDataSourceProperty("cachePrepStmts", "true")
+                    addDataSourceProperty("prepStmtCacheSize", "250")
+                    addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
+                }
+            }
+            HikariDataSource(config)
+        } else {
+            null
         }
-        connection = DriverManager.getConnection(url, props)
     }
 
-    @Throws(SQLException::class)
     fun getConnection(): Connection {
-        if (connection == null || connection!!.isClosed) connect()
-        return connection!!
+        if (dataSource != null) {
+            return dataSource.connection
+        } else {
+            // Fallback to non-pooled connection (not recommended for production)
+            val url = when (type) {
+                DatabaseType.MYSQL -> "jdbc:mysql://$host:$port/$database"
+                DatabaseType.MARIADB -> "jdbc:mariadb://$host:$port/$database"
+                DatabaseType.POSTGRESQL -> "jdbc:postgresql://$host:$port/$database"
+            }
+            val props = java.util.Properties().apply {
+                setProperty("user", username)
+                setProperty("password", password)
+            }
+            return java.sql.DriverManager.getConnection(url, props)
+        }
     }
 
-    @Throws(SQLException::class)
-    fun disconnect() {
-        connection?.takeIf { !it.isClosed }?.close()
+    fun close() {
+        dataSource?.close()
     }
 }

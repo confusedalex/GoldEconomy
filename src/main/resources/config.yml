@@ -24,12 +24,31 @@ prefix: "TheGoldEconomy"
 base: "nuggets"
 
 # Enables MySQL to sync banks across worlds
-MySQL: false
+database_enabled: false
 
 # MySQL connection details
-mysql:
+database:
+  # Type of database to use: mysql, mariadb, or postgresql
+  type: mysql
+  # Database server hostname or IP address
   host: "localhost"
+  # Database server port number
   port: 3306
+  # Name of the database to connect to
   database: "gold_economy"
+  # Username for database authentication
   user: "gold_user"
+  # Password for database authentication
   password: "gold_password"
+  # Connection pooling settings for improved performance and stability
+  pool:
+    # Enable or disable connection pooling (recommended: true)
+    enabled: true
+    # Maximum number of connections to keep in the pool (recommended: 5-10 for most servers)
+    maxPoolSize: 5
+    # Maximum time (in milliseconds) to wait for a connection before failing (30 seconds)
+    connectionTimeout: 30000
+    # Maximum time (in milliseconds) a connection can remain idle in the pool before being closed (10 minutes)
+    idleTimeout: 600000
+    # Maximum lifetime (in milliseconds) of a connection in the pool before it is retired (30 minutes)
+    maxLifetime: 1800000
