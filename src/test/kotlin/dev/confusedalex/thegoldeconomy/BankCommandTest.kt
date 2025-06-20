@@ -15,7 +15,6 @@ class BankCommandTest {
     private lateinit var bankCommand: BankCommand
     private lateinit var sender: PlayerMock
     private lateinit var target: PlayerMock
-    private val prefix = "TheGoldEconomy"
 
     @BeforeEach
     fun setUp() {
@@ -41,7 +40,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.balance"), 100, 100, 0), prefix
+                String.format(plugin.bundle.getString("info.balance"), 100, 100, 0)
             ), sender.nextMessage()
         )
     }
@@ -54,7 +53,7 @@ class BankCommandTest {
         bankCommand.balance(sender, target)
 
         assertEquals(
-            plugin.util.formatMessage(plugin.bundle.getString("error.noPermission"), prefix), sender.nextMessage()
+            plugin.util.formatMessage(plugin.bundle.getString("error.noPermission")), sender.nextMessage()
         )
     }
 
@@ -69,7 +68,7 @@ class BankCommandTest {
             plugin.util.formatMessage(
                 String.format(
                     plugin.bundle.getString("info.balance.other"), target.name, 50
-                ), prefix
+                )
             ), sender.nextMessage()
         )
     }
@@ -82,7 +81,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.moneyReceived"), 50, sender.name), prefix
+                String.format(plugin.bundle.getString("info.moneyReceived"), 50, sender.name)
             ), target.nextMessage()
         )
     }
@@ -113,7 +112,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.sendMoneyTo"), 50, target.name), prefix
+                String.format(plugin.bundle.getString("info.sendMoneyTo"), 50, target.name)
             ), sender.nextMessage()
         )
     }
@@ -126,7 +125,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.zero")), prefix
+                String.format(plugin.bundle.getString("error.zero"))
             ), sender.nextMessage()
         )
     }
@@ -157,7 +156,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.negative")), prefix
+                String.format(plugin.bundle.getString("error.negative"))
             ), sender.nextMessage()
         )
     }
@@ -188,7 +187,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.notEnough")), prefix
+                String.format(plugin.bundle.getString("error.notEnough"))
             ), sender.nextMessage()
         )
     }
@@ -219,7 +218,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.payYourself")), prefix
+                String.format(plugin.bundle.getString("error.payYourself"))
             ), sender.nextMessage()
         )
     }
@@ -241,7 +240,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.noPlayer")), prefix
+                String.format(plugin.bundle.getString("error.noPlayer"))
             ), sender.nextMessage()
         )
     }
@@ -264,7 +263,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.sendMoneyTo"), 50, target.name), prefix
+                String.format(plugin.bundle.getString("info.sendMoneyTo"), 50, target.name)
             ), sender.nextMessage()
         )
     }
@@ -298,7 +297,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.deposit"), 25), prefix
+                String.format(plugin.bundle.getString("info.deposit"), 25)
             ), sender.nextMessage()
         )
     }
@@ -329,7 +328,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.deposit"), 50), prefix
+                String.format(plugin.bundle.getString("info.deposit"), 50)
             ), sender.nextMessage()
         )
     }
@@ -360,7 +359,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.deposit"), 278), prefix
+                String.format(plugin.bundle.getString("info.deposit"), 278)
             ), sender.nextMessage()
         )
     }
@@ -391,7 +390,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.notEnough")), prefix
+                String.format(plugin.bundle.getString("error.notEnough"))
             ), sender.nextMessage()
         )
     }
@@ -422,7 +421,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.zero")), prefix
+                String.format(plugin.bundle.getString("error.zero"))
             ), sender.nextMessage()
         )
     }
@@ -453,7 +452,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.negative")), prefix
+                String.format(plugin.bundle.getString("error.negative"))
             ), sender.nextMessage()
         )
     }
@@ -485,7 +484,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.withdraw"), 25), prefix
+                String.format(plugin.bundle.getString("info.withdraw"), 25)
             ), sender.nextMessage()
         )
     }
@@ -516,7 +515,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.withdraw"), 50), prefix
+                String.format(plugin.bundle.getString("info.withdraw"), 50)
             ), sender.nextMessage()
         )
     }
@@ -547,7 +546,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.withdraw"), 50), prefix
+                String.format(plugin.bundle.getString("info.withdraw"), 50)
             ), sender.nextMessage()
         )
     }
@@ -579,7 +578,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.notEnough")), prefix
+                String.format(plugin.bundle.getString("error.notEnough"))
             ), sender.nextMessage()
         )
     }
@@ -610,7 +609,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.zero")), prefix
+                String.format(plugin.bundle.getString("error.zero"))
             ), sender.nextMessage()
         )
     }
@@ -641,7 +640,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("error.negative")), prefix
+                String.format(plugin.bundle.getString("error.negative"))
             ), sender.nextMessage()
         )
     }
@@ -680,7 +679,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.sender.moneyset"), target.name, 100), prefix
+                String.format(plugin.bundle.getString("info.sender.moneyset"), target.name, 100)
             ), sender.nextMessage()
         )
     }
@@ -691,8 +690,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.target.moneySet"), 100),
-                prefix
+                String.format(plugin.bundle.getString("info.target.moneySet"), 100)
             ),
             target.nextMessage().toString()
         )

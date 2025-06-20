@@ -15,19 +15,21 @@ class Util(private val plugin: TheGoldEconomy) {
             ?: Optional.empty()
     }
 
-    fun formatMessage(message: String, prefix: String): String =
-        ChatColor.GOLD.toString() + "[$prefix] " + ChatColor.WHITE + ChatColor.translateAlternateColorCodes(
+    fun formatMessage(message: String): String =
+        ChatColor.GOLD.toString() + "[" + (plugin.config.getString("prefix")
+            ?: "TheGoldEconomy") + "]" + ChatColor.WHITE + ChatColor.translateAlternateColorCodes(
             '&', message
         )
-
-    fun sendMessageToPlayer(message: String, player: Player?) =
-        player?.sendMessage(formatMessage(message, plugin.config.getString("prefix") ?: "TheGoldEconomy"))
 
     fun isBankingRestrictedToPlot(player: Player): Boolean {
         if (plugin.config.getBoolean("restrictToBankPlot")) {
             val townBlock = TownyAPI.getInstance().getTownBlock(player.location)
             if (townBlock?.type != TownBlockType.BANK) {
-                sendMessageToPlayer(plugin.bundle.getString("error.bankplot"), player)
+                player.sendMessage(
+                    formatMessage(
+                        plugin.bundle.getString("error.bankplot")
+                    )
+                )
                 return true
             }
         }

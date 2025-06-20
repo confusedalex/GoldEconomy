@@ -120,7 +120,7 @@ class Converter(var eco: EconomyImplementer, var bundle: ResourceBundle) {
                 }
             }
         }
-        if (warning) eco.util.sendMessageToPlayer(String.format(bundle.getString("warning.drops")), player)
+        if (warning) player.sendMessage(eco.util.formatMessage(String.format(bundle.getString("warning.drops"))))
     }
 
     fun withdraw(player: Player, nuggets: Int, base: Base) {
@@ -129,7 +129,7 @@ class Converter(var eco: EconomyImplementer, var bundle: ResourceBundle) {
 
         // Checks balance in hashmap
         if (nuggets > eco.bank.getAccountBalance(uuid)) {
-            eco.util.sendMessageToPlayer(bundle.getString("error.notEnoughMoneyWithdraw"), player)
+            player.sendMessage(eco.util.formatMessage(bundle.getString("error.notEnoughMoneyWithdraw")))
             return
         }
         eco.bank.setAccountBalance(uuid, (oldBalance - nuggets))
