@@ -104,7 +104,7 @@ tasks {
         downloadPlugins {
             url("https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar")
         }
-        minecraftVersion("1.21.4")
+        minecraftVersion("1.21.7")
     }
 }
 
