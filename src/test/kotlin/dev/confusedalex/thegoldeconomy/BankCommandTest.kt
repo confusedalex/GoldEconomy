@@ -691,10 +691,8 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.target.moneySet"), 100),
-                prefix
-            ),
-            target.nextMessage().toString()
+                String.format(plugin.bundle.getString("info.target.moneySet"), 100)
+            ), target.nextMessage().toString()
         )
     }
 
@@ -710,11 +708,35 @@ class BankCommandTest {
     }
 
     @Test
-    fun add() {
+    fun add_works() {
+        plugin.eco.bank.playerAccounts[target.uniqueId.toString()] = 50
+
+        bankCommand.add(null, target, 50)
+
+        assertEquals(
+            100, plugin.eco.bank.getAccountBalance(target.uniqueId)
+        )
     }
 
     @Test
-    fun remove() {
+    fun add_with_negative_amount_wont_work() {
+        plugin.eco.bank.playerAccounts[target.uniqueId.toString()] = 75
+
+        bankCommand.add(null, target, -25)
+
+        assertEquals(
+            75, plugin.eco.bank.getAccountBalance(target.uniqueId)
+        )
     }
 
+    @Test
+    fun remove_works() {
+        plugin.eco.bank.playerAccounts[target.uniqueId.toString()] = 75
+
+        bankCommand.remove(null, target, 25)
+
+        assertEquals(
+            50, plugin.eco.bank.getAccountBalance(target.uniqueId)
+        )
+    }
 }
