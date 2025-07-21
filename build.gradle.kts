@@ -41,9 +41,9 @@ dependencies {
         exclude(group = "org.jetbrains", module = "annotations")
     }
     testImplementation("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.13.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.13.4")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation(platform("org.junit:junit-bom:5.13.3"))
+    testImplementation(platform("org.junit:junit-bom:5.13.4"))
 }
 
 java {
