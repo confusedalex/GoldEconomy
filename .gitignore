@@ -131,6 +131,7 @@ gradlew*
 # Common working directory
 run/
 server*
+plugin/
 
 # direnv
 .envrc
