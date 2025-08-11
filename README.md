@@ -2,7 +2,6 @@
 ![Spiget Rating](https://img.shields.io/spiget/rating/102242)
 ![Spiget tested server versions](https://img.shields.io/spiget/tested-versions/102242)
 ![Weblate project translated](https://img.shields.io/weblate/progress/thegoldeconomy)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy?ref=badge_shield)
 
 ![TheGoldEconomy Logo](https://github.com/user-attachments/assets/dd12ed0c-3058-4b1f-b12f-478c780730f4)
 
@@ -113,7 +112,3 @@ prefix: "TheGoldEconomy"
 # 'raw' = 1 raw gold is 1 currency, 1 block is 9
 base: "nuggets"
 ```
-
-## License
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FConfusedAlex%2FGoldEconomy?ref=badge_large)
