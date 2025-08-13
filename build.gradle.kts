@@ -89,7 +89,7 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("")
-        enableRelocation = true
+        enableAutoRelocation = true
         relocationPrefix = "confusedalex.thegoldeconomy.libs"
         exclude("META-INF/**")
         from("LICENSE")
