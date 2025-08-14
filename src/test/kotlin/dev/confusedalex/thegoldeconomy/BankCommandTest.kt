@@ -40,7 +40,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.balance"), 100, 100, 0)
+                String.format(plugin.bundle.getString("info.balance"), plugin.util.colorCurrency(100), plugin.util.colorCurrency(100), plugin.util.colorCurrency(0))
             ), sender.nextMessage()
         )
     }
@@ -67,7 +67,7 @@ class BankCommandTest {
         assertEquals(
             plugin.util.formatMessage(
                 String.format(
-                    plugin.bundle.getString("info.balance.other"), target.name, 50
+                    plugin.bundle.getString("info.balance.other"), target.name, plugin.util.colorCurrency(50)
                 )
             ), sender.nextMessage()
         )
@@ -81,7 +81,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.moneyReceived"), 50, sender.name)
+                String.format(plugin.bundle.getString("info.moneyReceived"), plugin.util.colorCurrency(50), sender.name)
             ), target.nextMessage()
         )
     }
@@ -112,7 +112,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.sendMoneyTo"), 50, target.name)
+                String.format(plugin.bundle.getString("info.sendMoneyTo"), plugin.util.colorCurrency(50), target.name)
             ), sender.nextMessage()
         )
     }
@@ -263,7 +263,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.sendMoneyTo"), 50, target.name)
+                String.format(plugin.bundle.getString("info.sendMoneyTo"), plugin.util.colorCurrency(50), target.name)
             ), sender.nextMessage()
         )
     }
@@ -297,7 +297,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.deposit"), 25)
+                String.format(plugin.bundle.getString("info.deposit"), plugin.util.colorCurrency(25))
             ), sender.nextMessage()
         )
     }
@@ -328,7 +328,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.deposit"), 50)
+                String.format(plugin.bundle.getString("info.deposit"), plugin.util.colorCurrency(50))
             ), sender.nextMessage()
         )
     }
@@ -359,7 +359,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.deposit"), 278)
+                String.format(plugin.bundle.getString("info.deposit"), plugin.util.colorCurrency(278))
             ), sender.nextMessage()
         )
     }
@@ -484,7 +484,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.withdraw"), 25)
+                String.format(plugin.bundle.getString("info.withdraw"), plugin.util.colorCurrency(25))
             ), sender.nextMessage()
         )
     }
@@ -515,7 +515,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.withdraw"), 50)
+                String.format(plugin.bundle.getString("info.withdraw"), plugin.util.colorCurrency(50))
             ), sender.nextMessage()
         )
     }
@@ -546,7 +546,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.withdraw"), 50)
+                String.format(plugin.bundle.getString("info.withdraw"), plugin.util.colorCurrency(50))
             ), sender.nextMessage()
         )
     }
@@ -679,7 +679,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.sender.moneyset"), target.name, 100)
+                String.format(plugin.bundle.getString("info.sender.moneyset"), target.name, plugin.util.colorCurrency(100))
             ), sender.nextMessage()
         )
     }
@@ -690,7 +690,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.target.moneySet"), 100)
+                String.format(plugin.bundle.getString("info.target.moneySet"), plugin.util.colorCurrency(100))
             ),
             target.nextMessage().toString()
         )
