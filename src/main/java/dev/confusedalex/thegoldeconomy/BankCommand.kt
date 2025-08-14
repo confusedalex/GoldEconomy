@@ -39,10 +39,15 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
             sender.sendMessage(
                 util.formatMessage(
                     String.format(
-                        bundle.getString("info.balance"),
-                        eco.getBalance(uuid.toString()).toInt(),
-                        eco.bank.getAccountBalance(uuid),
-                        eco.converter.getInventoryValue(sender, base)
+                        bundle.getString("info.balance"), util.colorCurrency(
+                            eco.getBalance(uuid.toString()).toInt()
+                        ), util.colorCurrency(
+
+                            eco.bank.getAccountBalance(uuid)
+
+                        ), util.colorCurrency(
+                            eco.converter.getInventoryValue(sender, base)
+                        )
                     )
                 )
             )
@@ -50,7 +55,9 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
             sender.sendMessage(
                 util.formatMessage(
                     String.format(
-                        bundle.getString("info.balance.other"), player.name, eco.getBalance(player).toInt()
+                        bundle.getString("info.balance.other"),
+                        player.name,
+                        util.colorCurrency(eco.getBalance(player).toInt())
                     )
                 )
             )
@@ -104,14 +111,14 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
                 eco.withdrawPlayer(sender, amount.toDouble())
                 sender.sendMessage(
                     util.formatMessage(
-                        String.format(bundle.getString("info.sendMoneyTo"), amount, target.name)
+                        String.format(bundle.getString("info.sendMoneyTo"), util.colorCurrency(amount), target.name)
                     )
                 )
                 if (target.isOnline) {
                     Bukkit.getPlayer(target.uniqueId)?.sendMessage(
                         util.formatMessage(
                             String.format(
-                                bundle.getString("info.moneyReceived"), amount, sender.name
+                                bundle.getString("info.moneyReceived"), util.colorCurrency(amount), sender.name
                             )
                         )
                     )
@@ -141,7 +148,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
                 player.sendMessage(util.formatMessage(bundle.getString("error.zero")))
                 return
             }
-            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.deposit"), inventoryValue)))
+            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.deposit"), util.colorCurrency(inventoryValue))))
             eco.converter.deposit(player, inventoryValue, base)
             return
         }
@@ -161,7 +168,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
         } else if (amount > inventoryValue) {
             player.sendMessage(util.formatMessage(bundle.getString("error.notEnough")))
         } else {
-            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.deposit"), amount)))
+            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.deposit"), util.colorCurrency(amount))))
             eco.converter.deposit(player, nuggets.toInt(), base)
         }
     }
@@ -178,7 +185,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
         if (util.isBankingRestrictedToPlot(player)) return
         if (nuggets == null || nuggets == "all") {
             val accountBalance = eco.bank.getAccountBalance(player.uniqueId)
-            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.withdraw"), accountBalance)))
+            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.withdraw"), util.colorCurrency(accountBalance))))
             eco.converter.withdraw(player, eco.bank.getAccountBalance(player.uniqueId), base)
             return
         }
@@ -198,7 +205,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
         } else if (amount > eco.bank.getAccountBalance(player.uniqueId)) {
             player.sendMessage(util.formatMessage(bundle.getString("error.notEnough")))
         } else {
-            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.withdraw"), amount)))
+            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.withdraw"), util.colorCurrency(amount))))
             eco.converter.withdraw(player, amount, base)
         }
     }
@@ -211,7 +218,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
         if (gold < 0) {
             commandSender?.sendMessage(
                 util.formatMessage(
-                    String.format(bundle.getString("error.negative"), target.name, gold),
+                    String.format(bundle.getString("error.negative"), target.name, util.colorCurrency(gold)),
                 )
             )
             return;
@@ -219,14 +226,14 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
 
         commandSender?.sendMessage(
             util.formatMessage(
-                String.format(bundle.getString("info.sender.moneyset"), target.name, gold)
+                String.format(bundle.getString("info.sender.moneyset"), target.name, util.colorCurrency(gold))
             )
         )
 
         eco.bank.setAccountBalance(target.uniqueId, gold)
         Bukkit.getPlayer(target.uniqueId)?.sendMessage(
             util.formatMessage(
-                String.format(bundle.getString("info.target.moneySet"), gold),
+                String.format(bundle.getString("info.target.moneySet"), util.colorCurrency(gold)),
             )
         )
     }
@@ -237,7 +244,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
     fun add(commandSender: CommandSender?, target: OfflinePlayer, gold: Int) {
         commandSender?.sendMessage(
             util.formatMessage(
-                String.format(bundle.getString("info.sender.addmoney"), gold, target.name)
+                String.format(bundle.getString("info.sender.addmoney"), util.colorCurrency(gold), target.name)
             )
         )
 
@@ -245,7 +252,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
         Bukkit.getPlayer(target.uniqueId)?.sendMessage(
             util.formatMessage(
 
-                String.format(bundle.getString("info.target.addMoney"), gold)
+                String.format(bundle.getString("info.target.addMoney"), util.colorCurrency(gold))
             )
         )
     }
@@ -256,14 +263,14 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
     fun remove(commandSender: CommandSender?, target: OfflinePlayer, gold: Int) {
         commandSender?.sendMessage(
             util.formatMessage(
-                String.format(bundle.getString("info.sender.remove"), gold, target.name)
+                String.format(bundle.getString("info.sender.remove"), util.colorCurrency(gold), target.name)
             )
         )
 
         eco.withdrawPlayer(target, gold.toDouble())
         Bukkit.getPlayer(target.uniqueId)?.sendMessage(
             util.formatMessage(
-                String.format(bundle.getString("info.target.remove"), gold)
+                String.format(bundle.getString("info.target.remove"), util.colorCurrency(gold))
             )
         )
     }

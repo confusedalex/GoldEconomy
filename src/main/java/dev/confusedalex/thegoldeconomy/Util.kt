@@ -2,6 +2,7 @@ package dev.confusedalex.thegoldeconomy
 
 import com.palmergames.bukkit.towny.TownyAPI
 import com.palmergames.bukkit.towny.`object`.TownBlockType
+import net.milkbowl.vault.chat.Chat
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
@@ -14,6 +15,8 @@ class Util(private val plugin: TheGoldEconomy) {
         return Bukkit.getOfflinePlayers().firstOrNull { it.name == playerName }?.let { Optional.of(it) }
             ?: Optional.empty()
     }
+
+    fun colorCurrency(gold: Number): String = "" + ChatColor.GOLD + gold + ChatColor.WHITE
 
     fun formatMessage(message: String): String =
         ChatColor.GOLD.toString() + "[" + (plugin.config.getString("prefix")
