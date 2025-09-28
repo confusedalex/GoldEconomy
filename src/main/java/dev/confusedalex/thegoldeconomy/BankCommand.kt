@@ -122,7 +122,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
                             )
                         )
                     )
-                    eco.bank.setAccountBalance(target.uniqueId, eco.bank.getTotalPlayerBalance(targetuuid) + amount)
+                    eco.bank.setAccountBalance(target.uniqueId, eco.bank.getAccountBalance(targetuuid) + amount)
                 } else {
                     eco.depositPlayer(target, amount.toDouble())
                 }
