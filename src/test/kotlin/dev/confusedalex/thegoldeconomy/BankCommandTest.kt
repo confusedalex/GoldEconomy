@@ -290,6 +290,17 @@ class BankCommandTest {
     }
 
     @Test
+    fun paying_with_inventory_amout_will_only_add_ontop_balance() {
+        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
+        plugin.eco.converter.give(target, 50, Base.NUGGETS)
+
+        bankCommand.pay(sender, target, 25);
+
+        assertEquals(25, plugin.eco.bank.getTotalPlayerBalance(sender.uniqueId))
+        assertEquals(75, plugin.eco.bank.getTotalPlayerBalance(target.uniqueId))
+    }
+
+    @Test
     fun deposit_with_specific_sufficient_amount_will_notify_sender() {
         plugin.eco.converter.give(sender, 50, Base.NUGGETS)
 
