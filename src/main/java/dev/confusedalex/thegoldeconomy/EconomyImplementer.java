@@ -78,17 +78,13 @@ public class EconomyImplementer implements Economy {
     }
 
     @Override
-    public boolean hasAccount(String s, String s1) {
-        if (util.isOfflinePlayer(s).isPresent()) return true;
-        if (bank.getFakeAccounts().containsKey(s)) return true;
-
-        bank.setFakeAccountBalance(s, 0);
-        return true;
+    public boolean hasAccount(String playerName, String worldName) {
+        return hasAccount(playerName);
     }
 
     @Override
-    public boolean hasAccount(OfflinePlayer offlinePlayer, String s) {
-        return true;
+    public boolean hasAccount(OfflinePlayer player, String worldName) {
+        return hasAccount(player);
     }
 
     @Override
@@ -110,22 +106,13 @@ public class EconomyImplementer implements Economy {
     }
 
     @Override
-    public double getBalance(String s, String s1) {
-        try {
-            UUID uuid = UUID.fromString(s);
-            if (Bukkit.getPlayer(uuid) != null) return bank.getTotalPlayerBalance(uuid);
-        } catch (IllegalArgumentException e) {
-            // String is not UUID
-        }
-        if (util.isOfflinePlayer(s).isPresent())
-            return bank.getTotalPlayerBalance(Bukkit.getOfflinePlayer(s).getUniqueId());
-        return bank.getFakeBalance(s);
+    public double getBalance(String playerName, String world) {
+        return getBalance(playerName);
     }
 
     @Override
-    public double getBalance(OfflinePlayer offlinePlayer, String s) {
-        if (offlinePlayer != null) return bank.getTotalPlayerBalance(offlinePlayer.getUniqueId());
-        return 0;
+    public double getBalance(OfflinePlayer player, String world) {
+        return getBalance(player);
     }
 
     @Override
@@ -141,15 +128,13 @@ public class EconomyImplementer implements Economy {
     }
 
     @Override
-    public boolean has(String s, String s1, double v) {
-        if (util.isOfflinePlayer(s).isPresent())
-            return v < bank.getTotalPlayerBalance(Bukkit.getOfflinePlayer(s).getUniqueId());
-        else return v < bank.getFakeBalance(s);
+    public boolean has(String playerName, String worldName, double amount) {
+        return has(playerName, amount);
     }
 
     @Override
-    public boolean has(OfflinePlayer offlinePlayer, String s, double v) {
-        return v < bank.getTotalPlayerBalance(offlinePlayer.getUniqueId());
+    public boolean has(OfflinePlayer player, String worldName, double amount) {
+        return has(player, amount);
     }
 
     @Override
@@ -388,41 +373,13 @@ public class EconomyImplementer implements Economy {
     }
 
     @Override
-    public EconomyResponse depositPlayer(String s, String s1, double amount) {
-        int oldBalance = 0;
-
-        // If amount is negative -> return
-        if (amount < 0) return new EconomyResponse(amount, oldBalance, EconomyResponse.ResponseType.FAILURE, "error");
-
-        Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(s);
-        if (playerOptional.isPresent()) {
-            OfflinePlayer player = playerOptional.get();
-            UUID uuid = player.getUniqueId();
-
-            // Getting balance and calculating new Balance
-            oldBalance = bank.getAccountBalance(uuid);
-            int newBalance = (int) (oldBalance + amount);
-            bank.setAccountBalance(uuid, newBalance);
-            return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
-        } else {
-            oldBalance = bank.getFakeBalance(s);
-            int newBalance = (int) (oldBalance + amount);
-            bank.setFakeAccountBalance(s, newBalance);
-            return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
-        }
+    public EconomyResponse depositPlayer(String playerName, String worldName, double amount) {
+        return depositPlayer(playerName, amount);
     }
 
     @Override
-    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double amount) {
-        UUID uuid = offlinePlayer.getUniqueId();
-        int oldBalance = bank.getAccountBalance(uuid);
-        int newBalance = (int) (amount + oldBalance);
-
-        // If amount is negative -> return
-        if (amount < 0) return new EconomyResponse(amount, oldBalance, EconomyResponse.ResponseType.FAILURE, "error");
-
-        bank.setAccountBalance(uuid, newBalance);
-        return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
+    public EconomyResponse depositPlayer(OfflinePlayer player, String worldName, double amount) {
+        return depositPlayer(player, amount);
     }
 
     @Override
