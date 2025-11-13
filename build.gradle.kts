@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm") version "2.2.21"
     id("com.gradleup.shadow") version "9.2.2"
     id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("com.modrinth.minotaur") version "2.+"
 }
 
 group = "dev.confusedalex"
@@ -113,4 +114,41 @@ configurations {
         extendsFrom(configurations.compileOnly.get())
         exclude("org.spigotmc", "spigot-api")
     }
+}
+
+modrinth {
+    token.set(System.getenv("MODRINTH_TOKEN"))
+    projectId.set("thegoldeconomy")
+    versionType.set("release")
+    uploadFile.set(tasks.shadowJar)
+    gameVersions.addAll(
+        "1.18",
+        "1.18.1",
+        "1.18.2",
+        "1.19",
+        "1.19.1",
+        "1.19.2",
+        "1.19.3",
+        "1.19.4",
+        "1.20",
+        "1.20.1",
+        "1.20.2",
+        "1.20.3",
+        "1.20.4",
+        "1.20.5",
+        "1.20.6",
+        "1.21",
+        "1.21.1",
+        "1.21.2",
+        "1.21.3",
+        "1.21.4",
+        "1.21.5",
+        "1.21.6",
+        "1.21.7",
+        "1.21.8",
+        "1.21.9",
+        "1.21.10"
+    )
+    loaders.addAll("spigot", "paper", "purpur")
+    syncBodyFrom = rootProject.file("README.md").readText()
 }
