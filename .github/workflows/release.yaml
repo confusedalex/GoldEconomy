@@ -25,8 +25,13 @@ jobs:
         with:
           java-version: "21"
           distribution: "temurin"
-          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          server-id: github 
           settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          gradle-version: '9.1.0'
 
       - name: Build with Gradle
         run: gradle build
@@ -36,5 +41,10 @@ jobs:
         with:
           prerelease: false
           draft: false
-          files: target/TheGoldEconomy-*.jar
-          generate_release_notes: true
+          files: build/libs/GoldEconomy-*.jar
+
+      - name: Upload to Modrinth
+        run: gradle modrinth
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+
