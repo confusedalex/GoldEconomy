@@ -90,16 +90,20 @@ The following placeholders are available if using PlaceholderAPI
 ```yaml
 # Remove Gold Drops from Mobs like Piglins? (default: true)
 removeGoldDrop: true
-# Should the plugin check for updated? (default: true)
+# Should the plugin check for updates? (default: true)
 updateCheck: true
 # Valid language are:
-# German: de_DE
-# English: en_US
-# Spanish: es_ES
-# Simplified Chinese: zh_CN
-# Turkish: tr_TR
 # Brazilian Portuguese: pt_BR
+# Bulgarian: bg_BG
+# English: en_US
+# German: de_DE
+# Japanese: jp_JP
 # Norwegian: nb_NO
+# Polish: pl_PL
+# Simplified Chinese: zh_CN
+# Spanish: es_ES
+# Tamil: ta
+# Turkish: tr_TR
 # Ukrainian: uk
 language: "en_US"
 # Do you want to restrict bank commands to bank plots (requires Towny)
