@@ -29,10 +29,8 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
     @Description("{@@command.info.balance}")
     @CommandPermission("thegoldeconomy.balance")
     fun balance(commandSender: CommandSender, @Optional player: OfflinePlayer?) {
-        val senderOptional = util.isPlayer(commandSender)
-        if (senderOptional.isEmpty) return
+        val sender = util.isPlayer(commandSender) ?: return
 
-        val sender = senderOptional.get()
         val uuid = sender.uniqueId
 
         if (player == null) {
@@ -74,9 +72,7 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
     @Description("{@@command.info.pay}")
     @CommandPermission("thegoldeconomy.pay")
     fun pay(commandSender: CommandSender, target: OfflinePlayer, amount: Int) {
-        val playerOptional = util.isPlayer(commandSender)
-        if (playerOptional.isEmpty) return
-        val sender = playerOptional.get()
+        val sender = util.isPlayer(commandSender) ?: return
         val senderuuid = sender.uniqueId
         val targetuuid = target.uniqueId
 
@@ -134,10 +130,8 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
     @Description("{@@command.info.deposit}")
     @CommandPermission("thegoldeconomy.deposit")
     fun deposit(commandSender: CommandSender, @Optional nuggets: String?) {
-        val playerOptional = util.isPlayer(commandSender)
-        if (playerOptional.isEmpty) return
+        val player = util.isPlayer(commandSender) ?: return
 
-        val player = playerOptional.get()
         val inventoryValue = eco.converter.getInventoryValue(player, base)
 
         if (util.isBankingRestrictedToPlot(player)) {
@@ -177,10 +171,8 @@ class BankCommand(plugin: TheGoldEconomy) : BaseCommand() {
     @Description("{@@command.info.withdraw}")
     @CommandPermission("thegoldeconomy.withdraw")
     fun withdraw(commandSender: CommandSender, @Optional nuggets: String?) {
-        val playerOptional = util.isPlayer(commandSender)
-        if (playerOptional.isEmpty) return
+        val player = util.isPlayer(commandSender) ?: return
 
-        val player = playerOptional.get()
 
         if (util.isBankingRestrictedToPlot(player)) return
         if (nuggets == null || nuggets == "all") {

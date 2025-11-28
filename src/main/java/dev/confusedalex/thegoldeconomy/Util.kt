@@ -2,7 +2,6 @@ package dev.confusedalex.thegoldeconomy
 
 import com.palmergames.bukkit.towny.TownyAPI
 import com.palmergames.bukkit.towny.`object`.TownBlockType
-import net.milkbowl.vault.chat.Chat
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
@@ -37,12 +36,12 @@ class Util(private val plugin: TheGoldEconomy) {
         return false
     }
 
-    fun isPlayer(commandSender: CommandSender): Optional<Player> {
+    fun isPlayer(commandSender: CommandSender): Player? {
         return if (commandSender is Player) {
-            Optional.of(commandSender)
+            commandSender
         } else {
             commandSender.sendMessage(plugin.bundle.getString("error.notAPlayer"))
-            Optional.empty()
+            return null;
         }
     }
 }
