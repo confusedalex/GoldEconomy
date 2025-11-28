@@ -120,6 +120,7 @@ modrinth {
     token.set(System.getenv("MODRINTH_TOKEN"))
     projectId.set("thegoldeconomy")
     versionType.set("release")
+    versionName.set("TheGoldEconomy $version")
     uploadFile.set(tasks.shadowJar)
     gameVersions.addAll(
         "1.18",
