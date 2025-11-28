@@ -61,9 +61,7 @@ class Converter(var eco: EconomyImplementer, var bundle: ResourceBundle) {
     }
 
     fun give(player: Player, value: Int, base: Base) {
-        var value = value
         var warning = false
-
         val blockValue: Int
         val ingotValue: Int
         val block: Material?
@@ -87,29 +85,20 @@ class Converter(var eco: EconomyImplementer, var bundle: ResourceBundle) {
         // Set max. stack size to 64, otherwise the stacks will go up to 99
         player.inventory.maxStackSize = 64
 
-        if (value / blockValue > 0) {
-            val blocks = player.inventory.addItem(ItemStack(block, value / blockValue))
-            for (item in blocks.values) {
-                if (item != null && item.type == block && item.amount > 0) {
-                    player.world.dropItem(player.location, item)
-                    warning = true
+        fun removeMaterial(material: Material, materialValue: Int, value: Int): Int {
+            if (value / materialValue > 0) {
+                val itemMaterials = player.inventory.addItem(ItemStack(material, value / materialValue))
+                for (item in itemMaterials.values) {
+                    if (item != null && item.type == material && item.amount > 0) {
+                        player.world.dropItem(player.location, item)
+                        warning = true
+                    }
                 }
             }
+            return value - (value / materialValue) * materialValue
         }
 
-        value -= (value / blockValue) * blockValue
-
-        if (value / ingotValue > 0) {
-            val ingots = player.inventory.addItem(ItemStack(ingot, value / ingotValue))
-            for (item in ingots.values) {
-                if (item != null && item.type == ingot && item.amount > 0) {
-                    player.world.dropItem(player.location, item)
-                    warning = true
-                }
-            }
-        }
-
-        value -= (value / ingotValue) * ingotValue
+        val value = removeMaterial(ingot, ingotValue, removeMaterial(block, blockValue, value))
 
         if (base == Base.NUGGETS && value > 0) {
             val nuggets = player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, value))
