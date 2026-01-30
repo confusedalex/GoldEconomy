@@ -26,6 +26,11 @@ class Converter(var eco: EconomyImplementer, var bundle: ResourceBundle) {
             Material.RAW_GOLD_BLOCK -> 9
             else -> 0
         }
+
+        Base.TURTLE_SCUTE -> when (material) {
+            Material.TURTLE_SCUTE -> 1
+            else -> 0
+        }
     }
 
     fun isGold(material: Material?, base: Base): Boolean = getValue(material, base) > 0
@@ -71,6 +76,11 @@ class Converter(var eco: EconomyImplementer, var bundle: ResourceBundle) {
                 linkedMapOf(
                    Material.RAW_GOLD_BLOCK to getValue(Material.RAW_GOLD_BLOCK, base),
                    Material.RAW_GOLD to getValue(Material.RAW_GOLD, base),
+                )
+            }
+            Base.TURTLE_SCUTE -> {
+                linkedMapOf(
+                    Material.TURTLE_SCUTE to getValue(Material.TURTLE_SCUTE, base),
                 )
             }
         }

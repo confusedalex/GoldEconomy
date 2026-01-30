@@ -58,6 +58,7 @@ public class TheGoldEconomy extends JavaPlugin {
             case "nuggets" -> base = Base.NUGGETS;
             case "ingots" -> base = Base.INGOTS;
             case "raw" -> base = Base.RAW;
+            case "turtle_scute" -> base = Base.TURTLE_SCUTE;
             default -> {
                 getLogger().severe(bundle.getString("error.invalidBase"));
                 getServer().shutdown();
