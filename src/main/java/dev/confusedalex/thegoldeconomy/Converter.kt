@@ -28,17 +28,7 @@ class Converter(var eco: EconomyImplementer, var bundle: ResourceBundle) {
         }
     }
 
-    fun isGold(material: Material?, base: Base): Boolean = when (base) {
-        Base.INGOTS, Base.NUGGETS -> when (material) {
-            Material.GOLD_BLOCK, Material.GOLD_INGOT, Material.GOLD_NUGGET -> true
-            else -> false
-        }
-
-        Base.RAW -> when (material) {
-            Material.RAW_GOLD, Material.RAW_GOLD_BLOCK -> true
-            else -> false
-        }
-    }
+    fun isGold(material: Material?, base: Base): Boolean = getValue(material, base) > 0
 
     fun getInventoryValue(player: Player?, base: Base): Int =
         player?.inventory
