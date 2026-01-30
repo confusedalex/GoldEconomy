@@ -52,25 +52,28 @@ class Converter(var eco: EconomyImplementer, var bundle: ResourceBundle) {
 
     fun give(player: Player, value: Int, base: Base) {
         var warning = false
-        val blockValue: Int
-        val ingotValue: Int
-        val block: Material?
-        val ingot: Material?
 
-        when (base) {
-            Base.INGOTS, Base.NUGGETS -> {
-                block = Material.GOLD_BLOCK
-                ingot = Material.GOLD_INGOT
+        val materials = when (base) {
+            Base.NUGGETS -> {
+                linkedMapOf(
+                    Material.GOLD_BLOCK to getValue(Material.GOLD_BLOCK, base),
+                    Material.GOLD_INGOT to getValue(Material.GOLD_INGOT, base),
+                    Material.GOLD_NUGGET to getValue(Material.GOLD_NUGGET, base)
+                )
             }
-
+            Base.INGOTS -> {
+                 linkedMapOf(
+                     Material.GOLD_BLOCK to getValue(Material.GOLD_BLOCK, base),
+                     Material.GOLD_INGOT to getValue(Material.GOLD_INGOT, base),
+                )
+            }
             Base.RAW -> {
-                block = Material.RAW_GOLD_BLOCK
-                ingot = Material.RAW_GOLD
+                linkedMapOf(
+                   Material.RAW_GOLD_BLOCK to getValue(Material.RAW_GOLD_BLOCK, base),
+                   Material.RAW_GOLD to getValue(Material.RAW_GOLD, base),
+                )
             }
         }
-
-        blockValue = getValue(block, base)
-        ingotValue = getValue(ingot, base)
 
         // Set max. stack size to 64, otherwise the stacks will go up to 99
         player.inventory.maxStackSize = 64
@@ -88,17 +91,10 @@ class Converter(var eco: EconomyImplementer, var bundle: ResourceBundle) {
             return value - (value / materialValue) * materialValue
         }
 
-        val value = removeMaterial(ingot, ingotValue, removeMaterial(block, blockValue, value))
-
-        if (base == Base.NUGGETS && value > 0) {
-            val nuggets = player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, value))
-            for (item in nuggets.values) {
-                if (item != null && item.type == Material.GOLD_NUGGET && item.amount > 0) {
-                    player.world.dropItem(player.location, item)
-                    warning = true
-                }
-            }
+        materials.entries.fold(value) { acc, entry ->
+            removeMaterial(entry.key, entry.value, acc)
         }
+
         if (warning) player.sendMessage(eco.util.formatMessage(String.format(bundle.getString("warning.drops"))))
     }
 
