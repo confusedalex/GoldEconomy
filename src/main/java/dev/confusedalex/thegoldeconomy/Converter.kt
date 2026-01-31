@@ -37,7 +37,7 @@ class Converter(var eco: EconomyImplementer, var bundle: ResourceBundle) {
 
     fun getInventoryValue(player: Player?, base: Base): Int =
         player?.inventory
-            ?.filter { it != null }
+            ?.filterNotNull()
             ?.filter { isGold(it.type, base) }
             ?.sumOf { getValue(it.type, base) * it.amount } ?: 0
 
