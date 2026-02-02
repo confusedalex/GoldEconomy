@@ -10,6 +10,7 @@ plugins {
 
 group = "dev.confusedalex"
 version = "1.10.0"
+val targetApiVersion = "1.21.11"
 
 repositories {
     mavenCentral()
@@ -29,7 +30,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.12.0")
 
     // Internal
-    compileOnly("org.spigotmc:spigot-api:1.21.8-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:${targetApiVersion}-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
@@ -37,11 +38,11 @@ dependencies {
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
     // Tests
-    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.77.0") {
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.101.0") {
         // Exclude the JetBrains annotations to prevent conflicts
         exclude(group = "org.jetbrains", module = "annotations")
     }
-    testImplementation("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    testImplementation("io.papermc.paper:paper-api:${targetApiVersion}-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter:6.0.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(platform("org.junit:junit-bom:6.0.2"))
@@ -105,7 +106,7 @@ tasks {
         downloadPlugins {
             url("https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar")
         }
-        minecraftVersion("1.21.8")
+        minecraftVersion(targetApiVersion)
     }
 }
 
@@ -148,7 +149,8 @@ modrinth {
         "1.21.7",
         "1.21.8",
         "1.21.9",
-        "1.21.10"
+        "1.21.10",
+        "1.21.11"
     )
     loaders.addAll("spigot", "paper", "purpur")
     syncBodyFrom = rootProject.file("README.md").readText()
