@@ -6,7 +6,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
 
-class Bank(private val converter: Converter) {
+class Bank {
     val playerAccounts: HashMap<String, Int> = Json.decodeFromString(createPlayersFile().readText())
     val fakeAccounts: HashMap<String, Int> = Json.decodeFromString(createFakeAccountsFile().readText())
 
@@ -14,7 +14,7 @@ class Bank(private val converter: Converter) {
         val player: Player? = Bukkit.getPlayer(uuid)
 
         if (player?.isOnline == true) {
-            return getAccountBalance(uuid) + converter.getInventoryValue(player, base)
+            return getAccountBalance(uuid) + Converter.getInventoryValue(player, base)
         }
         return getAccountBalance(uuid)
     }

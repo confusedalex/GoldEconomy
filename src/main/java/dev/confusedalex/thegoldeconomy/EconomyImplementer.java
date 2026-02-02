@@ -24,8 +24,7 @@ public class EconomyImplementer implements Economy {
         this.plugin = plugin;
         this.bundle = bundle;
         this.util = util;
-        converter = new Converter(this, bundle);
-        bank = new Bank(converter);
+        bank = new Bank();
     }
 
     @Override
@@ -156,7 +155,7 @@ public class EconomyImplementer implements Economy {
 
                 // get balance and InventoryValue from Player
                 int oldBankBalance = bank.getAccountBalance(uuid);
-                int oldInventoryBalance = converter.getInventoryValue(player, base);
+                int oldInventoryBalance = Converter.Companion.getInventoryValue(player, base);
 
 
                 // If balance + InventoryValue is < amount, return
@@ -170,7 +169,7 @@ public class EconomyImplementer implements Economy {
                     // Set balance to 0 and cover rest of the costs with Inventory Funds
                     int diff = (int) (amount - oldBankBalance);
                     bank.setAccountBalance(uuid, 0);
-                    converter.remove(player, diff, base);
+                    Converter.Companion.remove(plugin.eco, bundle).invoke(player, diff, base);
 
                     return new EconomyResponse(amount, oldInventoryBalance - amount, EconomyResponse.ResponseType.SUCCESS, "");
                 }
@@ -206,7 +205,7 @@ public class EconomyImplementer implements Economy {
 
             // get Balance and InventoryValue
             int oldBankBalance = bank.getAccountBalance(uuid);
-            int oldInventoryBalance = converter.getInventoryValue(player, base);
+            int oldInventoryBalance = Converter.Companion.getInventoryValue(player, base);
 
             // If balance + InventoryValue is < amount, return
             if (amount > oldBankBalance + oldInventoryBalance)
@@ -219,7 +218,7 @@ public class EconomyImplementer implements Economy {
                 // Set balance to 0 and cover rest of the costs with Inventory Funds
                 int diff = (int) (amount - oldBankBalance);
                 bank.setAccountBalance(uuid, 0);
-                converter.remove(player, diff, base);
+                Converter.Companion.remove(plugin.eco, bundle).invoke(player, diff, base);
                 return new EconomyResponse(amount, oldInventoryBalance - amount, EconomyResponse.ResponseType.SUCCESS, "");
             }
         } else {

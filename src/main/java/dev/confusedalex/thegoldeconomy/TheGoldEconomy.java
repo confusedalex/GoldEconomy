@@ -75,7 +75,7 @@ public class TheGoldEconomy extends JavaPlugin {
         vaultHook = new VaultHook(this, eco);
         vaultHook.hook();
 
-        manager.registerCommand(new BankCommand(this));
+        manager.registerCommand(new BankCommand(eco, bundle, util, this.getConfig()));
 
         // Event class registering
         Bukkit.getPluginManager().registerEvents(new Events(eco.bank), this);

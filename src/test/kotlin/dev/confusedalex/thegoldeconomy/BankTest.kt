@@ -36,7 +36,7 @@ class BankTest {
         bank.setAccountBalance(uuid, 1000)
         assertEquals(1000, bank.getAccountBalance(uuid))
         assertEquals(1000, bank.getTotalPlayerBalance(uuid))
-        converter.withdraw(player, 500, Base.NUGGETS)
+        Converter.withdraw(plugin.eco, plugin.bundle)(player, 500, Base.NUGGETS)
         assertEquals(500, bank.getAccountBalance(uuid))
         assertEquals(1000, bank.getTotalPlayerBalance(uuid))
         player.disconnect()

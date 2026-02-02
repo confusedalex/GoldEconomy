@@ -1,5 +1,7 @@
 package dev.confusedalex.thegoldeconomy
 
+import dev.confusedalex.thegoldeconomy.Converter.Companion.getInventoryValue
+import org.bukkit.entity.Player
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -15,12 +17,16 @@ class BankCommandTest {
     private lateinit var bankCommand: BankCommand
     private lateinit var sender: PlayerMock
     private lateinit var target: PlayerMock
+    lateinit var give: (Player, Int, Base) -> Unit
 
     @BeforeEach
     fun setUp() {
         server = MockBukkit.mock()
         plugin = MockBukkit.load(TheGoldEconomy::class.java)
-        bankCommand = BankCommand(plugin)
+
+        give = Converter.give(plugin.eco, plugin.bundle)
+
+        bankCommand = BankCommand(plugin.eco, plugin.bundle, plugin.util, plugin.config)
         plugin.eco.bank.playerAccounts.clear()
         plugin.eco.bank.fakeAccounts.clear()
         sender = server.addPlayer("sender")
@@ -291,8 +297,8 @@ class BankCommandTest {
 
     @Test
     fun paying_with_inventory_amout_will_only_add_ontop_balance() {
-        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
-        plugin.eco.converter.give(target, 50, Base.NUGGETS)
+        give(sender, 50, Base.NUGGETS)
+        give(target, 50, Base.NUGGETS)
 
         bankCommand.pay(sender, target, 25);
 
@@ -302,7 +308,7 @@ class BankCommandTest {
 
     @Test
     fun deposit_with_specific_sufficient_amount_will_notify_sender() {
-        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
+        give(sender, 50, Base.NUGGETS)
 
         bankCommand.deposit(sender, "25")
 
@@ -315,7 +321,7 @@ class BankCommandTest {
 
     @Test
     fun deposit_with_specific_sufficient_amount_will_add_to_account() {
-        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
+        give(sender, 50, Base.NUGGETS)
 
         bankCommand.deposit(sender, "25")
 
@@ -324,16 +330,16 @@ class BankCommandTest {
 
     @Test
     fun deposit_with_specific_sufficient_amount_will_deduct_from_inventory() {
-        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
+        give(sender, 50, Base.NUGGETS)
 
         bankCommand.deposit(sender, "25")
 
-        assertEquals(25, plugin.eco.converter.getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(25, getInventoryValue(sender, Base.NUGGETS))
     }
 
     @Test
     fun deposit_of_all_with_sufficient_amount_will_notify_sender() {
-        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
+        give(sender, 50, Base.NUGGETS)
 
         bankCommand.deposit(sender, "all")
 
@@ -346,7 +352,7 @@ class BankCommandTest {
 
     @Test
     fun deposit_of_all_with_sufficient_amount_will_add_to_account() {
-        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
+        give(sender, 50, Base.NUGGETS)
 
         bankCommand.deposit(sender, "all")
 
@@ -355,16 +361,16 @@ class BankCommandTest {
 
     @Test
     fun deposit_of_all_with_sufficient_amount_will_deduct_from_inventory() {
-        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
+        give(sender, 50, Base.NUGGETS)
 
         bankCommand.deposit(sender, "all")
 
-        assertEquals(0, plugin.eco.converter.getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(sender, Base.NUGGETS))
     }
 
     @Test
     fun deposit_with_no_amount_will_notify_sender() {
-        plugin.eco.converter.give(sender, 278, Base.NUGGETS)
+        give(sender, 278, Base.NUGGETS)
 
         bankCommand.deposit(sender, null)
 
@@ -377,7 +383,7 @@ class BankCommandTest {
 
     @Test
     fun deposit_with_no_amount_will_add_all_gold_from_inventory_to_account() {
-        plugin.eco.converter.give(sender, 278, Base.NUGGETS)
+        give(sender, 278, Base.NUGGETS)
 
         bankCommand.deposit(sender, null)
 
@@ -386,16 +392,16 @@ class BankCommandTest {
 
     @Test
     fun deposit_with_no_amount_will_deduct_all_gold_from_inventory() {
-        plugin.eco.converter.give(sender, 278, Base.NUGGETS)
+        give(sender, 278, Base.NUGGETS)
 
         bankCommand.deposit(sender, null)
 
-        assertEquals(0, plugin.eco.converter.getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(sender, Base.NUGGETS))
     }
 
     @Test
     fun deposit_with_insufficient_amount_will_send_error() {
-        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
+        give(sender, 50, Base.NUGGETS)
 
         bankCommand.deposit(sender, "100")
 
@@ -408,7 +414,7 @@ class BankCommandTest {
 
     @Test
     fun deposit_with_insufficient_amount_will_not_add_to_account() {
-        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
+        give(sender, 50, Base.NUGGETS)
 
         bankCommand.deposit(sender, "100")
 
@@ -417,16 +423,16 @@ class BankCommandTest {
 
     @Test
     fun deposit_with_insufficient_amount_will_not_deduct_from_inventory() {
-        plugin.eco.converter.give(sender, 50, Base.NUGGETS)
+        give(sender, 50, Base.NUGGETS)
 
         bankCommand.deposit(sender, "100")
 
-        assertEquals(50, plugin.eco.converter.getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(50, getInventoryValue(sender, Base.NUGGETS))
     }
 
     @Test
     fun deposit_of_zero_will_send_error() {
-        plugin.eco.converter.give(sender, 50, Base.INGOTS)
+        give(sender, 50, Base.INGOTS)
 
         bankCommand.deposit(sender, "0")
 
@@ -439,7 +445,7 @@ class BankCommandTest {
 
     @Test
     fun deposit_of_zero_will_not_add_to_account() {
-        plugin.eco.converter.give(sender, 50, Base.INGOTS)
+        give(sender, 50, Base.INGOTS)
 
         bankCommand.deposit(sender, "0")
 
@@ -448,16 +454,16 @@ class BankCommandTest {
 
     @Test
     fun deposit_of_zero_will_not_remove_from_inventory() {
-        plugin.eco.converter.give(sender, 50, Base.INGOTS)
+        give(sender, 50, Base.INGOTS)
 
         bankCommand.deposit(sender, "0")
 
-        assertEquals(50, plugin.eco.converter.getInventoryValue(sender, Base.INGOTS))
+        assertEquals(50, getInventoryValue(sender, Base.INGOTS))
     }
 
     @Test
     fun deposit_of_negative_amount_will_send_error() {
-        plugin.eco.converter.give(sender, 50, Base.INGOTS)
+        give(sender, 50, Base.INGOTS)
 
         bankCommand.deposit(sender, "-50")
 
@@ -470,7 +476,7 @@ class BankCommandTest {
 
     @Test
     fun deposit_of_negative_amount_will_not_change_account() {
-        plugin.eco.converter.give(sender, 50, Base.INGOTS)
+        give(sender, 50, Base.INGOTS)
         plugin.eco.bank.setAccountBalance(sender.uniqueId, 20)
 
         bankCommand.deposit(sender, "-50")
@@ -480,11 +486,11 @@ class BankCommandTest {
 
     @Test
     fun deposit_of_negative_amount_will_not_remove_from_inventory() {
-        plugin.eco.converter.give(sender, 50, Base.INGOTS)
+        give(sender, 50, Base.INGOTS)
 
         bankCommand.deposit(sender, "-50")
 
-        assertEquals(50, plugin.eco.converter.getInventoryValue(sender, Base.INGOTS))
+        assertEquals(50, getInventoryValue(sender, Base.INGOTS))
     }
 
     @Test
@@ -515,7 +521,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, "25")
 
-        assertEquals(25, plugin.eco.converter.getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(25, getInventoryValue(sender, Base.NUGGETS))
     }
 
     @Test
@@ -546,7 +552,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, "all")
 
-        assertEquals(50, plugin.eco.converter.getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(50, getInventoryValue(sender, Base.NUGGETS))
     }
 
     @Test
@@ -577,7 +583,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, null)
 
-        assertEquals(50, plugin.eco.converter.getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(50, getInventoryValue(sender, Base.NUGGETS))
     }
 
 
@@ -609,7 +615,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, "100")
 
-        assertEquals(0, plugin.eco.converter.getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(sender, Base.NUGGETS))
     }
 
     @Test
@@ -640,7 +646,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, "0")
 
-        assertEquals(0, plugin.eco.converter.getInventoryValue(sender, Base.INGOTS))
+        assertEquals(0, getInventoryValue(sender, Base.INGOTS))
     }
 
     @Test
@@ -668,11 +674,11 @@ class BankCommandTest {
     @Test
     fun withdraw_of_negative_amount_will_not_add_to_inventory() {
         plugin.eco.bank.setAccountBalance(sender.uniqueId, 20)
-        plugin.eco.converter.give(sender, 70, Base.INGOTS)
+        give(sender, 70, Base.INGOTS)
 
         bankCommand.withdraw(sender, "-50")
 
-        assertEquals(70, plugin.eco.converter.getInventoryValue(sender, Base.INGOTS))
+        assertEquals(70, getInventoryValue(sender, Base.INGOTS))
     }
 
     @Test

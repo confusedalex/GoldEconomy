@@ -14,7 +14,7 @@ class Placeholders(private val plugin: TheGoldEconomy) : PlaceholderExpansion() 
     override fun persist() = true
 
     override fun onRequest(player: OfflinePlayer, params: String) = when (params.lowercase()) {
-        "inventorybalance" -> plugin.eco.converter.getInventoryValue(player.player, base).toString()
+        "inventorybalance" -> Converter.getInventoryValue(player.player, base).toString()
         "bankbalance" -> plugin.eco.bank.getAccountBalance(player.uniqueId).toString()
         "totalbalance" -> plugin.eco.bank.getTotalPlayerBalance(player.uniqueId).toString()
         else -> null
