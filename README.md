@@ -1,4 +1,4 @@
-![Spiget Downloads](https://img.shields.io/spiget/downloads/102242)
+![Modrinth Downloads](https://img.shields.io/modrinth/dt/thegoldeconomy)
 ![Spiget Rating](https://img.shields.io/spiget/rating/102242)
 ![Spiget tested server versions](https://img.shields.io/spiget/tested-versions/102242)
 ![Weblate project translated](https://img.shields.io/weblate/progress/thegoldeconomy)
