@@ -15,6 +15,7 @@ updateCheck: true
 # Tamil: ta
 # Turkish: tr_TR
 # Ukrainian: uk
+# Russian: ru
 language: "en_US"
 # Do you want to restrict bank commands to bank plots (requires Towny)
 restrictToBankPlot: false

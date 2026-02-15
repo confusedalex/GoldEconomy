@@ -40,6 +40,7 @@ public class TheGoldEconomy extends JavaPlugin {
         localeMap.put("bg_BG", Locales.BULGARIAN);
         localeMap.put("pl_PL", Locales.POLISH);
         localeMap.put("ta", new Locale("ta"));
+        localeMap.put("ru", Locales.RUSSIAN);
 
         if (localeMap.containsKey(language)) {
             Locale locale = localeMap.get(language);
