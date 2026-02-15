@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "dev.confusedalex"
-version = "1.10.0"
+version = "1.11.0"
 val targetApiVersion = "1.21.11"
 
 repositories {
