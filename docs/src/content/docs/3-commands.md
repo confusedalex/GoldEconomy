@@ -5,7 +5,7 @@ slug: commands
 
 ## Player Commands
 
-- **/bank balance**  
+- **/bank balance | /balance | /bal**  
   Displays your current bank balance (e.g, `/bank balance`).
 - **/bank balance <player>**  
   Shows the balance of the specified player (e.g., `/bank balance Steve`).
