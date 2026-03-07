@@ -24,7 +24,7 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
     }
 
     @Subcommand("balance")
-    @CommandAlias("balance")
+    @CommandAlias("balance|bal")
     @Description("{@@command.info.balance}")
     @CommandPermission("thegoldeconomy.balance")
     fun balance(commandSender: CommandSender, @Optional player: OfflinePlayer?) {
