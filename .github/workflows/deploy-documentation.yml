@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install, build, and upload your site output
         uses: withastro/action@v6
         with:
