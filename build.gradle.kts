@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("java")
-    kotlin("jvm") version "2.3.20"
+    kotlin("jvm") version "2.3.21"
     id("com.gradleup.shadow") version "9.4.1"
     id("xyz.jpenilla.run-paper") version "2.3.1"
     id("com.modrinth.minotaur") version "2.+"
