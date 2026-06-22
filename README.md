@@ -16,14 +16,15 @@ plugins like Vault and Towny.
 
 ## Features
 
-- Different item modes
-  - Nuggets: 1 nugget = 1 money, 1 ingot = 9 money
-  - Ingot: 1 ingot = 1 money
-  - Raw gold: 1 raw gold = 1 money
-- Option to remove gold drops from mobs
-- Vault Support for compatability with other plugins
-- PlaceholderAPI support
-- Towny Bank Plot support
+- Different gold translation modes
+  - Nugget Mode: 1 Nugget = 1$
+  - Ingot Mode: 1 Ingot = 1$
+  - Raw Gold Mode: 1 Raw Gold = 1$
+- Extensive plugin comatability
+  - Vault support to work with other plugins
+  - PlaceholderAPI
+  - Towny bank plots
+- Option to completly remove gold drops from mobs
 - Many languages included
 - No database required
 
