@@ -7,38 +7,34 @@
 
 ## Introduction
 
-TheGoldEconomy is a powerful economy plugin that allows servers to manage their gold-based currency through a bank system. Players can deposit and withdraw gold and send money to each other. With support for both gold nuggets, ingots and raw gold this plugin is designed to be lightweight, easy to configure, and fully compatible with popular plugins like Vault and Towny.
-
-## Table of Contents
-
-<!--ts-->
-
-- [Features](#features)
-- [How to Install](#how-to-install)
-- [Commands](#commands)
-- [Permissions](#permissions)
-- [Placeholders](#placeholders)
-- [Config](#config-file)
-<!--te-->
+TheGoldEconomy is a powerful economy plugin that allows servers to
+manage their gold-based currency through a bank system. Players can
+deposit and withdraw gold and send money to each other. With support
+for both gold nuggets, ingots and raw gold this plugin is designed to
+be lightweight, easy to configure, and fully compatible with popular
+plugins like Vault and Towny.
 
 ## Features
 
-- Easy to use.
-- Use nuggets or ingots as your base!
-- PlaceholderAPI Integration!
-- Towny and Vault support.
-- TownyAPI Integration!
-- Optional removing of Gold Drops by Mobs to reduce inflation.
-- Multiple Language support!
+- Different item modes
+  - Nuggets: 1 nugget = 1 money, 1 ingot = 9 money
+  - Ingot: 1 ingot = 1 money
+  - Raw gold: 1 raw gold = 1 money
+- Option to remove gold drops from mobs
+- Vault Support for compatability with other plugins
+- PlaceholderAPI support
+- Towny Bank Plot support
+- Many languages included
+- No database required
 
-## How to Install
+## Dependencies
 
-1. **Install Vault**: Ensure you have [Vault](https://www.spigotmc.org/resources/vault.34315/) installed on your server. Vault is compatible with Minecraft versions newer than 1.17.
-2. **Download TheGoldEconomy**: Get the latest version of TheGoldEconomy [here](https://modrinth.com/plugin/thegoldeconomy).
-3. **Place the Plugin**: Move the downloaded `.jar` file into your server's `plugins` folder.
-4. **Enjoy playing!**
+-  **[Vault](https://www.spigotmc.org/resources/vault.34315/)**
 
-## Commands
+## Additionals Information
+
+<details>
+  <summary>Commands</summary>
 
 ### Player
 
@@ -52,8 +48,11 @@ TheGoldEconomy is a powerful economy plugin that allows servers to manage their 
   Withdraws the specified amount of gold from your bank account into your inventory (e.g., `/bank withdraw 5`). To withdraw everything use `/bank withdraw` without an amount.
 - **/bank pay <player> <gold>**  
   Transfers the specified amount of gold to another player (e.g., `/bank pay Alex 20`).
+  
+</details>
 
-## Permissions
+<details>
+  <summary>Permission</summary>
 
 ### Default Permissions
 
@@ -76,8 +75,11 @@ TheGoldEconomy is a powerful economy plugin that allows servers to manage their 
   /bank add
 - `thegoldeconomy.remove`  
   /bank remove
+  
+</details>
 
-## Placeholders
+<details>
+<summary>Placeholders</summary>
 
 The following placeholders are available if using PlaceholderAPI
 
@@ -85,7 +87,10 @@ The following placeholders are available if using PlaceholderAPI
 - `thegoldeconomy_bankbalance`
 - `thegoldeconomy_totalBalance`
 
-## Config File
+</details>
+
+<details>
+<summary>Config File</summary>
 
 ```yaml
 # Remove Gold Drops from Mobs like Piglins? (default: true)
@@ -116,3 +121,4 @@ prefix: "TheGoldEconomy"
 # 'raw' = 1 raw gold is 1 currency, 1 block is 9
 base: "nuggets"
 ```
+</details>
