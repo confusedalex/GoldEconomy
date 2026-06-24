@@ -32,7 +32,7 @@ plugins like Vault and Towny.
 
 -  **[Vault](https://www.spigotmc.org/resources/vault.34315/)**
 
-## Additionals Information
+## Additional Information
 
 <details>
   <summary>Commands</summary>
@@ -53,7 +53,7 @@ plugins like Vault and Towny.
 </details>
 
 <details>
-  <summary>Permission</summary>
+  <summary>Permissions</summary>
 
 ### Default Permissions
 
