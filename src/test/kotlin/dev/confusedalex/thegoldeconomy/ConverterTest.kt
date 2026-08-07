@@ -10,6 +10,8 @@ import dev.confusedalex.thegoldeconomy.Converter.Companion.withdraw
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.BundleMeta
+import org.bukkit.inventory.meta.ItemMeta
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.Test
 import org.mockbukkit.mockbukkit.MockBukkit
 import org.mockbukkit.mockbukkit.ServerMock
 import org.mockbukkit.mockbukkit.entity.PlayerMock
+import org.mockbukkit.mockbukkit.inventory.meta.BundleMetaMock
 
 class ConverterTest {
     private lateinit var server: ServerMock
@@ -177,6 +180,79 @@ class ConverterTest {
 
         player.inventory.addItem(ItemStack(Material.RAW_GOLD_BLOCK, 1))
         assertEquals(13, getInventoryValue(player, Base.RAW))
+    }
+
+    @Test
+    fun getInventoryValue_fromBundle() {
+        val player: PlayerMock = server.addPlayer()
+
+        val bundle = ItemStack(Material.BUNDLE, 1)
+        val bundleMeta: BundleMeta = bundle.itemMeta as BundleMeta
+
+        bundleMeta.addItem(ItemStack(Material.GOLD_NUGGET, 4))
+        bundleMeta.addItem(ItemStack(Material.GOLD_INGOT, 1))
+        bundle.itemMeta = bundleMeta
+        player.inventory.addItem(bundle)
+        player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 5))
+        print((bundle.itemMeta as BundleMetaMock).items)
+
+        assertEquals(13, getInventoryValue(player, Base.NUGGETS))
+    }
+
+    @Test
+    fun getInventoryValue_fromMultipleColoredBundles() {
+        val player: PlayerMock = server.addPlayer()
+
+        val blueBundle = ItemStack(Material.BLUE_BUNDLE, 1)
+        val blueBundleMeta: BundleMeta = blueBundle.itemMeta as BundleMeta
+
+        blueBundleMeta.addItem(ItemStack(Material.GOLD_NUGGET, 4))
+        blueBundle.itemMeta = blueBundleMeta
+        player.inventory.addItem(blueBundle)
+
+        val redBundle = ItemStack(Material.RED_BUNDLE, 1)
+        val redBundleMeta: BundleMeta = redBundle.itemMeta as BundleMeta
+
+        redBundleMeta.addItem(ItemStack(Material.GOLD_INGOT, 1))
+        redBundle.itemMeta = redBundleMeta
+        player.inventory.addItem(redBundle)
+
+        val greenBundle = ItemStack(Material.GREEN_BUNDLE, 1)
+        val greenBundleMeta: BundleMeta = greenBundle.itemMeta as BundleMeta
+
+        greenBundleMeta.addItem(ItemStack(Material.GOLD_BLOCK, 1))
+        greenBundle.itemMeta = greenBundleMeta
+        player.inventory.addItem(greenBundle)
+
+        assertEquals(94, getInventoryValue(player, Base.NUGGETS))
+    }
+
+    @Test
+    fun getInventoryValue_fromBundle_withGoldBlockInIngotsBase() {
+        val player: PlayerMock = server.addPlayer()
+        val bundle = ItemStack(Material.BUNDLE, 1)
+        val bundleMeta: BundleMeta = bundle.itemMeta as BundleMeta
+
+        bundleMeta.addItem(ItemStack(Material.GOLD_BLOCK, 2))
+        bundle.itemMeta = bundleMeta
+        player.inventory.addItem(bundle)
+
+        assertEquals(18, getInventoryValue(player.inventory, Base.INGOTS))
+    }
+
+    @Test
+    fun getInventoryValue_fromMixedBundleAndLooseGold_inIngotsBase() {
+        val player: PlayerMock = server.addPlayer()
+        val bundle = ItemStack(Material.BUNDLE, 1)
+        val bundleMeta: BundleMeta = bundle.itemMeta as BundleMeta
+
+        bundleMeta.addItem(ItemStack(Material.GOLD_BLOCK, 1))
+        bundleMeta.addItem(ItemStack(Material.GOLD_INGOT, 2))
+        bundle.itemMeta = bundleMeta
+        player.inventory.addItem(bundle)
+        player.inventory.addItem(ItemStack(Material.GOLD_INGOT, 3))
+
+        assertEquals(14, getInventoryValue(player.inventory, Base.INGOTS))
     }
 
     @Test

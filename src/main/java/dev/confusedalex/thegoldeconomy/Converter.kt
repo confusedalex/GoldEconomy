@@ -4,6 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.BundleMeta
 import java.util.*
 
 class Converter {
@@ -36,9 +37,27 @@ class Converter {
 
         fun isGold(material: Material?, base: Base): Boolean = getValue(material, base) > 0
 
-        fun getInventoryValue(player: Player?, base: Base): Int =
-            player?.inventory?.filterNotNull()?.filter { isGold(it.type, base) }
-                ?.sumOf { getValue(it.type, base) * it.amount } ?: 0
+        private fun expandBundle(item: ItemStack): List<ItemStack> {
+            val meta = item.itemMeta
+            return if (meta is BundleMeta) meta.items.filterNotNull()
+            else listOf(item)
+        }
+
+        fun getInventoryValue(items: Iterable<ItemStack?>, base: Base): Int =
+            items
+                .filterNotNull()
+                .flatMap { expandBundle(it) }
+                .filter { isGold(it.type, base) }
+                .sumOf { getValue(it.type, base) * it.amount }
+
+        fun removeGoldFromBundle(item: ItemStack, base: Base) {
+            val meta = item.itemMeta
+            if (meta is BundleMeta) {
+                val kept = meta.items.filterNotNull().filterNot { isGold(it.type, base) }
+                meta.setItems(kept)
+                item.itemMeta = meta
+            }
+        }
 
         fun remove(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, amount: Int, base: Base) {
@@ -56,7 +75,7 @@ class Converter {
             }
         }
 
-        fun give( eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
+        fun give(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, value: Int, base: Base) {
                 var warning = false
 
