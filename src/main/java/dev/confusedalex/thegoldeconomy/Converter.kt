@@ -61,7 +61,7 @@ class Converter {
 
         fun remove(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, amount: Int, base: Base) {
-                val currentValue = getInventoryValue(player, base)
+                val currentValue = getInventoryValue(player.inventory, base)
                 // Checks if the value of the items is greater than the amount to deposit
                 if (currentValue < amount) return
 
@@ -152,7 +152,7 @@ class Converter {
         fun deposit(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, value: Int, base: Base) {
                 if (value <= 0) return
-                if (getInventoryValue(player, base) < value) return
+                if (getInventoryValue(player.inventory, base) < value) return
                 val op = Bukkit.getOfflinePlayer(player.uniqueId)
 
                 remove(eco, bundle)(player, value, base)

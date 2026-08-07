@@ -14,7 +14,7 @@ class Bank {
         val player: Player? = Bukkit.getPlayer(uuid)
 
         if (player?.isOnline == true) {
-            return getAccountBalance(uuid) + Converter.getInventoryValue(player, base)
+            return getAccountBalance(uuid) + Converter.getInventoryValue(player.inventory, base)
         }
         return getAccountBalance(uuid)
     }

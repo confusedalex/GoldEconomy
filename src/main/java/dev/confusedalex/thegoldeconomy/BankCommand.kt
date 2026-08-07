@@ -43,7 +43,7 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
                             eco.bank.getAccountBalance(uuid)
 
                         ), util.colorCurrency(
-                            getInventoryValue(sender, base)
+                            getInventoryValue(sender.inventory, base)
                         )
                     )
                 )
@@ -132,7 +132,7 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
     fun deposit(commandSender: CommandSender, @Optional nuggets: String?) {
         val player = util.isPlayer(commandSender) ?: return
 
-        val inventoryValue = getInventoryValue(player, base)
+        val inventoryValue = getInventoryValue(player.inventory, base)
 
         if (util.isBankingRestrictedToPlot(player)) {
             return

@@ -334,7 +334,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, "25")
 
-        assertEquals(25, getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(25, getInventoryValue(sender.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -365,7 +365,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, "all")
 
-        assertEquals(0, getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(sender.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -396,7 +396,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, null)
 
-        assertEquals(0, getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(sender.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -427,7 +427,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, "100")
 
-        assertEquals(50, getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(50, getInventoryValue(sender.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -458,7 +458,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, "0")
 
-        assertEquals(50, getInventoryValue(sender, Base.INGOTS))
+        assertEquals(50, getInventoryValue(sender.inventory, Base.INGOTS))
     }
 
     @Test
@@ -490,7 +490,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, "-50")
 
-        assertEquals(50, getInventoryValue(sender, Base.INGOTS))
+        assertEquals(50, getInventoryValue(sender.inventory, Base.INGOTS))
     }
 
     @Test
@@ -521,7 +521,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, "25")
 
-        assertEquals(25, getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(25, getInventoryValue(sender.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -552,7 +552,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, "all")
 
-        assertEquals(50, getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(50, getInventoryValue(sender.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -583,7 +583,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, null)
 
-        assertEquals(50, getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(50, getInventoryValue(sender.inventory, Base.NUGGETS))
     }
 
 
@@ -615,7 +615,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, "100")
 
-        assertEquals(0, getInventoryValue(sender, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(sender.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -646,7 +646,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, "0")
 
-        assertEquals(0, getInventoryValue(sender, Base.INGOTS))
+        assertEquals(0, getInventoryValue(sender.inventory, Base.INGOTS))
     }
 
     @Test
@@ -678,7 +678,7 @@ class BankCommandTest {
 
         bankCommand.withdraw(sender, "-50")
 
-        assertEquals(70, getInventoryValue(sender, Base.INGOTS))
+        assertEquals(70, getInventoryValue(sender.inventory, Base.INGOTS))
     }
 
     @Test

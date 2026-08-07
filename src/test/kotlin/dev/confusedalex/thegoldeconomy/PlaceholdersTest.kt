@@ -1,5 +1,7 @@
 package dev.confusedalex.thegoldeconomy
 
+import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -55,14 +57,22 @@ class PlaceholdersTest {
         val bank = plugin.eco.bank
 
         bank.setAccountBalance(uuid, 1000)
-        assertEquals("0", placeholders.onRequest(player, "inventorybalance"))
         assertEquals("1000", placeholders.onRequest(player, "bankbalance"))
         assertEquals("1000", placeholders.onRequest(player, "totalbalance"))
         Converter.withdraw(plugin.eco, plugin.bundle)(player, 500, Base.NUGGETS)
-        assertEquals("500", placeholders.onRequest(player, "inventorybalance"))
         assertEquals("500", placeholders.onRequest(player, "bankbalance"))
         assertEquals("1000", placeholders.onRequest(player, "totalbalance"))
 
         assertEquals(null, placeholders.onRequest(player, "someNoneExistingPlaceholder"))
+    }
+
+    @Test
+    fun onPlaceholderRequest() {
+        val placeholders = Placeholders(plugin)
+        val player = server.addPlayer()
+
+        player.inventory.addItem(ItemStack(Material.GOLD_INGOT, 2))
+
+        assertEquals("18", placeholders.onPlaceholderRequest(player, "inventorybalance"))
     }
 }

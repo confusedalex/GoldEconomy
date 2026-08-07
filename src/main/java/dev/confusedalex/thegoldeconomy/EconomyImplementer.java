@@ -155,7 +155,7 @@ public class EconomyImplementer implements Economy {
 
                 // get balance and InventoryValue from Player
                 int oldBankBalance = bank.getAccountBalance(uuid);
-                int oldInventoryBalance = Converter.Companion.getInventoryValue(player, base);
+                int oldInventoryBalance = Converter.Companion.getInventoryValue(player.getInventory(), base);
 
 
                 // If balance + InventoryValue is < amount, return
@@ -205,7 +205,7 @@ public class EconomyImplementer implements Economy {
 
             // get Balance and InventoryValue
             int oldBankBalance = bank.getAccountBalance(uuid);
-            int oldInventoryBalance = Converter.Companion.getInventoryValue(player, base);
+            int oldInventoryBalance = Converter.Companion.getInventoryValue(player.getInventory(), base);
 
             // If balance + InventoryValue is < amount, return
             if (amount > oldBankBalance + oldInventoryBalance)

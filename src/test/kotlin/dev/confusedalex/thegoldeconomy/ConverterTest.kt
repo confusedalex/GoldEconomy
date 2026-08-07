@@ -98,9 +98,9 @@ class ConverterTest {
     fun getInventoryValue_withEmptyInventory() {
         val player: PlayerMock = server.addPlayer()
 
-        assertEquals(0, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(0, getInventoryValue(player, Base.INGOTS))
-        assertEquals(0, getInventoryValue(player, Base.RAW))
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.INGOTS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.RAW))
     }
 
     @Test
@@ -108,9 +108,9 @@ class ConverterTest {
         val player: PlayerMock = server.addPlayer()
 
         player.inventory.addItem(ItemStack(Material.STONE, 8))
-        assertEquals(0, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(0, getInventoryValue(player, Base.INGOTS))
-        assertEquals(0, getInventoryValue(player, Base.RAW))
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.INGOTS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.RAW))
     }
 
     @Test
@@ -119,14 +119,14 @@ class ConverterTest {
 
         // Add 5 nuggets
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 5))
-        assertEquals(5, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(0, getInventoryValue(player, Base.INGOTS))
-        assertEquals(0, getInventoryValue(player, Base.RAW))
+        assertEquals(5, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.INGOTS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.RAW))
 
         // Add raw gold
         player.inventory.addItem(ItemStack(Material.RAW_GOLD, 4))
-        assertEquals(5, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(0, getInventoryValue(player, Base.INGOTS))
+        assertEquals(5, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.INGOTS))
     }
 
     @Test
@@ -135,13 +135,13 @@ class ConverterTest {
 
         // Add 1 ingot
         player.inventory.addItem(ItemStack(Material.GOLD_INGOT, 1))
-        assertEquals(9, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(1, getInventoryValue(player, Base.INGOTS))
-        assertEquals(0, getInventoryValue(player, Base.RAW))
+        assertEquals(9, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(1, getInventoryValue(player.inventory, Base.INGOTS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.RAW))
 
         player.inventory.addItem(ItemStack(Material.RAW_GOLD, 4))
-        assertEquals(9, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(1, getInventoryValue(player, Base.INGOTS))
+        assertEquals(9, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(1, getInventoryValue(player.inventory, Base.INGOTS))
     }
 
     @Test
@@ -149,18 +149,18 @@ class ConverterTest {
         val player: PlayerMock = server.addPlayer()
 
         player.inventory.addItem(ItemStack(Material.GOLD_BLOCK, 1))
-        assertEquals(81, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(9, getInventoryValue(player, Base.INGOTS))
-        assertEquals(0, getInventoryValue(player, Base.RAW))
+        assertEquals(81, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(9, getInventoryValue(player.inventory, Base.INGOTS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.RAW))
 
         player.inventory.addItem(ItemStack(Material.GOLD_BLOCK, 1)) // sum: 2 Blocks
-        assertEquals(162, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(18, getInventoryValue(player, Base.INGOTS))
-        assertEquals(0, getInventoryValue(player, Base.RAW))
+        assertEquals(162, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(18, getInventoryValue(player.inventory, Base.INGOTS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.RAW))
 
         player.inventory.addItem(ItemStack(Material.RAW_GOLD, 4))
-        assertEquals(162, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(18, getInventoryValue(player, Base.INGOTS))
+        assertEquals(162, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(18, getInventoryValue(player.inventory, Base.INGOTS))
     }
 
     @Test
@@ -168,18 +168,18 @@ class ConverterTest {
         val player: PlayerMock = server.addPlayer()
 
         player.inventory.addItem(ItemStack(Material.RAW_GOLD, 4))
-        assertEquals(0, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(0, getInventoryValue(player, Base.INGOTS))
-        assertEquals(4, getInventoryValue(player, Base.RAW))
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.INGOTS))
+        assertEquals(4, getInventoryValue(player.inventory, Base.RAW))
 
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 1))
         player.inventory.addItem(ItemStack(Material.GOLD_INGOT, 1))
         player.inventory.addItem(ItemStack(Material.GOLD_BLOCK, 1))
-        assertEquals(4, getInventoryValue(player, Base.RAW))
+        assertEquals(4, getInventoryValue(player.inventory, Base.RAW))
 
 
         player.inventory.addItem(ItemStack(Material.RAW_GOLD_BLOCK, 1))
-        assertEquals(13, getInventoryValue(player, Base.RAW))
+        assertEquals(13, getInventoryValue(player.inventory, Base.RAW))
     }
 
     @Test
@@ -196,7 +196,7 @@ class ConverterTest {
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 5))
         print((bundle.itemMeta as BundleMetaMock).items)
 
-        assertEquals(13, getInventoryValue(player, Base.NUGGETS))
+        assertEquals(18, getInventoryValue(player.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -224,7 +224,9 @@ class ConverterTest {
         greenBundle.itemMeta = greenBundleMeta
         player.inventory.addItem(greenBundle)
 
-        assertEquals(94, getInventoryValue(player, Base.NUGGETS))
+        player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 5))
+
+        assertEquals(99, getInventoryValue(player.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -261,16 +263,16 @@ class ConverterTest {
 
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 10))
         remove(player, 5, Base.NUGGETS)
-        assertEquals(5, getInventoryValue(player, Base.NUGGETS))
+        assertEquals(5, getInventoryValue(player.inventory, Base.NUGGETS))
 
         player.inventory.addItem(ItemStack(Material.GOLD_INGOT, 1)) // -> 5 nuggets + 1 ingot = 14 nuggets
         remove(player, 5, Base.NUGGETS)
-        assertEquals(9, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(1, getInventoryValue(player, Base.INGOTS))
+        assertEquals(9, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(1, getInventoryValue(player.inventory, Base.INGOTS))
 
         remove(player, 1, Base.INGOTS)
-        assertEquals(0, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(0, getInventoryValue(player, Base.INGOTS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.INGOTS))
     }
 
     @Test
@@ -279,7 +281,7 @@ class ConverterTest {
 
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 3))
         remove(player, 5, Base.NUGGETS)
-        assertEquals(3, getInventoryValue(player, Base.NUGGETS))
+        assertEquals(3, getInventoryValue(player.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -289,8 +291,8 @@ class ConverterTest {
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 5))
         player.inventory.addItem(ItemStack(Material.GOLD_INGOT, 1))
         remove(player, 14, Base.NUGGETS)
-        assertEquals(0, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(0, getInventoryValue(player, Base.INGOTS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.INGOTS))
     }
 
     @Test
@@ -299,7 +301,7 @@ class ConverterTest {
 
         player.inventory.addItem(ItemStack(Material.STONE, 10))
         remove(player, 5, Base.NUGGETS)
-        assertEquals(0, getInventoryValue(player, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
     }
 
     @Test
@@ -308,7 +310,7 @@ class ConverterTest {
 
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 10))
         deposit(player, 5, Base.NUGGETS)
-        assertEquals(5, getInventoryValue(player, Base.NUGGETS))
+        assertEquals(5, getInventoryValue(player.inventory, Base.NUGGETS))
         assertEquals(5, plugin.eco.bank.getAccountBalance(player.uniqueId))
     }
 
@@ -319,13 +321,13 @@ class ConverterTest {
 
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 3))
         deposit(player, 5, base)
-        assertEquals(3, getInventoryValue(player, base))
+        assertEquals(3, getInventoryValue(player.inventory, base))
         assertEquals(0, plugin.eco.bank.getAccountBalance(player.uniqueId))
 
         base = Base.RAW
         player.inventory.addItem(ItemStack(Material.RAW_GOLD_BLOCK, 1))
         deposit(player, 5, base)
-        assertEquals(4, getInventoryValue(player, base))
+        assertEquals(4, getInventoryValue(player.inventory, base))
         assertEquals(5, plugin.eco.bank.getAccountBalance(player.uniqueId))
     }
 
@@ -336,7 +338,7 @@ class ConverterTest {
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 5))
         player.inventory.addItem(ItemStack(Material.GOLD_INGOT, 1))
         deposit(player, 14, Base.NUGGETS)
-        assertEquals(0, getInventoryValue(player, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
         assertEquals(14, plugin.eco.bank.getAccountBalance(player.uniqueId))
     }
 
@@ -346,7 +348,7 @@ class ConverterTest {
 
         player.inventory.addItem(ItemStack(Material.STONE, 10))
         deposit(player, 5, Base.NUGGETS)
-        assertEquals(0, getInventoryValue(player, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
         assertEquals(0, plugin.eco.bank.getAccountBalance(player.uniqueId))
     }
 
@@ -358,7 +360,7 @@ class ConverterTest {
 
         bank.setAccountBalance(player.uniqueId, 92)
         withdraw(player, 91, Base.NUGGETS)
-        assertEquals(91, getInventoryValue(player, Base.NUGGETS))
+        assertEquals(91, getInventoryValue(player.inventory, Base.NUGGETS))
         assertEquals(1, bank.getAccountBalance(uuid))
         assertEquals(92, bank.getTotalPlayerBalance(uuid))
 
@@ -372,7 +374,7 @@ class ConverterTest {
         inventory.contents = Array(inventory.size) { ItemStack(Material.DIRT, 64) }
         bank.setAccountBalance(player.uniqueId, 92)
         withdraw(player, 91, Base.NUGGETS)
-        assertEquals(0, getInventoryValue(player, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
         assertEquals(1, bank.getAccountBalance(uuid))
         assertEquals(1, bank.getTotalPlayerBalance(uuid))
 
@@ -386,7 +388,7 @@ class ConverterTest {
         val player: PlayerMock = server.addPlayer()
 
         withdraw(player, 5, Base.NUGGETS)
-        assertEquals(0, getInventoryValue(player, Base.NUGGETS))
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
         assertEquals(0, plugin.eco.bank.getAccountBalance(player.uniqueId))
     }
 }
