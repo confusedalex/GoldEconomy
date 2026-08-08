@@ -6,12 +6,12 @@ import dev.confusedalex.thegoldeconomy.Converter.Companion.getValue
 import dev.confusedalex.thegoldeconomy.Converter.Companion.give
 import dev.confusedalex.thegoldeconomy.Converter.Companion.isGold
 import dev.confusedalex.thegoldeconomy.Converter.Companion.remove
+import dev.confusedalex.thegoldeconomy.Converter.Companion.removeGoldFromBundle
 import dev.confusedalex.thegoldeconomy.Converter.Companion.withdraw
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BundleMeta
-import org.bukkit.inventory.meta.ItemMeta
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -255,6 +255,56 @@ class ConverterTest {
         player.inventory.addItem(ItemStack(Material.GOLD_INGOT, 3))
 
         assertEquals(14, getInventoryValue(player.inventory, Base.INGOTS))
+    }
+
+    @Test
+    fun removeGoldFromBundle_willRemoveGoldFromBundle() {
+        val player: PlayerMock = server.addPlayer()
+        val bundle = ItemStack(Material.BUNDLE, 1)
+        val bundleMeta: BundleMeta = bundle.itemMeta as BundleMeta
+
+        bundleMeta.addItem(ItemStack(Material.GOLD_NUGGET, 10))
+        bundleMeta.addItem(ItemStack(Material.GOLD_INGOT, 2))
+        bundleMeta.addItem(ItemStack(Material.GOLD_BLOCK, 2))
+        bundle.itemMeta = bundleMeta
+        player.inventory.addItem(bundle)
+
+        val bundleFromInventory = player.inventory.itemInMainHand
+        removeGoldFromBundle(bundleFromInventory, Base.NUGGETS)
+
+        assertEquals(0, getInventoryValue(player.inventory, Base.NUGGETS))
+    }
+
+    @Test
+    fun removeGoldFromBundle_willKeepNonGoldItems() {
+        val player: PlayerMock = server.addPlayer()
+        val bundle = ItemStack(Material.BUNDLE, 1)
+        val bundleMeta: BundleMeta = bundle.itemMeta as BundleMeta
+        val nestedBundle = ItemStack(Material.BUNDLE, 1)
+        val nestedBundleMeta: BundleMeta = nestedBundle.itemMeta as BundleMeta
+
+        bundleMeta.addItem(ItemStack(Material.GOLD_NUGGET, 10))
+        bundleMeta.addItem(ItemStack(Material.STONE, 2))
+
+        nestedBundleMeta.addItem(ItemStack(Material.GOLD_INGOT, 2))
+        nestedBundleMeta.addItem(ItemStack(Material.GOLD_BLOCK, 2))
+        nestedBundleMeta.addItem(ItemStack(Material.ANDESITE, 2))
+
+        nestedBundle.itemMeta = nestedBundleMeta
+        bundleMeta.addItem(nestedBundle)
+        bundle.itemMeta = bundleMeta
+
+        player.inventory.addItem(bundle)
+
+        var bundleFromInventory = player.inventory.itemInMainHand
+        removeGoldFromBundle(bundleFromInventory, Base.NUGGETS)
+        bundleFromInventory = player.inventory.itemInMainHand
+        val bundleFromInventoryMeta = bundleFromInventory.itemMeta as BundleMeta
+        val nestedBundleFromInventoryMeta = bundleFromInventoryMeta.items[1].itemMeta as BundleMeta
+
+        assertEquals(3, bundleFromInventoryMeta.items.size)
+        assertEquals(Material.STONE, bundleFromInventoryMeta.items[0].type)
+        assertEquals(Material.ANDESITE, nestedBundleFromInventoryMeta.items[0].type)
     }
 
     @Test
