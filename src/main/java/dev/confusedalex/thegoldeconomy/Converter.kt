@@ -61,16 +61,16 @@ class Converter {
 
         fun remove(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, amount: Int, base: Base) {
-                val currentValue = getInventoryValue(player.inventory, base)
+                val totalInventoryValue = getInventoryValue(player.inventory, base)
                 // Checks if the value of the items is greater than the amount to deposit
-                if (currentValue < amount) return
+                if (totalInventoryValue < amount) return
 
                 player.inventory.filterNotNull().filter { getValue(it.type, base) > 0 }.forEach { item ->
                     item.amount = 0
                     item.type = Material.AIR
                 }
 
-                val newBalance = currentValue - amount
+                val newBalance = totalInventoryValue - amount
                 give(eco, bundle)(player, newBalance, base)
             }
         }
