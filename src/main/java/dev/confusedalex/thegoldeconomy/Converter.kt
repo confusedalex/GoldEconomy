@@ -93,17 +93,41 @@ class Converter {
 
         fun remove(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, amount: Int, base: Base) {
+                fun sumValue(items: List<ItemStack>): Int =
+                    items
+                        .filter { isGold(it.type, base) }
+                        .sumOf { getValue(it.type, base) * it.amount }
+
+                val inventory = player.inventory.filterNotNull()
                 val totalInventoryValue = getInventoryValue(player.inventory, base)
-                // Checks if the value of the items is greater than the amount to deposit
                 if (totalInventoryValue < amount) return
 
+                val loose = inventory.filterNot { isBundle(it) }
+                val looseValue = sumValue(loose)
+                val bundles =
+                    inventory.filter { isBundle(it) }.map { it to sumValue((it.itemMeta as BundleMeta).items) }
+
+                var stillNeeded = amount - looseValue
                 player.inventory.filterNotNull().filter { getValue(it.type, base) > 0 }.forEach { item ->
                     item.amount = 0
                     item.type = Material.AIR
                 }
 
-                val newBalance = totalInventoryValue - amount
-                give(eco, bundle)(player, newBalance, base)
+                if (stillNeeded <= 0) {
+                    val newBalance = looseValue - amount
+                    give(eco, bundle)(player, newBalance, base)
+                    return
+                } else {
+                    for ((bundleItem, bundleValue) in bundles) {
+                        if (stillNeeded <= 0) break
+                        val takenFromBundle = minOf(stillNeeded, bundleValue)
+                        replaceGoldInBundle(base, bundleItem, bundleValue - takenFromBundle)
+                        stillNeeded -= takenFromBundle
+                    }
+                }
+            }
+        }
+
         fun buildGoldItems(base: Base, value: Int): List<ItemStack> {
             val items = mutableListOf<ItemStack>()
 
