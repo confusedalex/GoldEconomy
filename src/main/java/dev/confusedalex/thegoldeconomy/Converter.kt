@@ -35,6 +35,38 @@ class Converter {
             }
         }
 
+        fun getMaterials(base: Base) = when (base) {
+            Base.NUGGETS -> {
+                linkedMapOf(
+                    Material.GOLD_BLOCK to getValue(Material.GOLD_BLOCK, base),
+                    Material.GOLD_INGOT to getValue(Material.GOLD_INGOT, base),
+                    Material.GOLD_NUGGET to getValue(Material.GOLD_NUGGET, base)
+                )
+            }
+
+            Base.INGOTS -> {
+                linkedMapOf(
+                    Material.GOLD_BLOCK to getValue(Material.GOLD_BLOCK, base),
+                    Material.GOLD_INGOT to getValue(Material.GOLD_INGOT, base),
+                )
+            }
+
+            Base.RAW -> {
+                linkedMapOf(
+                    Material.RAW_GOLD_BLOCK to getValue(Material.RAW_GOLD_BLOCK, base),
+                    Material.RAW_GOLD to getValue(Material.RAW_GOLD, base),
+                )
+            }
+
+            Base.TURTLE_SCUTE -> {
+                linkedMapOf(
+                    Material.TURTLE_SCUTE to getValue(Material.TURTLE_SCUTE, base),
+                )
+            }
+        }
+
+        private fun isBundle(item: ItemStack): Boolean = item.itemMeta is BundleMeta
+
         fun isGold(material: Material?, base: Base): Boolean = getValue(material, base) > 0
 
         private fun expandBundle(item: ItemStack): List<ItemStack> {
@@ -79,35 +111,7 @@ class Converter {
             return fun(player: Player, value: Int, base: Base) {
                 var warning = false
 
-                val materials = when (base) {
-                    Base.NUGGETS -> {
-                        linkedMapOf(
-                            Material.GOLD_BLOCK to getValue(Material.GOLD_BLOCK, base),
-                            Material.GOLD_INGOT to getValue(Material.GOLD_INGOT, base),
-                            Material.GOLD_NUGGET to getValue(Material.GOLD_NUGGET, base)
-                        )
-                    }
 
-                    Base.INGOTS -> {
-                        linkedMapOf(
-                            Material.GOLD_BLOCK to getValue(Material.GOLD_BLOCK, base),
-                            Material.GOLD_INGOT to getValue(Material.GOLD_INGOT, base),
-                        )
-                    }
-
-                    Base.RAW -> {
-                        linkedMapOf(
-                            Material.RAW_GOLD_BLOCK to getValue(Material.RAW_GOLD_BLOCK, base),
-                            Material.RAW_GOLD to getValue(Material.RAW_GOLD, base),
-                        )
-                    }
-
-                    Base.TURTLE_SCUTE -> {
-                        linkedMapOf(
-                            Material.TURTLE_SCUTE to getValue(Material.TURTLE_SCUTE, base),
-                        )
-                    }
-                }
 
                 // Set max. stack size to 64, otherwise the stacks will go up to 99
                 player.inventory.maxStackSize = 64
@@ -125,7 +129,7 @@ class Converter {
                     return value - (value / materialValue) * materialValue
                 }
 
-                materials.entries.fold(value) { acc, entry ->
+                getMaterials(base).entries.fold(value) { acc, entry ->
                     removeMaterial(entry.key, entry.value, acc)
                 }
 
