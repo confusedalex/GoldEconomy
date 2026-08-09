@@ -355,6 +355,58 @@ class ConverterTest {
     }
 
     @Test
+    fun remove_shouldRemoveGoldFromInventoryAndBundles() {
+        val player: PlayerMock = server.addPlayer()
+        val bundle = ItemStack(Material.BUNDLE, 1)
+        val bundleMeta: BundleMeta = bundle.itemMeta as BundleMeta
+
+        bundleMeta.addItem(ItemStack(Material.GOLD_BLOCK, 1))
+        bundle.itemMeta = bundleMeta
+        player.inventory.addItem(bundle)
+        player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 10))
+
+        remove(player, 5, Base.NUGGETS)
+
+        assertEquals(86, getInventoryValue(player.inventory, Base.NUGGETS))
+    }
+
+    @Test
+    fun buildGoldItems_shouldReturnCorrectGoldItems() {
+        val newInv = Converter.buildGoldItems(Base.NUGGETS, 91)
+
+        assertEquals(Material.GOLD_BLOCK, newInv[0].type)
+        assertEquals(1, newInv[0].amount)
+        assertEquals(Material.GOLD_INGOT, newInv[1].type)
+        assertEquals(1, newInv[1].amount)
+        assertEquals(Material.GOLD_NUGGET, newInv[2].type)
+        assertEquals(1, newInv[2].amount)
+    }
+
+    @Test
+    fun buildGoldItems_shouldReturnCorrectGoldItemsForRawGoldBase() {
+        val newInv = Converter.buildGoldItems(Base.RAW, 94)
+
+        assertEquals(Material.RAW_GOLD_BLOCK, newInv[0].type)
+        assertEquals(10, newInv[0].amount)
+        assertEquals(Material.RAW_GOLD, newInv[1].type)
+        assertEquals(4, newInv[1].amount)
+    }
+
+    @Test
+    fun buildGoldItems_shouldReturn0For0Amount() {
+        val newInv = Converter.buildGoldItems(Base.NUGGETS, 0)
+
+        assertEquals(0, newInv.size)
+    }
+
+    @Test
+    fun buildGoldItems_shouldReturn0ForNegativeAmount() {
+        val newInv = Converter.buildGoldItems(Base.NUGGETS, -1)
+
+        assertEquals(0, newInv.size)
+    }
+
+    @Test
     fun deposit_withSufficientGold() {
         val player: PlayerMock = server.addPlayer()
 

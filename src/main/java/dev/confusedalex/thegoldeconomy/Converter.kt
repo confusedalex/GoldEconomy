@@ -104,6 +104,23 @@ class Converter {
 
                 val newBalance = totalInventoryValue - amount
                 give(eco, bundle)(player, newBalance, base)
+        fun buildGoldItems(base: Base, value: Int): List<ItemStack> {
+            val items = mutableListOf<ItemStack>()
+
+            fun giveMaterial(material: Material, materialValue: Int, value: Int): Int {
+                if (value / materialValue > 0) {
+                    items.add(ItemStack(material, value / materialValue))
+                }
+                return value - (value / materialValue) * materialValue
+            }
+
+            getMaterials(base).entries
+                .fold(value) { acc, entry ->
+                    giveMaterial(entry.key, entry.value, acc)
+                }
+
+            return items
+        }
             }
         }
 
@@ -111,26 +128,17 @@ class Converter {
             return fun(player: Player, value: Int, base: Base) {
                 var warning = false
 
-
-
                 // Set max. stack size to 64, otherwise the stacks will go up to 99
                 player.inventory.maxStackSize = 64
 
-                fun removeMaterial(material: Material, materialValue: Int, value: Int): Int {
-                    if (value / materialValue > 0) {
-                        val itemMaterials = player.inventory.addItem(ItemStack(material, value / materialValue))
-                        for (item in itemMaterials.values) {
-                            if (item != null && item.type == material && item.amount > 0) {
-                                player.world.dropItem(player.location, item)
-                                warning = true
-                            }
-                        }
-                    }
-                    return value - (value / materialValue) * materialValue
-                }
+                val goldItems = buildGoldItems(base, value);
+                val given = player.inventory.addItem(*goldItems.toTypedArray())
 
-                getMaterials(base).entries.fold(value) { acc, entry ->
-                    removeMaterial(entry.key, entry.value, acc)
+                for (item in given.values) {
+                    if (item.amount > 0) {
+                        player.world.dropItem(player.location, item)
+                        warning = true
+                    }
                 }
 
                 if (warning) player.sendMessage(eco.util.formatMessage(String.format(bundle.getString("warning.drops"))))
