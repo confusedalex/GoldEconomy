@@ -407,6 +407,17 @@ class ConverterTest {
     }
 
     @Test
+    fun replaceGoldInBundle_shouldReplaceGoldInBundle() {
+        val bundle = ItemStack(Material.BUNDLE, 1)
+        fun bundleMeta() = bundle.itemMeta as BundleMeta
+
+        Converter.replaceGoldInBundle(Base.NUGGETS, bundle, 5)
+
+        assertEquals(5, bundleMeta().items[0].amount)
+        assertEquals(Material.GOLD_NUGGET, bundleMeta().items[0].type)
+    }
+
+    @Test
     fun deposit_withSufficientGold() {
         val player: PlayerMock = server.addPlayer()
 

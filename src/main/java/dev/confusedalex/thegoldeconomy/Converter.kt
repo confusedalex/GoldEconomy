@@ -121,6 +121,13 @@ class Converter {
 
             return items
         }
+
+        fun replaceGoldInBundle(base: Base, item: ItemStack, leftOver: Int) {
+            val meta = item.itemMeta
+            if (meta is BundleMeta) {
+                val nonGold = meta.items.filterNotNull().filterNot { isGold(it.type, base) }
+                meta.setItems(nonGold + buildGoldItems(base, leftOver))
+                item.itemMeta = meta
             }
         }
 
