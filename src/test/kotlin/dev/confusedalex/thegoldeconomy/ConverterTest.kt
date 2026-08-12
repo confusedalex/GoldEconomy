@@ -371,6 +371,23 @@ class ConverterTest {
     }
 
     @Test
+    fun itemWeight_shouldCalculateCorrectly() {
+        val map = listOf<Pair<Int, ItemStack>>(
+            16 to ItemStack(Material.ENDER_PEARL, 4),
+            32 to ItemStack(Material.ENDER_PEARL, 8),
+            64 to ItemStack(Material.ENDER_PEARL, 16),
+
+            1 to ItemStack(Material.GOLD_NUGGET, 1),
+            32 to ItemStack(Material.GOLD_NUGGET, 32),
+            64 to ItemStack(Material.COPPER_SWORD),
+        )
+
+        map.forEach { (expectedWeight, item) ->
+            assertEquals(expectedWeight, Converter.itemWeight(item))
+        }
+    }
+
+    @Test
     fun buildGoldItems_shouldReturnCorrectGoldItems() {
         val newInv = Converter.buildGoldItems(Base.NUGGETS, 91)
 

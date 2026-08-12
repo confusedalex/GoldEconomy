@@ -67,6 +67,10 @@ class Converter {
 
         private fun isBundle(item: ItemStack): Boolean = item.itemMeta is BundleMeta
 
+        fun itemWeight(item: ItemStack): Int = (item.amount * 64) / item.maxStackSize
+
+        private fun totalWeight(items: Iterable<ItemStack>): Int = items.sumOf { itemWeight(it) }
+
         fun isGold(material: Material?, base: Base): Boolean = getValue(material, base) > 0
 
         private fun expandBundle(item: ItemStack): List<ItemStack> {
