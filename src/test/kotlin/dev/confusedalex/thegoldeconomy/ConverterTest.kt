@@ -1,19 +1,24 @@
 package dev.confusedalex.thegoldeconomy
 
+import dev.confusedalex.thegoldeconomy.Converter.Companion.buildGoldItemsForBundle
 import dev.confusedalex.thegoldeconomy.Converter.Companion.deposit
 import dev.confusedalex.thegoldeconomy.Converter.Companion.getInventoryValue
 import dev.confusedalex.thegoldeconomy.Converter.Companion.getValue
 import dev.confusedalex.thegoldeconomy.Converter.Companion.give
 import dev.confusedalex.thegoldeconomy.Converter.Companion.isGold
+import dev.confusedalex.thegoldeconomy.Converter.Companion.itemWeight
 import dev.confusedalex.thegoldeconomy.Converter.Companion.remove
 import dev.confusedalex.thegoldeconomy.Converter.Companion.removeGoldFromBundle
+import dev.confusedalex.thegoldeconomy.Converter.Companion.replaceGoldInBundle
 import dev.confusedalex.thegoldeconomy.Converter.Companion.withdraw
 import org.bukkit.Material
+import org.bukkit.entity.EnderPearl
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BundleMeta
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockbukkit.mockbukkit.MockBukkit
@@ -28,6 +33,7 @@ class ConverterTest {
     lateinit var remove: (Player, Int, Base) -> Unit
     lateinit var deposit: (Player, Int, Base) -> Unit
     lateinit var withdraw: (Player, Int, Base) -> Unit
+    lateinit var replaceGoldInBundle: (Player, Base, ItemStack, Int) -> Unit
 
     @BeforeEach
     fun setUp() {
@@ -38,6 +44,7 @@ class ConverterTest {
         remove = remove(plugin.eco, plugin.bundle)
         deposit = deposit(plugin.eco, plugin.bundle)
         withdraw = withdraw(plugin.eco, plugin.bundle)
+        replaceGoldInBundle = replaceGoldInBundle(plugin.eco, plugin.bundle)
     }
 
     @AfterEach
@@ -388,6 +395,34 @@ class ConverterTest {
     }
 
     @Test
+    fun buildGoldItemsForBundle_shouldReturnCorrectGoldItems() {
+        var pair = buildGoldItemsForBundle(Base.NUGGETS, 172, 64)
+        assertEquals(true, pair.first.contains(ItemStack(Material.GOLD_BLOCK, 2)))
+        assertEquals(true, pair.first.contains(ItemStack(Material.GOLD_INGOT, 1)))
+        assertEquals(true, pair.first.contains(ItemStack(Material.GOLD_NUGGET, 1)))
+        assertEquals(0, pair.second)
+
+        pair = buildGoldItemsForBundle(Base.NUGGETS, 17, 2)
+        assertEquals(true, pair.first.contains(ItemStack(Material.GOLD_INGOT, 1)))
+        assertEquals(true, pair.first.contains(ItemStack(Material.GOLD_NUGGET, 1)))
+        assertEquals(7, pair.second)
+
+        pair = buildGoldItemsForBundle(Base.NUGGETS, 439, 1)
+        assertEquals(true, pair.first.all { it.type == Material.GOLD_BLOCK && it.amount == 1 })
+        assertEquals(358, pair.second)
+    }
+
+    @Test
+    fun buildGoldItemsForBundle_shouldNeverExceedWeightBudget() {
+        val (items, leftover) = buildGoldItemsForBundle(Base.NUGGETS, 91, 1)
+
+        val totalWeight = items.sumOf { itemWeight(it) }
+
+        assertTrue(totalWeight <= 1)
+        assertEquals(10, leftover)
+    }
+
+    @Test
     fun buildGoldItems_shouldReturnCorrectGoldItems() {
         val newInv = Converter.buildGoldItems(Base.NUGGETS, 91)
 
@@ -428,7 +463,7 @@ class ConverterTest {
         val bundle = ItemStack(Material.BUNDLE, 1)
         fun bundleMeta() = bundle.itemMeta as BundleMeta
 
-        Converter.replaceGoldInBundle(Base.NUGGETS, bundle, 5)
+        replaceGoldInBundle(PlayerMock(server, "player") as Player ,Base.NUGGETS, bundle, 5)
 
         assertEquals(5, bundleMeta().items[0].amount)
         assertEquals(Material.GOLD_NUGGET, bundleMeta().items[0].type)

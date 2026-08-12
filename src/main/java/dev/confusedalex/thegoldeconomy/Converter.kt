@@ -125,7 +125,7 @@ class Converter {
                     for ((bundleItem, bundleValue) in bundles) {
                         if (stillNeeded <= 0) break
                         val takenFromBundle = minOf(stillNeeded, bundleValue)
-                        replaceGoldInBundle(base, bundleItem, bundleValue - takenFromBundle)
+                        replaceGoldInBundle(eco, bundle)(player, base, bundleItem, bundleValue - takenFromBundle)
                         stillNeeded -= takenFromBundle
                     }
                 }
@@ -150,12 +150,62 @@ class Converter {
             return items
         }
 
-        fun replaceGoldInBundle(base: Base, item: ItemStack, leftOver: Int) {
-            val meta = item.itemMeta
-            if (meta is BundleMeta) {
+        fun buildGoldItemsForBundle(base: Base, value: Int, weightBudget: Int): Pair<List<ItemStack>, Int> {
+            data class Acc(val remaining: Int, val leftover: Int, val items: List<ItemStack>)
+
+            val result = buildGoldItems(base, value)
+                .fold(
+                    Acc(weightBudget, 0, listOf())
+                ) { acc, stack ->
+                    val curWeight = itemWeight(stack)
+
+                    when {
+                        acc.remaining <= 0 -> acc.copy(
+                            leftover = acc.leftover + getValue(
+                                stack.type,
+                                base
+                            ) * stack.amount
+                        )
+
+                        curWeight <= acc.remaining ->
+                            acc.copy(
+                                items = acc.items + stack,
+                                remaining = acc.remaining - curWeight
+                            )
+
+
+                        else ->
+                            acc.copy(
+                                items = acc.items + ItemStack(stack.type, acc.remaining),
+                                remaining = 0,
+                                leftover = acc.leftover + getValue(stack.type, base) * (stack.amount - acc.remaining)
+                            )
+
+                    }
+                }
+
+            return result.items to result.leftover
+        }
+
+        fun replaceGoldInBundle(
+            eco: EconomyImplementer,
+            bundle: ResourceBundle
+        ): (Player, Base, ItemStack, Int) -> Unit {
+            return fun(
+                player: Player,
+                base: Base,
+                item: ItemStack,
+                amount: Int
+            ) {
+                val meta = item.itemMeta as BundleMeta
                 val nonGold = meta.items.filterNotNull().filterNot { isGold(it.type, base) }
-                meta.setItems(nonGold + buildGoldItems(base, leftOver))
+                val weightBudget = 64 - totalWeight(nonGold)
+                val (goldItems, leftover) = buildGoldItemsForBundle(base, amount, weightBudget)
+
+                meta.setItems(nonGold + goldItems)
                 item.itemMeta = meta
+
+                if (leftover > 0) give(eco, bundle)(player, leftover, base)
             }
         }
 
