@@ -6,6 +6,7 @@ import co.aikar.commands.annotation.*
 import co.aikar.commands.annotation.Optional
 import dev.confusedalex.thegoldeconomy.Converter.Companion.getInventoryValue
 import dev.confusedalex.thegoldeconomy.TheGoldEconomy.base
+import dev.confusedalex.thegoldeconomy.vault.VaultEconomyImplementer
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
@@ -14,7 +15,7 @@ import java.util.*
 
 @Suppress("DEPRECATION")
 @CommandAlias("bank")
-class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val util: Util, val config: FileConfiguration) : BaseCommand() {
+class BankCommand(val eco: VaultEconomyImplementer, val bundle: ResourceBundle, val util: Util, val config: FileConfiguration) : BaseCommand() {
     val converterDeposit = Converter.deposit(eco, bundle)
     val converterWithdraw = Converter.withdraw(eco, bundle)
 

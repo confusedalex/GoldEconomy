@@ -1,5 +1,9 @@
-package dev.confusedalex.thegoldeconomy;
+package dev.confusedalex.thegoldeconomy.vault;
 
+import dev.confusedalex.thegoldeconomy.Bank;
+import dev.confusedalex.thegoldeconomy.Converter;
+import dev.confusedalex.thegoldeconomy.TheGoldEconomy;
+import dev.confusedalex.thegoldeconomy.Util;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -13,14 +17,14 @@ import java.util.UUID;
 
 import static dev.confusedalex.thegoldeconomy.TheGoldEconomy.base;
 
-public class EconomyImplementer implements Economy {
+public class VaultEconomyImplementer implements Economy {
     TheGoldEconomy plugin;
-    Bank bank;
-    Converter converter;
+    public Bank bank;
+    public Converter converter;
     ResourceBundle bundle;
-    Util util;
+    public Util util;
 
-    public EconomyImplementer(TheGoldEconomy plugin, ResourceBundle bundle, Util util) {
+    public VaultEconomyImplementer(TheGoldEconomy plugin, ResourceBundle bundle, Util util) {
         this.plugin = plugin;
         this.bundle = bundle;
         this.util = util;
@@ -169,7 +173,7 @@ public class EconomyImplementer implements Economy {
                     // Set balance to 0 and cover rest of the costs with Inventory Funds
                     int diff = (int) (amount - oldBankBalance);
                     bank.setAccountBalance(uuid, 0);
-                    Converter.Companion.remove(plugin.eco, bundle).invoke(player, diff, base);
+                    Converter.Companion.remove(this, bundle).invoke(player, diff, base);
 
                     return new EconomyResponse(amount, oldInventoryBalance - amount, EconomyResponse.ResponseType.SUCCESS, "");
                 }
@@ -218,7 +222,7 @@ public class EconomyImplementer implements Economy {
                 // Set balance to 0 and cover rest of the costs with Inventory Funds
                 int diff = (int) (amount - oldBankBalance);
                 bank.setAccountBalance(uuid, 0);
-                Converter.Companion.remove(plugin.eco, bundle).invoke(player, diff, base);
+                Converter.Companion.remove(this, bundle).invoke(player, diff, base);
                 return new EconomyResponse(amount, oldInventoryBalance - amount, EconomyResponse.ResponseType.SUCCESS, "");
             }
         } else {

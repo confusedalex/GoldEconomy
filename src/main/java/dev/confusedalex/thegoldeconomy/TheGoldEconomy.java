@@ -2,6 +2,7 @@ package dev.confusedalex.thegoldeconomy;
 
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import dev.confusedalex.thegoldeconomy.vault.VaultEconomyImplementer;
 import io.papermc.paper.ServerBuildInfo;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
@@ -12,7 +13,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class TheGoldEconomy extends JavaPlugin {
-    EconomyImplementer eco;
+    VaultEconomyImplementer eco;
     Util util;
     ResourceBundle bundle;
     public static Base base;
@@ -79,7 +80,7 @@ public class TheGoldEconomy extends JavaPlugin {
 
         // Vault shit
         util = new Util(this);
-        eco = new EconomyImplementer(this, bundle, util);
+        eco = new VaultEconomyImplementer(this, bundle, util);
         vaultHook = new VaultHook(this, eco);
         vaultHook.hook();
 

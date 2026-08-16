@@ -1,5 +1,6 @@
 package dev.confusedalex.thegoldeconomy
 
+import dev.confusedalex.thegoldeconomy.vault.VaultEconomyImplementer
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -40,7 +41,7 @@ class Converter {
             player?.inventory?.filterNotNull()?.filter { isGold(it.type, base) }
                 ?.sumOf { getValue(it.type, base) * it.amount } ?: 0
 
-        fun remove(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
+        fun remove(eco: VaultEconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, amount: Int, base: Base) {
                 val currentValue = getInventoryValue(player, base)
                 // Checks if the value of the items is greater than the amount to deposit
@@ -56,7 +57,7 @@ class Converter {
             }
         }
 
-        fun give( eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
+        fun give(eco: VaultEconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, value: Int, base: Base) {
                 var warning = false
 
@@ -114,7 +115,7 @@ class Converter {
             }
         }
 
-        fun withdraw(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
+        fun withdraw(eco: VaultEconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, value: Int, base: Base) {
                 val uuid = player.uniqueId
                 val oldBalance = eco.bank.getAccountBalance(player.uniqueId)
@@ -130,7 +131,7 @@ class Converter {
             }
         }
 
-        fun deposit(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
+        fun deposit(eco: VaultEconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, value: Int, base: Base) {
                 if (value <= 0) return
                 if (getInventoryValue(player, base) < value) return
