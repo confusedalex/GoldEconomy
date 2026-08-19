@@ -38,7 +38,7 @@ dependencies {
 
     // Tests
     // TODO: When updating to the next version of MC, replace "v1.21" with "v${targetApiVersion}" - mockbukkit uploaded 1.21.11 versions under 1.21
-    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.110.0") {
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.116.3") {
         // Exclude the JetBrains annotations to prevent conflicts
         exclude(group = "org.jetbrains", module = "annotations")
     }
