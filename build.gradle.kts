@@ -4,7 +4,7 @@ plugins {
     id("java")
     kotlin("jvm") version "2.4.10"
     id("com.gradleup.shadow") version "9.6.1"
-    id("xyz.jpenilla.run-paper") version "3.0.2"
+    id("xyz.jpenilla.run-paper") version "3.1.0"
     id("com.modrinth.minotaur") version "2.+"
 }
 
@@ -35,6 +35,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
     implementation("org.apache.commons:commons-lang3:3.20.0")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
+    implementation("com.zaxxer:HikariCP:5.1.0")
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.4.1")
+    implementation("com.mysql:mysql-connector-j:8.4.0")
 
     // Tests
     // TODO: When updating to the next version of MC, replace "v1.21" with "v${targetApiVersion}" - mockbukkit uploaded 1.21.11 versions under 1.21
