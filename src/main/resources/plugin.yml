@@ -23,3 +23,11 @@ permissions:
     default: true
   thegoldeconomy.balance.others:
     default: true
+  thegoldeconomy.admin:
+    default: op
+  thegoldeconomy.set:
+    default: op
+  thegoldeconomy.add:
+    default: op
+  thegoldeconomy.remove:
+    default: op

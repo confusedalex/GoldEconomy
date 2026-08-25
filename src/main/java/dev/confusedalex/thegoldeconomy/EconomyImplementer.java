@@ -20,11 +20,11 @@ public class EconomyImplementer implements Economy {
     ResourceBundle bundle;
     Util util;
 
-    public EconomyImplementer(TheGoldEconomy plugin, ResourceBundle bundle, Util util) {
+    public EconomyImplementer(TheGoldEconomy plugin, ResourceBundle bundle, Util util, StorageProvider storage) {
         this.plugin = plugin;
         this.bundle = bundle;
         this.util = util;
-        bank = new Bank();
+        bank = new Bank(storage);
     }
 
     @Override
@@ -117,13 +117,13 @@ public class EconomyImplementer implements Economy {
     @Override
     public boolean has(String playerName, double amount) {
         if (util.isOfflinePlayer(playerName).isPresent())
-            return amount < bank.getTotalPlayerBalance(Bukkit.getOfflinePlayer(playerName).getUniqueId());
-        else return amount < bank.getFakeBalance(playerName);
+            return amount <= bank.getTotalPlayerBalance(Bukkit.getOfflinePlayer(playerName).getUniqueId());
+        else return amount <= bank.getFakeBalance(playerName);
     }
 
     @Override
     public boolean has(OfflinePlayer player, double amount) {
-        return amount < bank.getTotalPlayerBalance(player.getUniqueId());
+        return amount <= bank.getTotalPlayerBalance(player.getUniqueId());
     }
 
     @Override
@@ -266,12 +266,12 @@ public class EconomyImplementer implements Economy {
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
+        // If amount is negative -> return
+        if (amount < 0) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
+
         UUID uuid = player.getUniqueId();
         int oldBalance = bank.getAccountBalance(uuid);
         int newBalance = (int) (oldBalance + amount);
-
-        // If amount is negative -> return
-        if (amount < 0) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
 
         bank.setAccountBalance(uuid, newBalance);
         return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");

@@ -26,3 +26,16 @@ prefix: "TheGoldEconomy"
 # 'ingots'  = 1 ingots is 1 currency, 1 block is 9
 # 'raw' = 1 raw gold is 1 currency, 1 block is 9
 base: "nuggets"
+
+# Storage backend: "json" or "mysql"
+storage: "json"
+
+# MySQL / MariaDB settings (only used when storage is "mysql")
+database:
+  host: "127.0.0.1"
+  port: 3306
+  name: "thegoldeconomy"
+  username: "root"
+  password: ""
+  use-ssl: false
+  pool-size: 4
