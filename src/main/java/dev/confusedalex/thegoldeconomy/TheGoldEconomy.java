@@ -5,6 +5,7 @@ import co.aikar.commands.PaperCommandManager;
 import io.papermc.paper.ServerBuildInfo;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -17,18 +18,16 @@ public class TheGoldEconomy extends JavaPlugin {
     ResourceBundle bundle;
     public static Base base;
     private VaultHook vaultHook;
+    private StorageProvider storageProvider;
 
     @Override
     public void onEnable() {
-        // Config
         saveDefaultConfig();
 
         if (isFolia()) {
-            getLogger().info("Folia detected."); // todo: i18n
-
+            getLogger().info("Folia detected.");
         }
 
-        // Registering Command using ACF
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.enableUnstableAPI("help");
 
@@ -70,28 +69,32 @@ public class TheGoldEconomy extends JavaPlugin {
             default -> {
                 getLogger().severe(bundle.getString("error.invalidBase"));
                 getServer().shutdown();
+                return;
             }
         }
 
-        // bStats
-        int pluginId = 15402;
-        new Metrics(this, pluginId);
+        new Metrics(this, 15402);
 
-        // Vault shit
+        storageProvider = createStorageProvider();
+        storageProvider.initialize();
+
         util = new Util(this);
-        eco = new EconomyImplementer(this, bundle, util);
+        eco = new EconomyImplementer(this, bundle, util, storageProvider);
         vaultHook = new VaultHook(this, eco);
         vaultHook.hook();
 
         manager.registerCommand(new BankCommand(eco, bundle, util, this.getConfig()));
 
-        // Event class registering
+        if ("mysql".equalsIgnoreCase(getConfig().getString("storage"))) {
+            JsonStorageProvider jsonFallback = new JsonStorageProvider(getDataFolder(), getLogger());
+            jsonFallback.initialize();
+            manager.registerCommand(new MigrateCommand(this, util, jsonFallback, storageProvider));
+        }
+
         Bukkit.getPluginManager().registerEvents(new Events(eco.bank), this);
-        // If removeGoldDrop is true, register Listener
         if (getConfig().getBoolean("removeGoldDrop"))
             Bukkit.getPluginManager().registerEvents(new RemoveGoldDrops(), this);
 
-        // Update Checker
         if (getConfig().getBoolean("updateCheck")) {
             new UpdateChecker(this, 102242).getVersion(version -> {
                 if (!this.getDescription().getVersion().equals(version)) {
@@ -107,11 +110,45 @@ public class TheGoldEconomy extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        FileUtilsKt.writeToFiles(eco.bank.getPlayerAccounts(), eco.bank.getFakeAccounts());
+        if (eco != null && eco.bank != null) {
+            eco.bank.saveAll();
+        }
 
-        vaultHook.unhook();
+        if (storageProvider != null) {
+            storageProvider.shutdown();
+        }
+
+        if (vaultHook != null) {
+            vaultHook.unhook();
+        }
 
         getLogger().info("TheGoldEconomy disabled.");
+    }
+
+    private StorageProvider createStorageProvider() {
+        String storageType = getConfig().getString("storage", "json");
+
+        if ("mysql".equalsIgnoreCase(storageType)) {
+            ConfigurationSection db = getConfig().getConfigurationSection("database");
+            if (db == null) {
+                getLogger().severe("storage is set to 'mysql' but there is no 'database' section in config.yml! Falling back to JSON.");
+                return new JsonStorageProvider(getDataFolder(), getLogger());
+            }
+
+            MysqlConfig mysqlConfig = new MysqlConfig(
+                    db.getString("host", "127.0.0.1"),
+                    db.getInt("port", 3306),
+                    db.getString("name", "thegoldeconomy"),
+                    db.getString("username", "root"),
+                    db.getString("password", ""),
+                    db.getBoolean("use-ssl", false),
+                    db.getInt("pool-size", 4)
+            );
+
+            return new MysqlStorageProvider(mysqlConfig, getLogger());
+        }
+
+        return new JsonStorageProvider(getDataFolder(), getLogger());
     }
 
     private static boolean isFolia() {
