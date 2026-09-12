@@ -25,7 +25,7 @@ repositories {
 dependencies {
     // Plugins
     compileOnly("net.milkbowl.vault:VaultUnlockedAPI:2.20") { isTransitive = false }
-    compileOnly("com.palmergames.bukkit.towny:towny:0.101.2.1")
+    compileOnly("com.palmergames.bukkit.towny:towny:0.103.2.5")
     compileOnly("me.clip:placeholderapi:2.12.3")
 
     // Internal
