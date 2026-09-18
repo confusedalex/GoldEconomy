@@ -14,9 +14,9 @@ import java.util.*
 
 @Suppress("DEPRECATION")
 @CommandAlias("bank")
-class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val util: Util, val config: FileConfiguration) : BaseCommand() {
-    val converterDeposit = Converter.deposit(eco, bundle)
-    val converterWithdraw = Converter.withdraw(eco, bundle)
+class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util, val config: FileConfiguration) : BaseCommand() {
+    val converterDeposit = Converter.deposit(bank, util, bundle)
+    val converterWithdraw = Converter.withdraw(bank, util, bundle)
 
     @HelpCommand
     fun help(help: CommandHelp) {
@@ -37,10 +37,10 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
                 util.formatMessage(
                     String.format(
                         bundle.getString("info.balance"), util.colorCurrency(
-                            eco.getBalance(uuid.toString()).toInt()
+                            bank.getTotalPlayerBalance(uuid)
                         ), util.colorCurrency(
 
-                            eco.bank.getAccountBalance(uuid)
+                            bank.getAccountBalance(uuid)
 
                         ), util.colorCurrency(
                             getInventoryValue(sender, base)
@@ -54,7 +54,7 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
                     String.format(
                         bundle.getString("info.balance.other"),
                         player.name,
-                        util.colorCurrency(eco.getBalance(player).toInt())
+                        util.colorCurrency(bank.getTotalPlayerBalance(player.uniqueId))
                     )
                 )
             )
@@ -88,7 +88,7 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
                 return
             }
 
-            amount > eco.bank.getTotalPlayerBalance(senderuuid) -> {
+            amount > bank.getTotalPlayerBalance(senderuuid) -> {
                 sender.sendMessage(util.formatMessage(bundle.getString("error.notEnough")))
                 return
             }
@@ -104,12 +104,13 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
             }
 
             else -> {
-                eco.withdrawPlayer(sender, amount.toDouble())
+                Converter.spend(bank, util, bundle)(sender, amount, base)
                 sender.sendMessage(
                     util.formatMessage(
                         String.format(bundle.getString("info.sendMoneyTo"), util.colorCurrency(amount), target.name)
                     )
                 )
+                Converter.credit(bank)(target, amount)
                 if (target.isOnline) {
                     Bukkit.getPlayer(target.uniqueId)?.sendMessage(
                         util.formatMessage(
@@ -118,9 +119,6 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
                             )
                         )
                     )
-                    eco.bank.setAccountBalance(target.uniqueId, eco.bank.getAccountBalance(targetuuid) + amount)
-                } else {
-                    eco.depositPlayer(target, amount.toDouble())
                 }
             }
         }
@@ -176,9 +174,9 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
 
         if (util.isBankingRestrictedToPlot(player)) return
         if (nuggets == null || nuggets == "all") {
-            val accountBalance = eco.bank.getAccountBalance(player.uniqueId)
+            val accountBalance = bank.getAccountBalance(player.uniqueId)
             player.sendMessage(util.formatMessage(String.format(bundle.getString("info.withdraw"), util.colorCurrency(accountBalance))))
-            converterWithdraw(player, eco.bank.getAccountBalance(player.uniqueId), base)
+            converterWithdraw(player, bank.getAccountBalance(player.uniqueId), base)
             return
         }
 
@@ -194,7 +192,7 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
             player.sendMessage(util.formatMessage(bundle.getString("error.zero")))
         } else if (amount < 0) {
             player.sendMessage(util.formatMessage(bundle.getString("error.negative")))
-        } else if (amount > eco.bank.getAccountBalance(player.uniqueId)) {
+        } else if (amount > bank.getAccountBalance(player.uniqueId)) {
             player.sendMessage(util.formatMessage(bundle.getString("error.notEnough")))
         } else {
             player.sendMessage(util.formatMessage(String.format(bundle.getString("info.withdraw"), util.colorCurrency(amount))))
@@ -222,7 +220,7 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
             )
         )
 
-        eco.bank.setAccountBalance(target.uniqueId, gold)
+        bank.setAccountBalance(target.uniqueId, gold)
         Bukkit.getPlayer(target.uniqueId)?.sendMessage(
             util.formatMessage(
                 String.format(bundle.getString("info.target.moneySet"), util.colorCurrency(gold)),
@@ -240,7 +238,7 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
             )
         )
 
-        eco.depositPlayer(target, gold.toDouble())
+        Converter.credit(bank)(target, gold)
         Bukkit.getPlayer(target.uniqueId)?.sendMessage(
             util.formatMessage(
 
@@ -259,7 +257,7 @@ class BankCommand(val eco: EconomyImplementer, val bundle: ResourceBundle, val u
             )
         )
 
-        eco.withdrawPlayer(target, gold.toDouble())
+        Converter.spend(bank, util, bundle)(target, gold, base)
         Bukkit.getPlayer(target.uniqueId)?.sendMessage(
             util.formatMessage(
                 String.format(bundle.getString("info.target.remove"), util.colorCurrency(gold))

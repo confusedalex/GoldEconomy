@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 
 public class TheGoldEconomy extends JavaPlugin {
     EconomyImplementer eco;
+    Bank bank;
     Util util;
     ResourceBundle bundle;
     public static Base base;
@@ -74,14 +75,15 @@ public class TheGoldEconomy extends JavaPlugin {
 
         // Vault shit
         util = new Util(this);
-        eco = new EconomyImplementer(this, bundle, util);
+        bank = new Bank();
+        eco = new EconomyImplementer(bank, util, bundle);
         vaultHook = new VaultHook(this, eco);
         vaultHook.hook();
 
-        manager.registerCommand(new BankCommand(eco, bundle, util, this.getConfig()));
+        manager.registerCommand(new BankCommand(bank, bundle, util, this.getConfig()));
 
         // Event class registering
-        Bukkit.getPluginManager().registerEvents(new Events(eco.bank), this);
+        Bukkit.getPluginManager().registerEvents(new Events(bank), this);
         // If removeGoldDrop is true, register Listener
         if (getConfig().getBoolean("removeGoldDrop"))
             Bukkit.getPluginManager().registerEvents(new RemoveGoldDrops(), this);
@@ -102,7 +104,7 @@ public class TheGoldEconomy extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        FileUtilsKt.writeToFiles(eco.bank.getPlayerAccounts(), eco.bank.getFakeAccounts());
+        FileUtilsKt.writeToFiles(bank.getPlayerAccounts(), bank.getFakeAccounts());
 
         vaultHook.unhook();
 

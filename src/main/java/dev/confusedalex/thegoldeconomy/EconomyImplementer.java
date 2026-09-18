@@ -4,7 +4,6 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,17 +13,14 @@ import java.util.UUID;
 import static dev.confusedalex.thegoldeconomy.TheGoldEconomy.base;
 
 public class EconomyImplementer implements Economy {
-    TheGoldEconomy plugin;
     Bank bank;
-    Converter converter;
     ResourceBundle bundle;
     Util util;
 
-    public EconomyImplementer(TheGoldEconomy plugin, ResourceBundle bundle, Util util) {
-        this.plugin = plugin;
-        this.bundle = bundle;
+    public EconomyImplementer(Bank bank, Util util, ResourceBundle bundle) {
+        this.bank = bank;
         this.util = util;
-        bank = new Bank();
+        this.bundle = bundle;
     }
 
     @Override
@@ -142,93 +138,22 @@ public class EconomyImplementer implements Economy {
         if (amount < 0) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
 
         Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(playerName);
-        if (playerOptional.isPresent()) {
-            OfflinePlayer offlinePlayer = playerOptional.get();
-            UUID uuid = offlinePlayer.getUniqueId();
+        if (playerOptional.isPresent()) return withdrawPlayer(playerOptional.get(), amount);
 
-            // if player is online
-            if (offlinePlayer.isOnline()) {
-                Player player = offlinePlayer.getPlayer();
-
-                if (player == null)
-                    return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
-
-                // get balance and InventoryValue from Player
-                int oldBankBalance = bank.getAccountBalance(uuid);
-                int oldInventoryBalance = Converter.Companion.getInventoryValue(player, base);
-
-
-                // If balance + InventoryValue is < amount, return
-                if (amount > oldBankBalance + oldInventoryBalance)
-                    return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Not enough money!");
-                // If bank balances is enough to cover amount
-                if (oldBankBalance - amount > 0) {
-                    bank.setAccountBalance(uuid, (int) (oldBankBalance - amount));
-                    return new EconomyResponse(amount, (oldBankBalance - amount), EconomyResponse.ResponseType.SUCCESS, "");
-                } else {
-                    // Set balance to 0 and cover rest of the costs with Inventory Funds
-                    int diff = (int) (amount - oldBankBalance);
-                    bank.setAccountBalance(uuid, 0);
-                    Converter.Companion.remove(plugin.eco, bundle).invoke(player, diff, base);
-
-                    return new EconomyResponse(amount, oldInventoryBalance - amount, EconomyResponse.ResponseType.SUCCESS, "");
-                }
-            } else {
-                // When player is offline
-                int oldBalance = bank.getTotalPlayerBalance(uuid);
-                int newBalance = (int) (oldBalance - amount);
-                bank.setAccountBalance(uuid, newBalance);
-                return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
-            }
-        } else {
-            int oldBalance = bank.getFakeBalance(playerName);
-            int newBalance = (int) (oldBalance - amount);
-            bank.setFakeAccountBalance(playerName, newBalance);
-            return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
-        }
+        int newBalance = (int) (bank.getFakeBalance(playerName) - amount);
+        bank.setFakeAccountBalance(playerName, newBalance);
+        return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
-        UUID uuid = offlinePlayer.getUniqueId();
-        Player player;
-
         // if amount is negative return
         if (amount < 0) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
 
-        // if player is online
-        if (offlinePlayer.isOnline()) {
-            player = offlinePlayer.getPlayer();
+        Integer newBalance = Converter.Companion.spend(bank, util, bundle).invoke(offlinePlayer, (int) amount, base);
+        if (newBalance == null) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
 
-            if (player == null)
-                return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
-
-            // get Balance and InventoryValue
-            int oldBankBalance = bank.getAccountBalance(uuid);
-            int oldInventoryBalance = Converter.Companion.getInventoryValue(player, base);
-
-            // If balance + InventoryValue is < amount, return
-            if (amount > oldBankBalance + oldInventoryBalance)
-                return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
-            // If bank balances is enough to cover amount
-            if (oldBankBalance - amount > 0) {
-                bank.setAccountBalance(uuid, (int) (oldBankBalance - amount));
-                return new EconomyResponse(amount, (oldBankBalance - amount), EconomyResponse.ResponseType.SUCCESS, "");
-            } else {
-                // Set balance to 0 and cover rest of the costs with Inventory Funds
-                int diff = (int) (amount - oldBankBalance);
-                bank.setAccountBalance(uuid, 0);
-                Converter.Companion.remove(plugin.eco, bundle).invoke(player, diff, base);
-                return new EconomyResponse(amount, oldInventoryBalance - amount, EconomyResponse.ResponseType.SUCCESS, "");
-            }
-        } else {
-            // if offline or fakeAccount
-            int oldBalance = bank.getTotalPlayerBalance(uuid);
-            int newBalance = (int) (oldBalance - amount);
-            bank.setAccountBalance(uuid, newBalance);
-
-            return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
-        }
+        return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
     }
 
     @Override
@@ -247,33 +172,18 @@ public class EconomyImplementer implements Economy {
         if (amount < 0) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
 
         Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(playerName);
-        if (playerOptional.isPresent()) {
-            OfflinePlayer offlinePlayer = playerOptional.get();
-            UUID uuid = offlinePlayer.getUniqueId();
+        if (playerOptional.isPresent()) return depositPlayer(playerOptional.get(), amount);
 
-            // Getting balance and calculating new Balance
-            int oldBalance = bank.getAccountBalance(uuid);
-            int newBalance = (int) (oldBalance + amount);
-            bank.setAccountBalance(uuid, newBalance);
-            return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
-        } else {
-            int oldBalance = bank.getFakeBalance(playerName);
-            int newBalance = (int) (oldBalance + amount);
-            bank.setFakeAccountBalance(playerName, newBalance);
-            return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
-        }
+        int newBalance = (int) (bank.getFakeBalance(playerName) + amount);
+        bank.setFakeAccountBalance(playerName, newBalance);
+        return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
-        UUID uuid = player.getUniqueId();
-        int oldBalance = bank.getAccountBalance(uuid);
-        int newBalance = (int) (oldBalance + amount);
+        Integer newBalance = Converter.Companion.credit(bank).invoke(player, (int) amount);
+        if (newBalance == null) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
 
-        // If amount is negative -> return
-        if (amount < 0) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
-
-        bank.setAccountBalance(uuid, newBalance);
         return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
     }
 

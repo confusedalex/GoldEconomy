@@ -31,10 +31,10 @@ class ConverterTest {
         server = MockBukkit.mock()
         plugin = MockBukkit.load(TheGoldEconomy::class.java)
 
-        give = give(plugin.eco, plugin.bundle)
-        remove = remove(plugin.eco, plugin.bundle)
-        deposit = deposit(plugin.eco, plugin.bundle)
-        withdraw = withdraw(plugin.eco, plugin.bundle)
+        give = give(plugin.util, plugin.bundle)
+        remove = remove(plugin.util, plugin.bundle)
+        deposit = deposit(plugin.bank, plugin.util, plugin.bundle)
+        withdraw = withdraw(plugin.bank, plugin.util, plugin.bundle)
     }
 
     @AfterEach
@@ -233,7 +233,7 @@ class ConverterTest {
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 10))
         deposit(player, 5, Base.NUGGETS)
         assertEquals(5, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(5, plugin.eco.bank.getAccountBalance(player.uniqueId))
+        assertEquals(5, plugin.bank.getAccountBalance(player.uniqueId))
     }
 
     @Test
@@ -244,13 +244,13 @@ class ConverterTest {
         player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 3))
         deposit(player, 5, base)
         assertEquals(3, getInventoryValue(player, base))
-        assertEquals(0, plugin.eco.bank.getAccountBalance(player.uniqueId))
+        assertEquals(0, plugin.bank.getAccountBalance(player.uniqueId))
 
         base = Base.RAW
         player.inventory.addItem(ItemStack(Material.RAW_GOLD_BLOCK, 1))
         deposit(player, 5, base)
         assertEquals(4, getInventoryValue(player, base))
-        assertEquals(5, plugin.eco.bank.getAccountBalance(player.uniqueId))
+        assertEquals(5, plugin.bank.getAccountBalance(player.uniqueId))
     }
 
     @Test
@@ -261,7 +261,7 @@ class ConverterTest {
         player.inventory.addItem(ItemStack(Material.GOLD_INGOT, 1))
         deposit(player, 14, Base.NUGGETS)
         assertEquals(0, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(14, plugin.eco.bank.getAccountBalance(player.uniqueId))
+        assertEquals(14, plugin.bank.getAccountBalance(player.uniqueId))
     }
 
     @Test
@@ -271,14 +271,14 @@ class ConverterTest {
         player.inventory.addItem(ItemStack(Material.STONE, 10))
         deposit(player, 5, Base.NUGGETS)
         assertEquals(0, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(0, plugin.eco.bank.getAccountBalance(player.uniqueId))
+        assertEquals(0, plugin.bank.getAccountBalance(player.uniqueId))
     }
 
     @Test
     fun withdraw_withSufficientGold() {
         val player: PlayerMock = server.addPlayer()
         val uuid = player.uniqueId
-        val bank = plugin.eco.bank
+        val bank = plugin.bank
 
         bank.setAccountBalance(player.uniqueId, 92)
         withdraw(player, 91, Base.NUGGETS)
@@ -311,6 +311,6 @@ class ConverterTest {
 
         withdraw(player, 5, Base.NUGGETS)
         assertEquals(0, getInventoryValue(player, Base.NUGGETS))
-        assertEquals(0, plugin.eco.bank.getAccountBalance(player.uniqueId))
+        assertEquals(0, plugin.bank.getAccountBalance(player.uniqueId))
     }
 }

@@ -24,11 +24,11 @@ class BankCommandTest {
         server = MockBukkit.mock()
         plugin = MockBukkit.load(TheGoldEconomy::class.java)
 
-        give = Converter.give(plugin.eco, plugin.bundle)
+        give = Converter.give(plugin.util, plugin.bundle)
 
-        bankCommand = BankCommand(plugin.eco, plugin.bundle, plugin.util, plugin.config)
-        plugin.eco.bank.playerAccounts.clear()
-        plugin.eco.bank.fakeAccounts.clear()
+        bankCommand = BankCommand(plugin.bank, plugin.bundle, plugin.util, plugin.config)
+        plugin.bank.playerAccounts.clear()
+        plugin.bank.fakeAccounts.clear()
         sender = server.addPlayer("sender")
         target = server.addPlayer("target")
     }
@@ -40,7 +40,7 @@ class BankCommandTest {
 
     @Test
     fun balance_will_return_correct_balance() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.balance(sender, null)
 
@@ -53,7 +53,7 @@ class BankCommandTest {
 
     @Test
     fun balance_of_others_without_permission_not_allowed() {
-        plugin.eco.bank.setAccountBalance(target.uniqueId, 50)
+        plugin.bank.setAccountBalance(target.uniqueId, 50)
         sender.addAttachment(plugin, "thegoldeconomy.balance.others", false)
 
         bankCommand.balance(sender, target)
@@ -65,7 +65,7 @@ class BankCommandTest {
 
     @Test
     fun balance_of_others_with_permission_allowed() {
-        plugin.eco.bank.setAccountBalance(target.uniqueId, 50)
+        plugin.bank.setAccountBalance(target.uniqueId, 50)
         sender.addAttachment(plugin, "thegoldeconomy.balance.others", true)
 
         bankCommand.balance(sender, target)
@@ -81,7 +81,7 @@ class BankCommandTest {
 
     @Test
     fun pay_with_valid_amount_will_notify_target() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, 50)
 
@@ -94,25 +94,25 @@ class BankCommandTest {
 
     @Test
     fun pay_with_valid_amount_will_deduct_from_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, 50)
 
-        assertEquals(50, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(50, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun pay_with_valid_amount_will_add_to_target() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, 50)
 
-        assertEquals(50, plugin.eco.bank.getAccountBalance(target.uniqueId))
+        assertEquals(50, plugin.bank.getAccountBalance(target.uniqueId))
     }
 
     @Test
     fun pay_with_valid_amount_will_notify_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, 50)
 
@@ -125,7 +125,7 @@ class BankCommandTest {
 
     @Test
     fun pay_of_zero_will_send_error() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, 0)
 
@@ -138,25 +138,25 @@ class BankCommandTest {
 
     @Test
     fun pay_of_zero_will_not_deduct_from_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, 0)
 
-        assertEquals(100, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(100, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun pay_of_zero_will_not_add_to_target() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, 0)
 
-        assertEquals(0, plugin.eco.bank.getAccountBalance(target.uniqueId))
+        assertEquals(0, plugin.bank.getAccountBalance(target.uniqueId))
     }
 
     @Test
     fun pay_of_negative_amount_will_send_error() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, -50)
 
@@ -169,25 +169,25 @@ class BankCommandTest {
 
     @Test
     fun pay_of_negative_amount_will_not_deduct_from_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, -50)
 
-        assertEquals(100, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(100, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun pay_of_negative_amount_will_not_add_to_target() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, -50)
 
-        assertEquals(0, plugin.eco.bank.getAccountBalance(target.uniqueId))
+        assertEquals(0, plugin.bank.getAccountBalance(target.uniqueId))
     }
 
     @Test
     fun pay_of_insufficient_amount_will_send_error() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, 200)
 
@@ -200,25 +200,25 @@ class BankCommandTest {
 
     @Test
     fun pay_of_insufficient_amount_will_not_deduct_from_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, 200)
 
-        assertEquals(100, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(100, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun pay_of_insufficient_amount_will_not_add_to_target() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, target, 200)
 
-        assertEquals(0, plugin.eco.bank.getAccountBalance(target.uniqueId))
+        assertEquals(0, plugin.bank.getAccountBalance(target.uniqueId))
     }
 
     @Test
     fun paying_yourself_will_send_error() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, sender, 50)
 
@@ -231,16 +231,16 @@ class BankCommandTest {
 
     @Test
     fun paying_yourself_will_not_change_balance() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, sender, 50)
 
-        assertEquals(100, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(100, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun paying_not_existing_player_will_send_error() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, server.getOfflinePlayer(UUID.randomUUID()), 50)
 
@@ -253,16 +253,16 @@ class BankCommandTest {
 
     @Test
     fun paying_not_existing_player_will_not_deduct_from_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
 
         bankCommand.pay(sender, server.getOfflinePlayer(UUID.randomUUID()), 50)
 
-        assertEquals(100, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(100, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun paying_offline_player_with_sufficient_funds_will_notify_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
         target.disconnect()
 
         bankCommand.pay(sender, target, 50)
@@ -277,22 +277,22 @@ class BankCommandTest {
 
     @Test
     fun paying_offline_player_with_sufficient_funds_will_deduct_from_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
         target.disconnect()
 
         bankCommand.pay(sender, target, 50)
 
-        assertEquals(50, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(50, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun paying_offline_player_with_sufficient_funds_will_add_to_target() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 100)
+        plugin.bank.setAccountBalance(sender.uniqueId, 100)
         target.disconnect()
 
         bankCommand.pay(sender, target, 50)
 
-        assertEquals(50, plugin.eco.bank.getAccountBalance(target.uniqueId))
+        assertEquals(50, plugin.bank.getAccountBalance(target.uniqueId))
     }
 
     @Test
@@ -302,8 +302,8 @@ class BankCommandTest {
 
         bankCommand.pay(sender, target, 25);
 
-        assertEquals(25, plugin.eco.bank.getTotalPlayerBalance(sender.uniqueId))
-        assertEquals(75, plugin.eco.bank.getTotalPlayerBalance(target.uniqueId))
+        assertEquals(25, plugin.bank.getTotalPlayerBalance(sender.uniqueId))
+        assertEquals(75, plugin.bank.getTotalPlayerBalance(target.uniqueId))
     }
 
     @Test
@@ -325,7 +325,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, "25")
 
-        assertEquals(25, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(25, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
@@ -356,7 +356,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, "all")
 
-        assertEquals(50, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(50, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
@@ -387,7 +387,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, null)
 
-        assertEquals(278, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(278, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
@@ -418,7 +418,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, "100")
 
-        assertEquals(0, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(0, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
@@ -449,7 +449,7 @@ class BankCommandTest {
 
         bankCommand.deposit(sender, "0")
 
-        assertEquals(0, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(0, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
@@ -477,11 +477,11 @@ class BankCommandTest {
     @Test
     fun deposit_of_negative_amount_will_not_change_account() {
         give(sender, 50, Base.INGOTS)
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 20)
+        plugin.bank.setAccountBalance(sender.uniqueId, 20)
 
         bankCommand.deposit(sender, "-50")
 
-        assertEquals(20, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(20, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
@@ -495,7 +495,7 @@ class BankCommandTest {
 
     @Test
     fun withdraw_with_specific_sufficient_amount_will_notify_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "25")
 
@@ -508,16 +508,16 @@ class BankCommandTest {
 
     @Test
     fun withdraw_with_specific_sufficient_amount_will_remove_from_account() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "25")
 
-        assertEquals(25, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(25, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun withdraw_with_specific_sufficient_amount_will_add_to_inventory() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "25")
 
@@ -526,7 +526,7 @@ class BankCommandTest {
 
     @Test
     fun withdraw_of_all_with_sufficient_amount_will_notify_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "all")
 
@@ -539,16 +539,16 @@ class BankCommandTest {
 
     @Test
     fun withdraw_of_all_with_sufficient_amount_will_remove_from_account() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "all")
 
-        assertEquals(0, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(0, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun withdraw_of_all_with_sufficient_amount_will_add_to_inventory() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "all")
 
@@ -557,7 +557,7 @@ class BankCommandTest {
 
     @Test
     fun withdraw_of_no_amount_with_sufficient_amount_will_notify_sender() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, null)
 
@@ -570,16 +570,16 @@ class BankCommandTest {
 
     @Test
     fun withdraw_of_no_amount_with_sufficient_amount_will_remove_from_account() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, null)
 
-        assertEquals(0, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(0, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun withdraw_of_no_amount_with_sufficient_amount_will_add_to_inventory() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, null)
 
@@ -589,7 +589,7 @@ class BankCommandTest {
 
     @Test
     fun withdraw_with_insufficient_amount_will_send_error() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "100")
 
@@ -602,16 +602,16 @@ class BankCommandTest {
 
     @Test
     fun withdraw_with_insufficient_amount_will_not_change_account() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "100")
 
-        assertEquals(50, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(50, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun withdraw_with_insufficient_amount_will_not_add_to_inventory() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "100")
 
@@ -620,7 +620,7 @@ class BankCommandTest {
 
     @Test
     fun withdraw_of_zero_will_send_error() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "0")
 
@@ -633,16 +633,16 @@ class BankCommandTest {
 
     @Test
     fun withdraw_of_zero_will_not__account() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "0")
 
-        assertEquals(50, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(50, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun withdraw_of_zero_will_not_add_to_inventory() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "0")
 
@@ -651,7 +651,7 @@ class BankCommandTest {
 
     @Test
     fun withdraw_of_negative_amount_will_send_error() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 50)
+        plugin.bank.setAccountBalance(sender.uniqueId, 50)
 
         bankCommand.withdraw(sender, "-50")
 
@@ -664,16 +664,16 @@ class BankCommandTest {
 
     @Test
     fun withdraw_of_negative_amount_will_not_change_account() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 20)
+        plugin.bank.setAccountBalance(sender.uniqueId, 20)
 
         bankCommand.withdraw(sender, "-50")
 
-        assertEquals(20, plugin.eco.bank.getAccountBalance(sender.uniqueId))
+        assertEquals(20, plugin.bank.getAccountBalance(sender.uniqueId))
     }
 
     @Test
     fun withdraw_of_negative_amount_will_not_add_to_inventory() {
-        plugin.eco.bank.setAccountBalance(sender.uniqueId, 20)
+        plugin.bank.setAccountBalance(sender.uniqueId, 20)
         give(sender, 70, Base.INGOTS)
 
         bankCommand.withdraw(sender, "-50")
@@ -683,11 +683,11 @@ class BankCommandTest {
 
     @Test
     fun set_with_valid_amount_and_player_and_permission_will_succeed() {
-        plugin.eco.bank.playerAccounts[target.uniqueId.toString()] = 150
+        plugin.bank.playerAccounts[target.uniqueId.toString()] = 150
 
         bankCommand.set(sender, target, 100)
 
-        assertEquals(100, plugin.eco.bank.getAccountBalance(target.uniqueId))
+        assertEquals(100, plugin.bank.getAccountBalance(target.uniqueId))
     }
 
     @Test
@@ -715,45 +715,45 @@ class BankCommandTest {
 
     @Test
     fun set_with_negative_amount_will_not_work() {
-        plugin.eco.bank.playerAccounts[target.uniqueId.toString()] = 50
+        plugin.bank.playerAccounts[target.uniqueId.toString()] = 50
 
         bankCommand.set(null, target, -50)
 
         assertEquals(
-            50, plugin.eco.bank.getAccountBalance(target.uniqueId)
+            50, plugin.bank.getAccountBalance(target.uniqueId)
         )
     }
 
     @Test
     fun add_works() {
-        plugin.eco.bank.playerAccounts[target.uniqueId.toString()] = 50
+        plugin.bank.playerAccounts[target.uniqueId.toString()] = 50
 
         bankCommand.add(null, target, 50)
 
         assertEquals(
-            100, plugin.eco.bank.getAccountBalance(target.uniqueId)
+            100, plugin.bank.getAccountBalance(target.uniqueId)
         )
     }
 
     @Test
     fun add_with_negative_amount_wont_work() {
-        plugin.eco.bank.playerAccounts[target.uniqueId.toString()] = 75
+        plugin.bank.playerAccounts[target.uniqueId.toString()] = 75
 
         bankCommand.add(null, target, -25)
 
         assertEquals(
-            75, plugin.eco.bank.getAccountBalance(target.uniqueId)
+            75, plugin.bank.getAccountBalance(target.uniqueId)
         )
     }
 
     @Test
     fun remove_works() {
-        plugin.eco.bank.playerAccounts[target.uniqueId.toString()] = 75
+        plugin.bank.playerAccounts[target.uniqueId.toString()] = 75
 
         bankCommand.remove(null, target, 25)
 
         assertEquals(
-            50, plugin.eco.bank.getAccountBalance(target.uniqueId)
+            50, plugin.bank.getAccountBalance(target.uniqueId)
         )
     }
 }

@@ -52,13 +52,13 @@ class PlaceholdersTest {
         val placeholders = Placeholders(plugin)
         val player = server.addPlayer()
         val uuid = player.uniqueId
-        val bank = plugin.eco.bank
+        val bank = plugin.bank
 
         bank.setAccountBalance(uuid, 1000)
         assertEquals("0", placeholders.onRequest(player, "inventorybalance"))
         assertEquals("1000", placeholders.onRequest(player, "bankbalance"))
         assertEquals("1000", placeholders.onRequest(player, "totalbalance"))
-        Converter.withdraw(plugin.eco, plugin.bundle)(player, 500, Base.NUGGETS)
+        Converter.withdraw(plugin.bank, plugin.util, plugin.bundle)(player, 500, Base.NUGGETS)
         assertEquals("500", placeholders.onRequest(player, "inventorybalance"))
         assertEquals("500", placeholders.onRequest(player, "bankbalance"))
         assertEquals("1000", placeholders.onRequest(player, "totalbalance"))

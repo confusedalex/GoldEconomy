@@ -2,6 +2,7 @@ package dev.confusedalex.thegoldeconomy
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockbukkit.mockbukkit.MockBukkit
@@ -17,8 +18,8 @@ class BankTest {
     fun setUp() {
         server = MockBukkit.mock()
         plugin = MockBukkit.load(TheGoldEconomy::class.java)
-        plugin.eco.bank.playerAccounts.clear()
-        plugin.eco.bank.fakeAccounts.clear()
+        plugin.bank.playerAccounts.clear()
+        plugin.bank.fakeAccounts.clear()
     }
 
     @AfterEach
@@ -30,13 +31,12 @@ class BankTest {
     fun getTotalPlayerBalance() {
         val player: PlayerMock = server.addPlayer()
         val uuid = player.uniqueId
-        val converter = plugin.eco.converter
-        val bank = plugin.eco.bank
+        val bank = plugin.bank
 
         bank.setAccountBalance(uuid, 1000)
         assertEquals(1000, bank.getAccountBalance(uuid))
         assertEquals(1000, bank.getTotalPlayerBalance(uuid))
-        Converter.withdraw(plugin.eco, plugin.bundle)(player, 500, Base.NUGGETS)
+        Converter.withdraw(plugin.bank, plugin.util, plugin.bundle)(player, 500, Base.NUGGETS)
         assertEquals(500, bank.getAccountBalance(uuid))
         assertEquals(1000, bank.getTotalPlayerBalance(uuid))
         player.disconnect()
@@ -47,7 +47,7 @@ class BankTest {
     fun playerAccount() {
         val player: PlayerMock = server.addPlayer()
         val uuid = player.uniqueId
-        val bank = plugin.eco.bank
+        val bank = plugin.bank
 
         bank.setAccountBalance(uuid, 1000)
         assertEquals(1000, bank.playerAccounts[uuid.toString()])
@@ -57,7 +57,7 @@ class BankTest {
 
     @Test
     fun fakeAccount() {
-        val bank = plugin.eco.bank
+        val bank = plugin.bank
         val fakeName = "test-name"
 
         bank.setFakeAccountBalance(fakeName, 1000)

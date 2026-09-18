@@ -1,7 +1,7 @@
 package dev.confusedalex.thegoldeconomy
 
-import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.*
@@ -40,7 +40,7 @@ class Converter {
             player?.inventory?.filterNotNull()?.filter { isGold(it.type, base) }
                 ?.sumOf { getValue(it.type, base) * it.amount } ?: 0
 
-        fun remove(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
+        fun remove(util: Util, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, amount: Int, base: Base) {
                 val currentValue = getInventoryValue(player, base)
                 // Checks if the value of the items is greater than the amount to deposit
@@ -52,11 +52,11 @@ class Converter {
                 }
 
                 val newBalance = currentValue - amount
-                give(eco, bundle)(player, newBalance, base)
+                give(util, bundle)(player, newBalance, base)
             }
         }
 
-        fun give( eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
+        fun give(util: Util, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, value: Int, base: Base) {
                 var warning = false
 
@@ -110,34 +110,75 @@ class Converter {
                     removeMaterial(entry.key, entry.value, acc)
                 }
 
-                if (warning) player.sendMessage(eco.util.formatMessage(String.format(bundle.getString("warning.drops"))))
+                if (warning) player.sendMessage(util.formatMessage(String.format(bundle.getString("warning.drops"))))
             }
         }
 
-        fun withdraw(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
+        fun withdraw(bank: Bank, util: Util, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, value: Int, base: Base) {
                 val uuid = player.uniqueId
-                val oldBalance = eco.bank.getAccountBalance(player.uniqueId)
+                val oldBalance = bank.getAccountBalance(player.uniqueId)
 
                 // Checks balance in hashmap
-                if (value > eco.bank.getAccountBalance(uuid)) {
-                    player.sendMessage(eco.util.formatMessage(bundle.getString("error.notEnoughMoneyWithdraw")))
+                if (value > bank.getAccountBalance(uuid)) {
+                    player.sendMessage(util.formatMessage(bundle.getString("error.notEnoughMoneyWithdraw")))
                     return
                 }
-                eco.bank.setAccountBalance(uuid, (oldBalance - value))
+                bank.setAccountBalance(uuid, (oldBalance - value))
 
-                give(eco, bundle)(player, value, base)
+                give(util, bundle)(player, value, base)
             }
         }
 
-        fun deposit(eco: EconomyImplementer, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
+        fun deposit(bank: Bank, util: Util, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, value: Int, base: Base) {
                 if (value <= 0) return
                 if (getInventoryValue(player, base) < value) return
-                val op = Bukkit.getOfflinePlayer(player.uniqueId)
 
-                remove(eco, bundle)(player, value, base)
-                eco.depositPlayer(op, value.toDouble())
+                remove(util, bundle)(player, value, base)
+                credit(bank)(player, value)
+            }
+        }
+
+        fun credit(bank: Bank): (OfflinePlayer, Int) -> Int? {
+            return fun(offlinePlayer: OfflinePlayer, amount: Int): Int? {
+                if (amount < 0) return null
+
+                val uuid = offlinePlayer.uniqueId
+                val newBalance = bank.getAccountBalance(uuid) + amount
+                bank.setAccountBalance(uuid, newBalance)
+                return newBalance
+            }
+        }
+
+        fun spend(bank: Bank, util: Util, bundle: ResourceBundle): (OfflinePlayer, Int, Base) -> Int? {
+            return fun(offlinePlayer: OfflinePlayer, amount: Int, base: Base): Int? {
+                if (amount < 0) return null
+
+                val uuid = offlinePlayer.uniqueId
+
+                if (!offlinePlayer.isOnline) {
+                    val newBalance = bank.getTotalPlayerBalance(uuid) - amount
+                    bank.setAccountBalance(uuid, newBalance)
+                    return newBalance
+                }
+
+                val player = offlinePlayer.player ?: return null
+                val oldBankBalance = bank.getAccountBalance(uuid)
+                val oldInventoryBalance = getInventoryValue(player, base)
+
+                if (amount > oldBankBalance + oldInventoryBalance) return null
+
+                if (oldBankBalance - amount > 0) {
+                    val newBalance = oldBankBalance - amount
+                    bank.setAccountBalance(uuid, newBalance)
+                    return newBalance
+                }
+
+                val diff = amount - oldBankBalance
+                bank.setAccountBalance(uuid, 0)
+                remove(util, bundle)(player, diff, base)
+                return oldInventoryBalance - amount
             }
         }
     }
