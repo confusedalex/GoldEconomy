@@ -23,11 +23,6 @@ public class TheGoldEconomy extends JavaPlugin {
         // Config
         saveDefaultConfig();
 
-        if (isFolia()) {
-            getLogger().info("Folia detected."); // todo: i18n
-
-        }
-
         // Registering Command using ACF
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.enableUnstableAPI("help");
