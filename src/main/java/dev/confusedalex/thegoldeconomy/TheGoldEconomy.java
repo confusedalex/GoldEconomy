@@ -2,6 +2,9 @@ package dev.confusedalex.thegoldeconomy;
 
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import dev.confusedalex.thegoldeconomy.vault.VaultHook;
+import dev.confusedalex.thegoldeconomy.vault.VaultUnlockedEconomyImplementer;
+import dev.confusedalex.thegoldeconomy.vault.VaultUnlockedHook;
 import io.papermc.paper.ServerBuildInfo;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
@@ -12,12 +15,12 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class TheGoldEconomy extends JavaPlugin {
-    EconomyImplementer eco;
     Bank bank;
     Util util;
     ResourceBundle bundle;
     public static Base base;
     private VaultHook vaultHook;
+    private VaultUnlockedHook vaultUnlockedHook;
 
     @Override
     public void onEnable() {
@@ -76,9 +79,14 @@ public class TheGoldEconomy extends JavaPlugin {
         // Vault shit
         util = new Util(this);
         bank = new Bank();
-        eco = new EconomyImplementer(bank, util, bundle);
-        vaultHook = new VaultHook(this, eco);
+
+        vaultHook = new VaultHook(this, new EconomyImplementer(bank, util, bundle));
         vaultHook.hook();
+
+        if (isVaultUnlockedAvailable()) {
+            vaultUnlockedHook = new VaultUnlockedHook(this, new VaultUnlockedEconomyImplementer(bank, util, bundle));
+            vaultUnlockedHook.hook();
+        }
 
         manager.registerCommand(new BankCommand(bank, bundle, util, this.getConfig()));
 
@@ -106,9 +114,19 @@ public class TheGoldEconomy extends JavaPlugin {
     public void onDisable() {
         FileUtilsKt.writeToFiles(bank.getPlayerAccounts(), bank.getFakeAccounts());
 
-        vaultHook.unhook();
+        if (vaultUnlockedHook != null) vaultUnlockedHook.unhook();
+        if (vaultHook != null) vaultHook.unhook();
 
         getLogger().info("TheGoldEconomy disabled.");
+    }
+
+    private static boolean isVaultUnlockedAvailable() {
+        try {
+            Class.forName("net.milkbowl.vault2.economy.Economy");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 
     private static boolean isFolia() {

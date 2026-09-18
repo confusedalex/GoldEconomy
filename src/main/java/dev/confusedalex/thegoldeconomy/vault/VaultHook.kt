@@ -1,5 +1,6 @@
-package dev.confusedalex.thegoldeconomy
+package dev.confusedalex.thegoldeconomy.vault
 
+import dev.confusedalex.thegoldeconomy.TheGoldEconomy
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
