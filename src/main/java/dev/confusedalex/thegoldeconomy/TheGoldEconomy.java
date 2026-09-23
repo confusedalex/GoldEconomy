@@ -129,8 +129,4 @@ public class TheGoldEconomy extends JavaPlugin {
             return false;
         }
     }
-
-    private static boolean isFolia() {
-        return ServerBuildInfo.buildInfo().isBrandCompatible(Key.key("papermc", "folia"));
-    }
 }
