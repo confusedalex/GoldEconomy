@@ -151,7 +151,7 @@ class Converter {
             }
         }
 
-        // Spend handles the logic of spending (removing) money from a player or fakeAccount
+        // Spend handles the logic of spending (removing) money from a player
         // Returns the new total balance (bank + inventory) or null for error
         fun spend(bank: Bank, util: Util, bundle: ResourceBundle): (OfflinePlayer, Int, Base) -> Int? {
             return fun(offlinePlayer: OfflinePlayer, amount: Int, base: Base): Int? {

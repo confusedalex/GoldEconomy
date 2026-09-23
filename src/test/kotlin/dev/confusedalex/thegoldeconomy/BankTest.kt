@@ -2,7 +2,6 @@ package dev.confusedalex.thegoldeconomy
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockbukkit.mockbukkit.MockBukkit
@@ -19,7 +18,6 @@ class BankTest {
         server = MockBukkit.mock()
         plugin = MockBukkit.load(TheGoldEconomy::class.java)
         plugin.bank.playerAccounts.clear()
-        plugin.bank.fakeAccounts.clear()
     }
 
     @AfterEach
@@ -53,15 +51,5 @@ class BankTest {
         assertEquals(1000, bank.playerAccounts[uuid.toString()])
         assertEquals(1000, bank.getAccountBalance(uuid))
         assertEquals(0, bank.getAccountBalance(UUID.randomUUID()))
-    }
-
-    @Test
-    fun fakeAccount() {
-        val bank = plugin.bank
-        val fakeName = "test-name"
-
-        bank.setFakeAccountBalance(fakeName, 1000)
-        assertEquals(1000, bank.fakeAccounts[fakeName])
-        assertEquals(0, bank.getFakeBalance("other-name"))
     }
 }

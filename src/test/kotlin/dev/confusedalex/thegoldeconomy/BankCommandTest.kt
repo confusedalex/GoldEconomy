@@ -28,7 +28,6 @@ class BankCommandTest {
 
         bankCommand = BankCommand(plugin.bank, plugin.bundle, plugin.util, plugin.config)
         plugin.bank.playerAccounts.clear()
-        plugin.bank.fakeAccounts.clear()
         sender = server.addPlayer("sender")
         target = server.addPlayer("target")
     }

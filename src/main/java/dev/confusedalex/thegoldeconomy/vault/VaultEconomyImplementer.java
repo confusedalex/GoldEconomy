@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static dev.confusedalex.thegoldeconomy.TheGoldEconomy.base;
 
+@SuppressWarnings("deprecation")
 public class VaultEconomyImplementer implements Economy {
     Bank bank;
     ResourceBundle bundle;
@@ -63,10 +64,6 @@ public class VaultEconomyImplementer implements Economy {
 
     @Override
     public boolean hasAccount(String playerName) {
-        if (util.isOfflinePlayer(playerName).isPresent()) return true;
-        if (bank.getFakeAccounts().containsKey(playerName)) return true;
-
-        bank.setFakeAccountBalance(playerName, 0);
         return true;
     }
 
@@ -87,14 +84,8 @@ public class VaultEconomyImplementer implements Economy {
 
     @Override
     public double getBalance(String playerName) {
-        try {
-            UUID uuid = UUID.fromString(playerName);
-            if (Bukkit.getPlayer(uuid) != null) return bank.getTotalPlayerBalance(uuid);
-        } catch (IllegalArgumentException e) {
-            // String is not UUID
-        }
-        Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(playerName);
-        return playerOptional.map(offlinePlayer -> bank.getTotalPlayerBalance(offlinePlayer.getUniqueId())).orElseGet(() -> bank.getFakeBalance(playerName));
+        OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
+        return getBalance(player);
     }
 
     @Override
@@ -115,9 +106,10 @@ public class VaultEconomyImplementer implements Economy {
 
     @Override
     public boolean has(String playerName, double amount) {
+        UUID uuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
         if (util.isOfflinePlayer(playerName).isPresent())
-            return amount <= bank.getTotalPlayerBalance(Bukkit.getOfflinePlayer(playerName).getUniqueId());
-        else return amount <= bank.getFakeBalance(playerName);
+            return amount <= bank.getTotalPlayerBalance(uuid);
+        else return amount <= bank.getAccountBalance(uuid);
     }
 
     @Override
@@ -137,20 +129,11 @@ public class VaultEconomyImplementer implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(String playerName, double amount) {
-        // if amount is negative return
-        if (amount < 0) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
-
-        Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(playerName);
-        if (playerOptional.isPresent()) return withdrawPlayer(playerOptional.get(), amount);
-
-        int newBalance = (int) (bank.getFakeBalance(playerName) - amount);
-        bank.setFakeAccountBalance(playerName, newBalance);
-        return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
+        return withdrawPlayer(Bukkit.getOfflinePlayer(playerName), amount);
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
-        // if amount is negative return
         if (amount < 0) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
 
         Integer newBalance = Converter.Companion.spend(bank, util, bundle).invoke(offlinePlayer, (int) amount, base);
@@ -171,15 +154,7 @@ public class VaultEconomyImplementer implements Economy {
 
     @Override
     public EconomyResponse depositPlayer(String playerName, double amount) {
-        // If amount is negative -> return
-        if (amount < 0) return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "error");
-
-        Optional<OfflinePlayer> playerOptional = util.isOfflinePlayer(playerName);
-        if (playerOptional.isPresent()) return depositPlayer(playerOptional.get(), amount);
-
-        int newBalance = (int) (bank.getFakeBalance(playerName) + amount);
-        bank.setFakeAccountBalance(playerName, newBalance);
-        return new EconomyResponse(amount, newBalance, EconomyResponse.ResponseType.SUCCESS, "");
+        return depositPlayer(Bukkit.getOfflinePlayer(playerName), amount);
     }
 
     @Override

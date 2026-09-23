@@ -7,6 +7,6 @@ import org.bukkit.event.player.PlayerQuitEvent
 class Events(var bank: Bank) : Listener {
     @EventHandler
     fun onPlayerQuit(e: PlayerQuitEvent?) {
-        writeToFiles(bank.playerAccounts, bank.fakeAccounts)
+        writeToFiles(bank.playerAccounts)
     }
 }

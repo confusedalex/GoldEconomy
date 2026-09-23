@@ -113,7 +113,7 @@ public class TheGoldEconomy extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        FileUtilsKt.writeToFiles(bank.getPlayerAccounts(), bank.getFakeAccounts());
+        FileUtilsKt.writeToFiles(bank.getPlayerAccounts());
 
         if (vaultUnlockedHook != null) vaultUnlockedHook.unhook();
         if (vaultHook != null) vaultHook.unhook();

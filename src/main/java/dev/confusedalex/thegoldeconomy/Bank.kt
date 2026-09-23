@@ -8,7 +8,6 @@ import java.util.*
 
 class Bank {
     val playerAccounts: HashMap<String, Int> = Json.decodeFromString(createPlayersFile().readText())
-    val fakeAccounts: HashMap<String, Int> = Json.decodeFromString(createFakeAccountsFile().readText())
 
     fun getTotalPlayerBalance(uuid: UUID): Int {
         val player: Player? = Bukkit.getPlayer(uuid)
@@ -28,16 +27,5 @@ class Bank {
 
     fun setAccountBalance(uuid: UUID, amount: Int) {
         playerAccounts[uuid.toString()] = amount
-    }
-
-    fun setFakeAccountBalance(s: String, amount: Int) {
-        fakeAccounts[s] = amount
-    }
-
-    fun getFakeBalance(s: String): Int {
-        if (fakeAccounts.containsKey(s)) return fakeAccounts.getValue(s)
-
-        fakeAccounts[s] = 0
-        return 0
     }
 }

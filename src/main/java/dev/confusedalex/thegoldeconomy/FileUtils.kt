@@ -17,17 +17,6 @@ fun createPlayersFile(): File {
     return playersFile
 }
 
-fun createFakeAccountsFile(): File {
-    val fakeAccountsFile = File("plugins/TheGoldEconomy/data/fakeAccounts.json")
-
-    if (!fakeAccountsFile.exists()) {
-        fakeAccountsFile.createNewFile()
-        fakeAccountsFile.writeText("{}")
-    }
-    return fakeAccountsFile
-}
-
-fun writeToFiles(playerAccounts: HashMap<String, Int>, fakeAccounts: HashMap<String, Int>) {
+fun writeToFiles(playerAccounts: HashMap<String, Int>) {
     createPlayersFile().writeText(Json.encodeToString(playerAccounts))
-    createFakeAccountsFile().writeText(Json.encodeToString(fakeAccounts))
 }
