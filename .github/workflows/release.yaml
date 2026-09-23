@@ -27,14 +27,8 @@ jobs:
           server-id: github 
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
-        with:
-          gradle-version: '9.8.0'
-          cache-disabled: true
-
       - name: Build with Gradle
-        run: gradle build
+        run: ./gradlew build
 
       - name: Release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
@@ -44,7 +38,7 @@ jobs:
           files: build/libs/GoldEconomy-*.jar
 
       - name: Upload to Modrinth
-        run: gradle modrinth
+        run: ./gradlew modrinth
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
 
