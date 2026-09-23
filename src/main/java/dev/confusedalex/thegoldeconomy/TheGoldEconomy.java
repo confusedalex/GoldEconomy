@@ -2,6 +2,7 @@ package dev.confusedalex.thegoldeconomy;
 
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import dev.confusedalex.thegoldeconomy.vault.VaultEconomyImplementer;
 import dev.confusedalex.thegoldeconomy.vault.VaultHook;
 import dev.confusedalex.thegoldeconomy.vault.VaultUnlockedEconomyImplementer;
 import dev.confusedalex.thegoldeconomy.vault.VaultUnlockedHook;
@@ -80,7 +81,7 @@ public class TheGoldEconomy extends JavaPlugin {
         util = new Util(this);
         bank = new Bank();
 
-        vaultHook = new VaultHook(this, new EconomyImplementer(bank, util, bundle));
+        vaultHook = new VaultHook(this, new VaultEconomyImplementer(bank, util, bundle));
         vaultHook.hook();
 
         if (isVaultUnlockedAvailable()) {

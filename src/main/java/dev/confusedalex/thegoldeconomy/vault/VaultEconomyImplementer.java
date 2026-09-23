@@ -1,5 +1,8 @@
-package dev.confusedalex.thegoldeconomy;
+package dev.confusedalex.thegoldeconomy.vault;
 
+import dev.confusedalex.thegoldeconomy.Bank;
+import dev.confusedalex.thegoldeconomy.Converter;
+import dev.confusedalex.thegoldeconomy.Util;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -12,12 +15,12 @@ import java.util.UUID;
 
 import static dev.confusedalex.thegoldeconomy.TheGoldEconomy.base;
 
-public class EconomyImplementer implements Economy {
+public class VaultEconomyImplementer implements Economy {
     Bank bank;
     ResourceBundle bundle;
     Util util;
 
-    public EconomyImplementer(Bank bank, Util util, ResourceBundle bundle) {
+    public VaultEconomyImplementer(Bank bank, Util util, ResourceBundle bundle) {
         this.bank = bank;
         this.util = util;
         this.bundle = bundle;
