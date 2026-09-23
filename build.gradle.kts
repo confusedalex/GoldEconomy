@@ -17,7 +17,6 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/") // MockBukkit and Paper API
     maven("https://repo.codemc.io/repository/creatorfromhell/") // VaultUnlockedAPI
     maven("https://repo.glaremasters.me/repository/towny/") // Towny
-    maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") // PlaceholderAPI
     maven("https://repo.aikar.co/content/groups/aikar/") // ACF
 }
