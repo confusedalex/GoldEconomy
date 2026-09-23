@@ -117,7 +117,7 @@ class VaultUnlockedEconomyImplementer(private val bank: Bank, private val util: 
         pluginName: String,
         accountID: UUID,
         amount: BigDecimal
-    ): Boolean = amount.toInt() < bank.getTotalPlayerBalance(accountID)
+    ): Boolean = amount.toInt() <= bank.getTotalPlayerBalance(accountID)
 
     override fun has(
         pluginName: String,
