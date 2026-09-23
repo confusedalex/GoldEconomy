@@ -120,7 +120,6 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-
 # Eclipse Gradle plugin generated files
 # Eclipse Core
 .project
@@ -135,7 +134,5 @@ plugins/
 # direnv
 .envrc
 .direnv
-/gradle/wrapper/gradle-wrapper.jar
-/gradle/wrapper/gradle-wrapper.properties
 
 public
