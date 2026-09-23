@@ -139,42 +139,11 @@ class VaultUnlockedEconomyImplementer(private val bank: Bank, private val util: 
         accountID: UUID,
         amount: BigDecimal
     ): EconomyResponse {
-        // if amount is negative return
-        if (amount.signum() < 0) return EconomyResponse(amount, BigDecimal.ZERO, EconomyResponse.ResponseType.FAILURE, "error")
-
-        val amountInt = amount.toInt()
         val offlinePlayer = Bukkit.getOfflinePlayer(accountID)
-        val player = offlinePlayer.player
+        val newBalance = Converter.spend(bank, util, bundle)(offlinePlayer, amount.toInt(), base)
+            ?: return EconomyResponse(amount, BigDecimal(bank.getTotalPlayerBalance(accountID)), EconomyResponse.ResponseType.FAILURE, "Not enough money!")
 
-        // if player is online
-        if (player != null) {
-            // get balance and InventoryValue from Player
-            val oldBankBalance = bank.getAccountBalance(accountID)
-            val oldInventoryBalance = Converter.getInventoryValue(player, base)
-
-            // If balance + InventoryValue is < amount, return
-            if (amountInt > oldBankBalance + oldInventoryBalance)
-                return EconomyResponse(amount, BigDecimal.ZERO, EconomyResponse.ResponseType.FAILURE, "Not enough money!")
-
-            // If bank balance is enough to cover amount
-            if (oldBankBalance - amountInt > 0) {
-                bank.setAccountBalance(accountID, oldBankBalance - amountInt)
-                return EconomyResponse(amount, BigDecimal(oldBankBalance - amountInt), EconomyResponse.ResponseType.SUCCESS, "")
-            } else {
-                // Set balance to 0 and cover rest of the costs with Inventory Funds
-                val diff = amountInt - oldBankBalance
-                bank.setAccountBalance(accountID, 0)
-                Converter.remove(util, bundle)(player, diff, base)
-
-                return EconomyResponse(amount, BigDecimal(oldInventoryBalance - amountInt), EconomyResponse.ResponseType.SUCCESS, "")
-            }
-        } else {
-            // When player is offline
-            val oldBalance = bank.getTotalPlayerBalance(accountID)
-            val newBalance = oldBalance - amountInt
-            bank.setAccountBalance(accountID, newBalance)
-            return EconomyResponse(amount, BigDecimal(newBalance), EconomyResponse.ResponseType.SUCCESS, "")
-        }
+        return EconomyResponse(amount, BigDecimal(newBalance), EconomyResponse.ResponseType.SUCCESS, "")
     }
 
     override fun withdraw(

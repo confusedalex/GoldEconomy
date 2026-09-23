@@ -151,6 +151,8 @@ class Converter {
             }
         }
 
+        // Spend handles the logic of spending (removing) money from a player or fakeAccount
+        // Returns the new total balance (bank + inventory) or null for error
         fun spend(bank: Bank, util: Util, bundle: ResourceBundle): (OfflinePlayer, Int, Base) -> Int? {
             return fun(offlinePlayer: OfflinePlayer, amount: Int, base: Base): Int? {
                 if (amount < 0) return null
@@ -158,27 +160,29 @@ class Converter {
                 val uuid = offlinePlayer.uniqueId
 
                 if (!offlinePlayer.isOnline) {
-                    val newBalance = bank.getTotalPlayerBalance(uuid) - amount
+                    val newBalance = bank.getAccountBalance(uuid) - amount
+                    if (newBalance < 0) return null
+
                     bank.setAccountBalance(uuid, newBalance)
                     return newBalance
                 }
 
                 val player = offlinePlayer.player ?: return null
-                val oldBankBalance = bank.getAccountBalance(uuid)
-                val oldInventoryBalance = getInventoryValue(player, base)
+                val bankBalance = bank.getAccountBalance(uuid)
+                val inventoryBalance = getInventoryValue(player, base)
 
-                if (amount > oldBankBalance + oldInventoryBalance) return null
+                if ((bankBalance + inventoryBalance) < amount) return null
 
-                if (oldBankBalance - amount > 0) {
-                    val newBalance = oldBankBalance - amount
-                    bank.setAccountBalance(uuid, newBalance)
-                    return newBalance
+                // Enough money on the bank to cover the amount
+                if (bankBalance - amount >= 0) {
+                    bank.setAccountBalance(uuid, bankBalance - amount)
+                } else {
+                    val diff = amount - bankBalance
+                    bank.setAccountBalance(uuid, 0)
+                    remove(util, bundle)(player, diff, base)
                 }
 
-                val diff = amount - oldBankBalance
-                bank.setAccountBalance(uuid, 0)
-                remove(util, bundle)(player, diff, base)
-                return oldInventoryBalance - amount
+                return bankBalance + inventoryBalance - amount
             }
         }
     }
