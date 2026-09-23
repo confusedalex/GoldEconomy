@@ -46,8 +46,6 @@ dependencies {
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
-    withSourcesJar()
-    withJavadocJar()
 }
 
 runPaper.folia.registerTask {
@@ -107,7 +105,9 @@ tasks {
 
     runServer {
         downloadPlugins {
-            url("https://github.com/TheNewEconomy/VaultUnlocked/releases/download/2.20.1/VaultUnlocked-2.20.1.jar")
+            url("https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar")
+//            url("https://github.com/TheNewEconomy/VaultUnlocked/releases/download/2.20.1/VaultUnlocked-2.20.1.jar")
+            modrinth("towny", "0.103.2.0")
         }
         minecraftVersion(targetApiVersion)
 
