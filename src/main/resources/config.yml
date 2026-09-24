@@ -3,20 +3,20 @@ removeGoldDrop: true
 # Should the plugin check for updates? (default: true)
 updateCheck: true
 # Valid language are:
-# Brazilian Portuguese: pt_BR
-# Bulgarian: bg_BG
-# English: en_US
-# German: de_DE
-# Japanese: jp_JP
-# Norwegian: nb_NO
-# Polish: pl_PL
-# Simplified Chinese: zh_CN
-# Spanish: es_ES
+# Brazilian Portuguese: pt
+# Bulgarian: bg
+# English: en
+# German: de
+# Japanese: ja
+# Norwegian: nb
+# Polish: pl
+# Simplified Chinese: zh
+# Spanish: es
 # Tamil: ta
-# Turkish: tr_TR
+# Turkish: tr
 # Ukrainian: uk
 # Russian: ru
-language: "en_US"
+language: "en"
 # Do you want to restrict bank commands to bank plots (requires Towny)
 restrictToBankPlot: false
 # Prefix

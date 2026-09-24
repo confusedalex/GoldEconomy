@@ -1,6 +1,5 @@
 package dev.confusedalex.thegoldeconomy;
 
-import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import dev.confusedalex.thegoldeconomy.vault.VaultEconomyImplementer;
 import dev.confusedalex.thegoldeconomy.vault.VaultHook;
@@ -9,8 +8,8 @@ import dev.confusedalex.thegoldeconomy.vault.VaultUnlockedHook;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class TheGoldEconomy extends JavaPlugin {
@@ -31,34 +30,21 @@ public class TheGoldEconomy extends JavaPlugin {
         manager.enableUnstableAPI("help");
 
         // Language
-        String language = getConfig().getString("language");
-        HashMap<String, Locale> localeMap = new HashMap<>();
-        localeMap.put("de_DE", Locales.GERMAN);
-        localeMap.put("en_US", Locales.ENGLISH);
-        localeMap.put("zh_CN", Locales.SIMPLIFIED_CHINESE);
-        localeMap.put("es_ES", Locales.SPANISH);
-        localeMap.put("tr_TR", Locales.TURKISH);
-        localeMap.put("pt_BR", Locales.PORTUGUESE);
-        localeMap.put("nb_NO", Locales.NORWEGIAN_BOKMAAL);
-        localeMap.put("uk", Locales.UKRANIAN);
-        localeMap.put("jp_JP", Locales.JAPANESE);
-        localeMap.put("bg_BG", Locales.BULGARIAN);
-        localeMap.put("pl_PL", Locales.POLISH);
-        localeMap.put("ta", new Locale("ta"));
-        localeMap.put("ru", Locales.RUSSIAN);
-
-        if (localeMap.containsKey(language)) {
-            Locale locale = localeMap.get(language);
-            bundle = ResourceBundle.getBundle("messages", locale);
-            manager.addSupportedLanguage(locale);
-            manager.getLocales().addMessageBundle("messages", locale);
-            manager.getLocales().addMessageBundles("messages");
-            manager.getLocales();
-            manager.getLocales().setDefaultLocale(locale);
-        } else {
-            bundle = ResourceBundle.getBundle("messages", Locale.US);
-            getLogger().warning("Invalid language in config. Defaulting to English.");
+        String language = getConfig().getString("language", "en");
+        Locale locale = Locale.of(language.split("_")[0]);
+        ResourceBundle.Control noFallback = ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES);
+        try {
+            bundle = ResourceBundle.getBundle("messages", locale, noFallback);
+            getLogger().info("Language is " + locale.getLanguage());
+        } catch (MissingResourceException e) {
+            getLogger().warning("Invalid language '" + language + "' in config. Defaulting to English.");
+            locale = Locale.ENGLISH;
+            bundle = ResourceBundle.getBundle("messages", locale, noFallback);
         }
+
+        manager.addSupportedLanguage(locale);
+        manager.getLocales().addMessageBundle("messages", locale);
+        manager.getLocales().setDefaultLocale(locale);
 
         switch (getConfig().getString("base")) {
             case "nuggets" -> base = Base.NUGGETS;
