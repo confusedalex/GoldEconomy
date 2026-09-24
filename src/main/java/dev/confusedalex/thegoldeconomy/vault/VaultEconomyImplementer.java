@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -17,9 +16,9 @@ import static dev.confusedalex.thegoldeconomy.TheGoldEconomy.base;
 
 @SuppressWarnings("deprecation")
 public class VaultEconomyImplementer implements Economy {
-    Bank bank;
-    ResourceBundle bundle;
-    Util util;
+    final Bank bank;
+    final ResourceBundle bundle;
+    final Util util;
 
     public VaultEconomyImplementer(Bank bank, Util util, ResourceBundle bundle) {
         this.bank = bank;

@@ -41,7 +41,7 @@ class Util(private val plugin: TheGoldEconomy) {
             commandSender
         } else {
             commandSender.sendMessage(plugin.bundle.getString("error.notAPlayer"))
-            return null;
+            null
         }
     }
 }

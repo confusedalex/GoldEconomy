@@ -9,12 +9,11 @@ import dev.confusedalex.thegoldeconomy.TheGoldEconomy.base
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
-import org.bukkit.configuration.file.FileConfiguration
 import java.util.*
 
 @Suppress("DEPRECATION")
 @CommandAlias("bank")
-class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util, val config: FileConfiguration) : BaseCommand() {
+class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : BaseCommand() {
     val converterDeposit = Converter.deposit(bank, util, bundle)
     val converterWithdraw = Converter.withdraw(bank, util, bundle)
 
@@ -211,7 +210,7 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util, va
                     String.format(bundle.getString("error.negative"), target.name, util.colorCurrency(gold)),
                 )
             )
-            return;
+            return
         }
 
         commandSender?.sendMessage(

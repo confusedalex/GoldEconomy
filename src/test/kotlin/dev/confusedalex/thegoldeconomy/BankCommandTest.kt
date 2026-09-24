@@ -26,7 +26,7 @@ class BankCommandTest {
 
         give = Converter.give(plugin.util, plugin.bundle)
 
-        bankCommand = BankCommand(plugin.bank, plugin.bundle, plugin.util, plugin.config)
+        bankCommand = BankCommand(plugin.bank, plugin.bundle, plugin.util)
         plugin.bank.playerAccounts.clear()
         sender = server.addPlayer("sender")
         target = server.addPlayer("target")

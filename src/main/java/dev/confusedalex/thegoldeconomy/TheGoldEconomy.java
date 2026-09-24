@@ -6,8 +6,6 @@ import dev.confusedalex.thegoldeconomy.vault.VaultEconomyImplementer;
 import dev.confusedalex.thegoldeconomy.vault.VaultHook;
 import dev.confusedalex.thegoldeconomy.vault.VaultUnlockedEconomyImplementer;
 import dev.confusedalex.thegoldeconomy.vault.VaultUnlockedHook;
-import io.papermc.paper.ServerBuildInfo;
-import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -91,7 +89,7 @@ public class TheGoldEconomy extends JavaPlugin {
             vaultUnlockedHook.hook();
         }
 
-        manager.registerCommand(new BankCommand(bank, bundle, util, this.getConfig()));
+        manager.registerCommand(new BankCommand(bank, bundle, util));
 
         // Event class registering
         Bukkit.getPluginManager().registerEvents(new Events(bank), this);
