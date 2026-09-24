@@ -73,6 +73,8 @@ public class TheGoldEconomy extends JavaPlugin {
             }
         }
 
+        FileUtilsKt.migrateFakeAccounts();
+
         // bStats
         int pluginId = 15402;
         new Metrics(this, pluginId);

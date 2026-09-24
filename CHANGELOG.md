@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Fixed
 - Spending gold from bank account and inventory now returns the correct amount (This was only a display bug, the logic was correct)
+### Changed
+- Remove fakeAccounts file and different logic for fake accounts. As a user/admin nothing the plugin still behaves as expected. Just simplified the code.
 ## [2.1.0] - 2026-09-18
 ### Added
 - Add VaultUnlocked Support
