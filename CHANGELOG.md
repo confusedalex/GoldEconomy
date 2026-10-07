@@ -5,8 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
-As I implemented Folia support I just tested it with a single player on a Folia server. Turns out, that you need many many players (or simulate some threads) to really find the errors and race condition.
+## [2.1.1] - 2026-10-07
+As I implemented Folia support I just tested it with a single player on a Folia server. Turns out, that you need many,
+many players (or simulate some threads) to really find the errors and race condition. I'm sorry for any data loss or
+inconvenience you might have encountered.
 ### Fixed
 - Spending gold from bank account and inventory now returns the correct amount (This was only a display bug, the logic was correct)
 - Folia: Balance changes from different regions at the same time no longer get lost.
