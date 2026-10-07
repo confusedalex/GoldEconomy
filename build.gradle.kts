@@ -102,6 +102,7 @@ tasks {
 
     test {
         useJUnitPlatform()
+        systemProperty("bstats.relocatecheck", "false")
     }
 
     runServer {
