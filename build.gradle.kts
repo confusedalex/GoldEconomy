@@ -31,6 +31,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:${targetApiVersion}-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
+    implementation("org.bstats:bstats-bukkit:3.2.1")
 
     // Tests
     // TODO: When updating to the next version of MC, replace "v1.21" with "v${targetApiVersion}" - mockbukkit uploaded 1.21.11 versions under 1.21
@@ -93,7 +94,7 @@ tasks {
     shadowJar {
         archiveClassifier.set("")
         enableAutoRelocation = true
-        relocationPrefix = "confusedalex.thegoldeconomy.libs"
+        relocationPrefix = "dev.confusedalex.thegoldeconomy.libs"
         exclude("META-INF/**")
         from("LICENSE")
         minimize()

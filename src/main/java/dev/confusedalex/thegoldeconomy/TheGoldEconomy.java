@@ -5,6 +5,7 @@ import dev.confusedalex.thegoldeconomy.vault.VaultEconomyImplementer;
 import dev.confusedalex.thegoldeconomy.vault.VaultHook;
 import dev.confusedalex.thegoldeconomy.vault.VaultUnlockedEconomyImplementer;
 import dev.confusedalex.thegoldeconomy.vault.VaultUnlockedHook;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
