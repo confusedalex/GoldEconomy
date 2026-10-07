@@ -1,5 +1,6 @@
 package dev.confusedalex.thegoldeconomy
 
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
@@ -116,15 +117,10 @@ class Converter {
 
         fun withdraw(bank: Bank, util: Util, bundle: ResourceBundle): (Player, Int, Base) -> Unit {
             return fun(player: Player, value: Int, base: Base) {
-                val uuid = player.uniqueId
-                val oldBalance = bank.getAccountBalance(player.uniqueId)
-
-                // Checks balance in hashmap
-                if (value > bank.getAccountBalance(uuid)) {
+                if (!bank.removeFromAccount(player.uniqueId, value)) {
                     player.sendMessage(util.formatMessage(bundle.getString("error.notEnoughMoneyWithdraw")))
                     return
                 }
-                bank.setAccountBalance(uuid, (oldBalance - value))
 
                 give(util, bundle)(player, value, base)
             }
@@ -144,10 +140,7 @@ class Converter {
             return fun(offlinePlayer: OfflinePlayer, amount: Int): Int? {
                 if (amount < 0) return null
 
-                val uuid = offlinePlayer.uniqueId
-                val newBalance = bank.getAccountBalance(uuid) + amount
-                bank.setAccountBalance(uuid, newBalance)
-                return newBalance
+                return bank.addToAccount(offlinePlayer.uniqueId, amount)
             }
         }
 
@@ -158,31 +151,38 @@ class Converter {
                 if (amount < 0) return null
 
                 val uuid = offlinePlayer.uniqueId
+                val player = offlinePlayer.player
 
-                if (!offlinePlayer.isOnline) {
-                    val newBalance = bank.getAccountBalance(uuid) - amount
-                    if (newBalance < 0) return null
-
-                    bank.setAccountBalance(uuid, newBalance)
-                    return newBalance
+                if (player == null) {
+                    if (!bank.removeFromAccount(uuid, amount)) return null
+                    return bank.getAccountBalance(uuid)
                 }
 
-                val player = offlinePlayer.player ?: return null
-                val bankBalance = bank.getAccountBalance(uuid)
-                val inventoryBalance = getInventoryValue(player, base)
+                if (!Bukkit.isOwnedByCurrentRegion(player)) {
+                    val total = bank.getTotalPlayerBalance(uuid)
+                    if (total < amount) return null
 
-                if ((bankBalance + inventoryBalance) < amount) return null
+                    val diff = amount - bank.takeFromAccount(uuid, amount)
+                    if (diff > 0) util.runAsOwner(player) {
+                        val fromInventory = if (player.isOnline) minOf(diff, getInventoryValue(player, base)) else 0
+                        if (fromInventory > 0) remove(util, bundle)(player, fromInventory, base)
+                        // Gold left the inventory before the task ran, take the rest from the account
+                        if (diff > fromInventory) bank.addToAccount(uuid, fromInventory - diff)
+                    }
+                    return total - amount
+                }
 
-                // Enough money on the bank to cover the amount
-                if (bankBalance - amount >= 0) {
-                    bank.setAccountBalance(uuid, bankBalance - amount)
-                } else {
-                    val diff = amount - bankBalance
-                    bank.setAccountBalance(uuid, 0)
+                val taken = bank.takeFromAccount(uuid, amount)
+                val diff = amount - taken
+                if (diff > 0) {
+                    if (getInventoryValue(player, base) < diff) {
+                        bank.addToAccount(uuid, taken)
+                        return null
+                    }
                     remove(util, bundle)(player, diff, base)
                 }
 
-                return bankBalance + inventoryBalance - amount
+                return bank.getTotalPlayerBalance(uuid)
             }
         }
     }

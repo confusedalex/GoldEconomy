@@ -313,4 +313,48 @@ class ConverterTest {
         assertEquals(0, getInventoryValue(player, Base.NUGGETS))
         assertEquals(0, plugin.bank.getAccountBalance(player.uniqueId))
     }
+
+    @Test
+    fun spend_usesBankThenInventory() {
+        val player: PlayerMock = server.addPlayer()
+        val bank = plugin.bank
+        val spend = Converter.spend(bank, plugin.util, plugin.bundle)
+
+        bank.setAccountBalance(player.uniqueId, 5)
+        player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 10))
+
+        assertEquals(7, spend(player, 8, Base.NUGGETS))
+        assertEquals(0, bank.getAccountBalance(player.uniqueId))
+        assertEquals(7, getInventoryValue(player, Base.NUGGETS))
+
+        assertEquals(null, spend(player, 8, Base.NUGGETS))
+        assertEquals(0, bank.getAccountBalance(player.uniqueId))
+        assertEquals(7, getInventoryValue(player, Base.NUGGETS))
+    }
+
+    @Test
+    fun spend_fromOtherThread_removesInventoryOnOwningThread() {
+        val player: PlayerMock = server.addPlayer()
+        val bank = plugin.bank
+        val spend = Converter.spend(bank, plugin.util, plugin.bundle)
+
+        bank.setAccountBalance(player.uniqueId, 5)
+        player.inventory.addItem(ItemStack(Material.GOLD_NUGGET, 10))
+
+        fun spendOffThread(amount: Int): Int? {
+            var result: Int? = null
+            val thread = Thread { result = spend(player, amount, Base.NUGGETS) }
+            thread.start()
+            thread.join()
+            return result
+        }
+
+        assertEquals(null, spendOffThread(16))
+
+        assertEquals(7, spendOffThread(8))
+        assertEquals(0, bank.getAccountBalance(player.uniqueId))
+        assertEquals(10, getInventoryValue(player, Base.NUGGETS))
+        server.scheduler.performOneTick()
+        assertEquals(7, getInventoryValue(player, Base.NUGGETS))
+    }
 }

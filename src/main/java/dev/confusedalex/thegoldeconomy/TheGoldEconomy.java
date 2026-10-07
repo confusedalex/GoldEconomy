@@ -78,7 +78,7 @@ public class TheGoldEconomy extends JavaPlugin {
         manager.registerCommand(new BankCommand(bank, bundle, util));
 
         // Event class registering
-        Bukkit.getPluginManager().registerEvents(new Events(bank), this);
+        Bukkit.getPluginManager().registerEvents(new Events(this, bank), this);
         // If removeGoldDrop is true, register Listener
         if (getConfig().getBoolean("removeGoldDrop"))
             Bukkit.getPluginManager().registerEvents(new RemoveGoldDrops(), this);

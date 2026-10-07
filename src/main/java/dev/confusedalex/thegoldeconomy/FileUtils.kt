@@ -41,6 +41,7 @@ fun migrateFakeAccounts(
     fakeAccountsFile.delete()
 }
 
-fun writeToFiles(playerAccounts: HashMap<String, Int>) {
+@Synchronized
+fun writeToFiles(playerAccounts: Map<String, Int>) {
     createPlayersFile().writeText(Json.encodeToString(playerAccounts))
 }

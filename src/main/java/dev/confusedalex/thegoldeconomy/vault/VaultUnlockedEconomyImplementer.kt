@@ -168,12 +168,7 @@ class VaultUnlockedEconomyImplementer(private val bank: Bank, private val util: 
     ): EconomyResponse {
         if (amount.signum() < 0) return EconomyResponse(amount, BigDecimal.ZERO, EconomyResponse.ResponseType.FAILURE, "error")
 
-        val amountInt = amount.toInt()
-
-        // Getting balance and calculating new Balance
-        val oldBalance = bank.getAccountBalance(accountID)
-        val newBalance = oldBalance + amountInt
-        bank.setAccountBalance(accountID, newBalance)
+        val newBalance = bank.addToAccount(accountID, amount.toInt())
         return EconomyResponse(amount, BigDecimal(newBalance), EconomyResponse.ResponseType.SUCCESS, "")
     }
 

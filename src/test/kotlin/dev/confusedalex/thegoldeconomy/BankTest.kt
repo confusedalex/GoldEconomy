@@ -2,6 +2,8 @@ package dev.confusedalex.thegoldeconomy
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockbukkit.mockbukkit.MockBukkit
@@ -51,5 +53,30 @@ class BankTest {
         assertEquals(1000, bank.playerAccounts[uuid.toString()])
         assertEquals(1000, bank.getAccountBalance(uuid))
         assertEquals(0, bank.getAccountBalance(UUID.randomUUID()))
+    }
+
+    @Test
+    fun atomicAccountOperations() {
+        val uuid = UUID.randomUUID()
+        val bank = plugin.bank
+
+        assertEquals(10, bank.addToAccount(uuid, 10))
+        assertFalse(bank.removeFromAccount(uuid, 11))
+        assertTrue(bank.removeFromAccount(uuid, 4))
+        assertEquals(6, bank.getAccountBalance(uuid))
+        assertEquals(6, bank.takeFromAccount(uuid, 100))
+        assertEquals(0, bank.getAccountBalance(uuid))
+    }
+
+    @Test
+    fun concurrentCreditsAreNotLost() {
+        val uuid = UUID.randomUUID()
+        val bank = plugin.bank
+
+        val threads = List(8) { Thread { repeat(1000) { bank.addToAccount(uuid, 1) } } }
+        threads.forEach { it.start() }
+        threads.forEach { it.join() }
+
+        assertEquals(8000, bank.getAccountBalance(uuid))
     }
 }

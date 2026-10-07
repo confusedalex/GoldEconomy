@@ -36,6 +36,18 @@ class Util(private val plugin: TheGoldEconomy) {
         return false
     }
 
+    // Runs the task on the thread owning the player, needed to touch their inventory on Folia.
+    // Offline players are not owned by any region, so the task runs right away
+    fun runAsOwner(offlinePlayer: OfflinePlayer, task: () -> Unit) {
+        val player = offlinePlayer.player
+        if (player == null || Bukkit.isOwnedByCurrentRegion(player)) {
+            task()
+        } else if (player.scheduler.run(plugin, { task() }, task) == null) {
+            // Player was removed in the meantime
+            task()
+        }
+    }
+
     fun isPlayer(commandSender: CommandSender): Player? {
         return if (commandSender is Player) {
             commandSender
