@@ -4,6 +4,7 @@ import dev.confusedalex.thegoldeconomy.Converter.Companion.getInventoryValue
 import org.bukkit.entity.Player
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockbukkit.mockbukkit.MockBukkit
@@ -754,5 +755,93 @@ class BankCommandTest {
         assertEquals(
             50, plugin.bank.getAccountBalance(target.uniqueId)
         )
+    }
+
+    @Test
+    fun baltop_with_default_length_sends_top_10_players() {
+        val players = (1..15).map { i ->
+            val player = server.addPlayer("Player$i")
+            plugin.bank.setAccountBalance(player.uniqueId, i * 100)
+            player
+        }
+
+        bankCommand.baltop(sender)
+
+        assertEquals(
+            plugin.util.formatMessage(
+                String.format("=== " + plugin.bundle.getString("info.baltop.header") + " ===", plugin.util.colorCurrency(10))
+            ),
+            sender.nextMessage()
+        )
+
+        players.reversed().take(10).forEachIndexed { index, player ->
+            val expectedBalance = (15 - index) * 100
+            assertEquals(
+                plugin.util.formatMessage(
+                    String.format(
+                        plugin.bundle.getString("info.baltop.entry"),
+                        index + 1,
+                        player.name,
+                        plugin.util.colorCurrency(expectedBalance)
+                    )
+                ),
+                sender.nextMessage()
+            )
+        }
+        assertNull(sender.nextMessage())
+    }
+
+    @Test
+    fun baltop_with_custom_length_sends_requested_amount_of_players() {
+        val player1 = server.addPlayer("RichPlayer")
+        val player2 = server.addPlayer("MiddlePlayer")
+        val player3 = server.addPlayer("PoorPlayer")
+
+        plugin.bank.setAccountBalance(player2.uniqueId, 500)
+        plugin.bank.setAccountBalance(player3.uniqueId, 100)
+        plugin.bank.setAccountBalance(player1.uniqueId, 1000)
+
+        bankCommand.baltop(sender, 2)
+
+        assertEquals(
+            plugin.util.formatMessage(
+                String.format("=== " + plugin.bundle.getString("info.baltop.header") + " ===", plugin.util.colorCurrency(2))
+            ),
+            sender.nextMessage()
+        )
+        assertEquals(
+            plugin.util.formatMessage(
+                String.format(
+                    plugin.bundle.getString("info.baltop.entry"),
+                    1,
+                    "RichPlayer",
+                    plugin.util.colorCurrency(1000)
+                )
+            ),
+            sender.nextMessage()
+        )
+        assertEquals(
+            plugin.util.formatMessage(
+                String.format(
+                    plugin.bundle.getString("info.baltop.entry"),
+                    2,
+                    "MiddlePlayer",
+                    plugin.util.colorCurrency(500)
+                )
+            ),
+            sender.nextMessage()
+        )
+        assertNull(sender.nextMessage())
+    }
+
+    @Test
+    fun baltop_with_non_positive_length_sends_error() {
+        bankCommand.baltop(sender, 0)
+
+        assertEquals(
+            plugin.util.formatMessage(plugin.bundle.getString("error.args.zero")),
+            sender.nextMessage()
+        )
+        assertNull(sender.nextMessage())
     }
 }

@@ -3,6 +3,7 @@ package dev.confusedalex.thegoldeconomy
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -78,5 +79,41 @@ class BankTest {
         threads.forEach { it.join() }
 
         assertEquals(8000, bank.getAccountBalance(uuid))
+    }
+
+    @Test
+    fun balanceTop() {
+        val bank = plugin.bank
+        val expectedSet: MutableMap<String, Int> = mutableMapOf()
+
+        for (i in 100 downTo 0) {
+            val player: PlayerMock = server.addPlayer()
+            val uuid = player.uniqueId
+            expectedSet[uuid.toString()] = i
+        }
+
+        expectedSet.entries.shuffled().forEach {
+            bank.setAccountBalance(UUID.fromString(it.key), it.value)
+        }
+
+        assertIterableEquals(expectedSet.entries, bank.balanceTop())
+    }
+
+    @Test
+    fun balanceTopPlayerSameBalance() {
+        val bank = plugin.bank
+        val expectedSet: MutableMap<String, Int> = mutableMapOf()
+
+        for (i in 100 downTo 0) {
+            val player: PlayerMock = server.addPlayer()
+            val uuid = player.uniqueId
+            expectedSet[uuid.toString()] = if (i == 99) 100 else i
+        }
+
+        expectedSet.entries.shuffled().forEach {
+            bank.setAccountBalance(UUID.fromString(it.key), it.value)
+        }
+
+        assertEquals(expectedSet.size, bank.balanceTop().size)
     }
 }
