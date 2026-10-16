@@ -769,7 +769,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.baltop.header"), plugin.util.colorCurrency(10))
+                String.format("=== " + plugin.bundle.getString("info.baltop.header") + " ===", plugin.util.colorCurrency(10))
             ),
             sender.nextMessage()
         )
@@ -805,7 +805,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.baltop.header"), plugin.util.colorCurrency(2))
+                String.format("=== " + plugin.bundle.getString("info.baltop.header") + " ===", plugin.util.colorCurrency(2))
             ),
             sender.nextMessage()
         )

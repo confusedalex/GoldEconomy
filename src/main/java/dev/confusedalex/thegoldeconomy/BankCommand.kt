@@ -276,11 +276,18 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
         if (length <= 0) {
             player.sendMessage(util.formatMessage(bundle.getString("error.args.zero")))
             return
+        } else if (length > 100) {
+            player.sendMessage(
+                util.formatMessage(
+                    String.format(bundle.getString("error.args.outOfLimit"), 101)
+                )
+            )
+            return
         }
 
         player.sendMessage(
             util.formatMessage(
-                String.format(bundle.getString("info.baltop.header"), util.colorCurrency(length))
+                String.format("=== " + bundle.getString("info.baltop.header") + " ===", util.colorCurrency(length))
             )
         )
 
