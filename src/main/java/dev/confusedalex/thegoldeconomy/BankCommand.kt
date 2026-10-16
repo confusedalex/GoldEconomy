@@ -7,6 +7,7 @@ import co.aikar.commands.annotation.Optional
 import dev.confusedalex.thegoldeconomy.Converter.Companion.getInventoryValue
 import dev.confusedalex.thegoldeconomy.TheGoldEconomy.base
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import java.util.*
@@ -262,5 +263,33 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
                 String.format(bundle.getString("info.target.remove"), util.colorCurrency(gold))
             )
         )
+    }
+
+    @Subcommand("baltop")
+    @CommandPermission("thegoldeconomy.baltop")
+    @CommandAlias("baltop")
+    @Description("{@@command.info.baltop}")
+    fun baltop(commandSender: CommandSender, @Default("10") length: Int = 10) {
+        val player = util.isPlayer(commandSender) ?: return
+
+        val topBalances = bank.balanceTop()
+
+        if (length <= 0) {
+            player.sendMessage(util.formatMessage(bundle.getString("error.args.zero")))
+            return
+        }
+
+        player.sendMessage(
+            util.formatMessage("${ChatColor.GOLD}=== Top $length Balances ===")
+        )
+
+        for ((index, balance) in topBalances.withIndex().take(length)) {
+            val playerName = Bukkit.getOfflinePlayer(UUID.fromString(balance.key)).name ?: "Unknown"
+            player.sendMessage(
+                util.formatMessage(
+                    "${ChatColor.YELLOW}#${index + 1} ${ChatColor.WHITE}$playerName ${ChatColor.GRAY}- ${util.colorCurrency(balance.value)} Gold"
+                )
+            )
+        }
     }
 }

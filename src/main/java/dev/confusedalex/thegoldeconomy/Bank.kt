@@ -49,4 +49,8 @@ class Bank {
         }
         return taken
     }
+
+    fun balanceTop(): MutableSet<MutableMap.MutableEntry<String, Int>> {
+        return playerAccounts.entries.toSortedSet(compareByDescending<MutableMap.MutableEntry<String, Int>> { it.value }.thenBy { it.key })
+    }
 }
