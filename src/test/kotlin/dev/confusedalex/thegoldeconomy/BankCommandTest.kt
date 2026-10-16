@@ -769,7 +769,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                "${org.bukkit.ChatColor.GOLD}${String.format(plugin.bundle.getString("info.baltop.header"), 10)}"
+                String.format(plugin.bundle.getString("info.baltop.header"), plugin.util.colorCurrency(10))
             ),
             sender.nextMessage()
         )
@@ -780,8 +780,8 @@ class BankCommandTest {
                 plugin.util.formatMessage(
                     String.format(
                         plugin.bundle.getString("info.baltop.entry"),
-                        "${org.bukkit.ChatColor.YELLOW}#${index + 1}",
-                        "${org.bukkit.ChatColor.WHITE}${player.name}${org.bukkit.ChatColor.GRAY}",
+                        index + 1,
+                        player.name,
                         plugin.util.colorCurrency(expectedBalance)
                     )
                 ),
@@ -805,7 +805,7 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                "${org.bukkit.ChatColor.GOLD}${String.format(plugin.bundle.getString("info.baltop.header"), 2)}"
+                String.format(plugin.bundle.getString("info.baltop.header"), plugin.util.colorCurrency(2))
             ),
             sender.nextMessage()
         )
@@ -813,8 +813,8 @@ class BankCommandTest {
             plugin.util.formatMessage(
                 String.format(
                     plugin.bundle.getString("info.baltop.entry"),
-                    "${org.bukkit.ChatColor.YELLOW}#1",
-                    "${org.bukkit.ChatColor.WHITE}RichPlayer${org.bukkit.ChatColor.GRAY}",
+                    1,
+                    "RichPlayer",
                     plugin.util.colorCurrency(1000)
                 )
             ),
@@ -824,8 +824,8 @@ class BankCommandTest {
             plugin.util.formatMessage(
                 String.format(
                     plugin.bundle.getString("info.baltop.entry"),
-                    "${org.bukkit.ChatColor.YELLOW}#2",
-                    "${org.bukkit.ChatColor.WHITE}MiddlePlayer${org.bukkit.ChatColor.GRAY}",
+                    2,
+                    "MiddlePlayer",
                     plugin.util.colorCurrency(500)
                 )
             ),

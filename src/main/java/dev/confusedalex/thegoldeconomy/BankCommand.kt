@@ -7,7 +7,6 @@ import co.aikar.commands.annotation.Optional
 import dev.confusedalex.thegoldeconomy.Converter.Companion.getInventoryValue
 import dev.confusedalex.thegoldeconomy.TheGoldEconomy.base
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import java.util.*
@@ -281,7 +280,7 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
 
         player.sendMessage(
             util.formatMessage(
-                "${ChatColor.GOLD}${String.format(bundle.getString("info.baltop.header"), length)}"
+                String.format(bundle.getString("info.baltop.header"), util.colorCurrency(length))
             )
         )
 
@@ -291,8 +290,8 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
                 util.formatMessage(
                     String.format(
                         bundle.getString("info.baltop.entry"),
-                        "${ChatColor.YELLOW}#${index + 1}",
-                        "${ChatColor.WHITE}$playerName${ChatColor.GRAY}",
+                        index + 1,
+                        playerName,
                         util.colorCurrency(balance.value)
                     )
                 )
