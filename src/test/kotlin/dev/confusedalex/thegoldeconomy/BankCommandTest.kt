@@ -767,13 +767,23 @@ class BankCommandTest {
 
         bankCommand.baltop(sender)
 
-        assertEquals(plugin.util.formatMessage("${org.bukkit.ChatColor.GOLD}=== Top 10 Balances ==="), sender.nextMessage())
+        assertEquals(
+            plugin.util.formatMessage(
+                "${org.bukkit.ChatColor.GOLD}${String.format(plugin.bundle.getString("info.baltop.header"), 10)}"
+            ),
+            sender.nextMessage()
+        )
 
         players.reversed().take(10).forEachIndexed { index, player ->
             val expectedBalance = (15 - index) * 100
             assertEquals(
                 plugin.util.formatMessage(
-                    "${org.bukkit.ChatColor.YELLOW}#${index + 1} ${org.bukkit.ChatColor.WHITE}${player.name} ${org.bukkit.ChatColor.GRAY}- ${plugin.util.colorCurrency(expectedBalance)} Gold"
+                    String.format(
+                        plugin.bundle.getString("info.baltop.entry"),
+                        "${org.bukkit.ChatColor.YELLOW}#${index + 1}",
+                        "${org.bukkit.ChatColor.WHITE}${player.name}${org.bukkit.ChatColor.GRAY}",
+                        plugin.util.colorCurrency(expectedBalance)
+                    )
                 ),
                 sender.nextMessage()
             )
@@ -793,17 +803,43 @@ class BankCommandTest {
 
         bankCommand.baltop(sender, 2)
 
-        assertEquals(plugin.util.formatMessage("${org.bukkit.ChatColor.GOLD}=== Top 2 Balances ==="), sender.nextMessage())
         assertEquals(
             plugin.util.formatMessage(
-                "${org.bukkit.ChatColor.YELLOW}#1 ${org.bukkit.ChatColor.WHITE}RichPlayer ${org.bukkit.ChatColor.GRAY}- ${plugin.util.colorCurrency(1000)} Gold"
+                "${org.bukkit.ChatColor.GOLD}${String.format(plugin.bundle.getString("info.baltop.header"), 2)}"
             ),
             sender.nextMessage()
         )
         assertEquals(
             plugin.util.formatMessage(
-                "${org.bukkit.ChatColor.YELLOW}#2 ${org.bukkit.ChatColor.WHITE}MiddlePlayer ${org.bukkit.ChatColor.GRAY}- ${plugin.util.colorCurrency(500)} Gold"
+                String.format(
+                    plugin.bundle.getString("info.baltop.entry"),
+                    "${org.bukkit.ChatColor.YELLOW}#1",
+                    "${org.bukkit.ChatColor.WHITE}RichPlayer${org.bukkit.ChatColor.GRAY}",
+                    plugin.util.colorCurrency(1000)
+                )
             ),
+            sender.nextMessage()
+        )
+        assertEquals(
+            plugin.util.formatMessage(
+                String.format(
+                    plugin.bundle.getString("info.baltop.entry"),
+                    "${org.bukkit.ChatColor.YELLOW}#2",
+                    "${org.bukkit.ChatColor.WHITE}MiddlePlayer${org.bukkit.ChatColor.GRAY}",
+                    plugin.util.colorCurrency(500)
+                )
+            ),
+            sender.nextMessage()
+        )
+        assertNull(sender.nextMessage())
+    }
+
+    @Test
+    fun baltop_with_non_positive_length_sends_error() {
+        bankCommand.baltop(sender, 0)
+
+        assertEquals(
+            plugin.util.formatMessage(plugin.bundle.getString("error.args.zero")),
             sender.nextMessage()
         )
         assertNull(sender.nextMessage())

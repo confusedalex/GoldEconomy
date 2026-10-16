@@ -280,14 +280,21 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
         }
 
         player.sendMessage(
-            util.formatMessage("${ChatColor.GOLD}=== Top $length Balances ===")
+            util.formatMessage(
+                "${ChatColor.GOLD}${String.format(bundle.getString("info.baltop.header"), length)}"
+            )
         )
 
         for ((index, balance) in topBalances.withIndex().take(length)) {
             val playerName = Bukkit.getOfflinePlayer(UUID.fromString(balance.key)).name ?: "Unknown"
             player.sendMessage(
                 util.formatMessage(
-                    "${ChatColor.YELLOW}#${index + 1} ${ChatColor.WHITE}$playerName ${ChatColor.GRAY}- ${util.colorCurrency(balance.value)} Gold"
+                    String.format(
+                        bundle.getString("info.baltop.entry"),
+                        "${ChatColor.YELLOW}#${index + 1}",
+                        "${ChatColor.WHITE}$playerName${ChatColor.GRAY}",
+                        util.colorCurrency(balance.value)
+                    )
                 )
             )
         }
