@@ -23,3 +23,5 @@ permissions:
     default: true
   thegoldeconomy.balance.others:
     default: true
+  thegoldeconomy.baltop:
+    default: true

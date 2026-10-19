@@ -263,4 +263,46 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
             )
         )
     }
+
+    @Subcommand("baltop")
+    @CommandPermission("thegoldeconomy.baltop")
+    @CommandAlias("baltop")
+    @Description("{@@command.info.baltop}")
+    fun baltop(commandSender: CommandSender, @Default("10") length: Int = 10) {
+        val player = util.isPlayer(commandSender) ?: return
+
+        val topBalances = bank.balanceTop()
+
+        if (length <= 0) {
+            player.sendMessage(util.formatMessage(bundle.getString("error.args.zero")))
+            return
+        } else if (length > 100) {
+            player.sendMessage(
+                util.formatMessage(
+                    String.format(bundle.getString("error.args.outOfLimit"), 101)
+                )
+            )
+            return
+        }
+
+        player.sendMessage(
+            util.formatMessage(
+                String.format("=== " + bundle.getString("info.baltop.header") + " ===", util.colorCurrency(length))
+            )
+        )
+
+        for ((index, balance) in topBalances.withIndex().take(length)) {
+            val playerName = Bukkit.getOfflinePlayer(UUID.fromString(balance.key)).name ?: "Unknown"
+            player.sendMessage(
+                util.formatMessage(
+                    String.format(
+                        bundle.getString("info.baltop.entry"),
+                        index + 1,
+                        playerName,
+                        util.colorCurrency(balance.value)
+                    )
+                )
+            )
+        }
+    }
 }

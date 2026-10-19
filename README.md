@@ -49,6 +49,8 @@ plugins like Vault and Towny.
   Withdraws the specified amount of gold from your bank account into your inventory (e.g., `/bank withdraw 5`). To withdraw everything use `/bank withdraw` without an amount.
 - **/bank pay <player> <gold>**  
   Transfers the specified amount of gold to another player (e.g., `/bank pay Alex 20`).
+- **/bank baltop [length] | /baltop [length]**  
+  Shows the players with the highest bank balances (default: top 10, e.g., `/bank baltop 5`).
   
 </details>
 
@@ -67,6 +69,8 @@ plugins like Vault and Towny.
   /bank withdraw
 - `thegoldeconomy.pay`  
   /bank pay
+- `thegoldeconomy.baltop`  
+  /bank baltop
 
 ### Non-default Permissions
 
