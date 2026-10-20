@@ -29,7 +29,7 @@ dependencies {
 
     // Internal
     compileOnly("io.papermc.paper:paper-api:${targetApiVersion}-R0.1-SNAPSHOT")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.12.0")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
     implementation("org.bstats:bstats-bukkit:3.2.1")
 
