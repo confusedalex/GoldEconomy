@@ -305,7 +305,7 @@ class BankCommandTest {
         give(sender, 50, Base.NUGGETS)
         give(target, 50, Base.NUGGETS)
 
-        bankCommand.pay(sender, target, 25);
+        bankCommand.pay(sender, target, 25)
 
         assertEquals(25, plugin.bank.getTotalPlayerBalance(sender.uniqueId))
         assertEquals(75, plugin.bank.getTotalPlayerBalance(target.uniqueId))

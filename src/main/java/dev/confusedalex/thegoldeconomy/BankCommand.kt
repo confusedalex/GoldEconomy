@@ -139,7 +139,14 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
                 player.sendMessage(util.formatMessage(bundle.getString("error.zero")))
                 return
             }
-            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.deposit"), util.colorCurrency(inventoryValue))))
+            player.sendMessage(
+                util.formatMessage(
+                    String.format(
+                        bundle.getString("info.deposit"),
+                        util.colorCurrency(inventoryValue)
+                    )
+                )
+            )
             converterDeposit(player, inventoryValue, base)
             return
         }
@@ -159,7 +166,14 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
         } else if (amount > inventoryValue) {
             player.sendMessage(util.formatMessage(bundle.getString("error.notEnough")))
         } else {
-            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.deposit"), util.colorCurrency(amount))))
+            player.sendMessage(
+                util.formatMessage(
+                    String.format(
+                        bundle.getString("info.deposit"),
+                        util.colorCurrency(amount)
+                    )
+                )
+            )
             converterDeposit(player, nuggets.toInt(), base)
         }
     }
@@ -174,7 +188,14 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
         if (util.isBankingRestrictedToPlot(player)) return
         if (nuggets == null || nuggets == "all") {
             val accountBalance = bank.getAccountBalance(player.uniqueId)
-            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.withdraw"), util.colorCurrency(accountBalance))))
+            player.sendMessage(
+                util.formatMessage(
+                    String.format(
+                        bundle.getString("info.withdraw"),
+                        util.colorCurrency(accountBalance)
+                    )
+                )
+            )
             converterWithdraw(player, bank.getAccountBalance(player.uniqueId), base)
             return
         }
@@ -194,7 +215,14 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
         } else if (amount > bank.getAccountBalance(player.uniqueId)) {
             player.sendMessage(util.formatMessage(bundle.getString("error.notEnough")))
         } else {
-            player.sendMessage(util.formatMessage(String.format(bundle.getString("info.withdraw"), util.colorCurrency(amount))))
+            player.sendMessage(
+                util.formatMessage(
+                    String.format(
+                        bundle.getString("info.withdraw"),
+                        util.colorCurrency(amount)
+                    )
+                )
+            )
             converterWithdraw(player, amount, base)
         }
     }
@@ -297,11 +325,13 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
                 util.formatMessage(
                     String.format(
                         $$"#%1$s %2$s - " +
-                                String.format(bundle.getString("info.currency"),
-                        util.colorCurrency(balance.value)),
+                                String.format(
+                                    bundle.getString("info.currency"),
+                                    util.colorCurrency(balance.value)
+                                ),
                         index + 1,
                         playerName,
-                                )
+                    )
                 )
             )
         }

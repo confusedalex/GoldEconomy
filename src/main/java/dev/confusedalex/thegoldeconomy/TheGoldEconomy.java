@@ -14,12 +14,21 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class TheGoldEconomy extends JavaPlugin {
+    public static Base base;
     Bank bank;
     Util util;
     ResourceBundle bundle;
-    public static Base base;
     private VaultHook vaultHook;
     private VaultUnlockedHook vaultUnlockedHook;
+
+    private static boolean isVaultUnlockedAvailable() {
+        try {
+            Class.forName("net.milkbowl.vault2.economy.Economy");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 
     @Override
     public void onEnable() {
@@ -106,14 +115,5 @@ public class TheGoldEconomy extends JavaPlugin {
         if (vaultHook != null) vaultHook.unhook();
 
         getLogger().info("TheGoldEconomy disabled.");
-    }
-
-    private static boolean isVaultUnlockedAvailable() {
-        try {
-            Class.forName("net.milkbowl.vault2.economy.Economy");
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
     }
 }

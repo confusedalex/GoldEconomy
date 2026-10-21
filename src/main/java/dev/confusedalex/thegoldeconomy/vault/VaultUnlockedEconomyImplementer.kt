@@ -9,11 +9,13 @@ import net.milkbowl.vault2.economy.Economy
 import net.milkbowl.vault2.economy.EconomyResponse
 import org.bukkit.Bukkit
 import java.math.BigDecimal
-import java.util.Optional
-import java.util.ResourceBundle
-import java.util.UUID
+import java.util.*
 
-class VaultUnlockedEconomyImplementer(private val bank: Bank, private val util: Util, private val bundle: ResourceBundle) : Economy {
+class VaultUnlockedEconomyImplementer(
+    private val bank: Bank,
+    private val util: Util,
+    private val bundle: ResourceBundle
+) : Economy {
     val CURRENCY = "Gold"
 
     override fun isEnabled(): Boolean = true
@@ -66,9 +68,12 @@ class VaultUnlockedEconomyImplementer(private val bank: Bank, private val util: 
     ): Boolean = true
 
     override fun getUUIDNameMap(): Map<UUID?, String?> =
-        bank.playerAccounts.keys.associate { val uuid = UUID.fromString(it); uuid to Bukkit.getOfflinePlayer(uuid).name }
+        bank.playerAccounts.keys.associate {
+            val uuid = UUID.fromString(it); uuid to Bukkit.getOfflinePlayer(uuid).name
+        }
 
-    override fun getAccountName(accountID: UUID): Optional<String> = Optional.ofNullable(Bukkit.getOfflinePlayer(accountID).name)
+    override fun getAccountName(accountID: UUID): Optional<String> =
+        Optional.ofNullable(Bukkit.getOfflinePlayer(accountID).name)
 
     override fun hasAccount(accountID: UUID): Boolean = true
 
@@ -141,7 +146,12 @@ class VaultUnlockedEconomyImplementer(private val bank: Bank, private val util: 
     ): EconomyResponse {
         val offlinePlayer = Bukkit.getOfflinePlayer(accountID)
         val newBalance = Converter.spend(bank, util, bundle)(offlinePlayer, amount.toInt(), base)
-            ?: return EconomyResponse(amount, BigDecimal(bank.getTotalPlayerBalance(accountID)), EconomyResponse.ResponseType.FAILURE, "Not enough money!")
+            ?: return EconomyResponse(
+                amount,
+                BigDecimal(bank.getTotalPlayerBalance(accountID)),
+                EconomyResponse.ResponseType.FAILURE,
+                "Not enough money!"
+            )
 
         return EconomyResponse(amount, BigDecimal(newBalance), EconomyResponse.ResponseType.SUCCESS, "")
     }
@@ -166,7 +176,12 @@ class VaultUnlockedEconomyImplementer(private val bank: Bank, private val util: 
         accountID: UUID,
         amount: BigDecimal
     ): EconomyResponse {
-        if (amount.signum() < 0) return EconomyResponse(amount, BigDecimal.ZERO, EconomyResponse.ResponseType.FAILURE, "error")
+        if (amount.signum() < 0) return EconomyResponse(
+            amount,
+            BigDecimal.ZERO,
+            EconomyResponse.ResponseType.FAILURE,
+            "error"
+        )
 
         val newBalance = bank.addToAccount(accountID, amount.toInt())
         return EconomyResponse(amount, BigDecimal(newBalance), EconomyResponse.ResponseType.SUCCESS, "")

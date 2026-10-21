@@ -52,7 +52,10 @@ class RemoveGoldDropsTest {
         var world = server.addSimpleWorld("world")
         var location = Location(world, 0.0, 0.0, 0.0)
         var zombie = world.spawn(location, Zombie::class.java)
-        var event = EntityDeathEvent(zombie, DamageSource.builder(DamageType.PLAYER_ATTACK).build(), List(0) { ItemStack(Material.GOLDEN_BOOTS) })
+        var event = EntityDeathEvent(
+            zombie,
+            DamageSource.builder(DamageType.PLAYER_ATTACK).build(),
+            List(0) { ItemStack(Material.GOLDEN_BOOTS) })
 
         event.drops.add(ItemStack(Material.GOLD_INGOT))
         event.drops.add(ItemStack(Material.GOLD_BLOCK))
