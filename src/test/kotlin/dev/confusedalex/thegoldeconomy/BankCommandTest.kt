@@ -46,7 +46,12 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.balance"), plugin.util.colorCurrency(100), plugin.util.colorCurrency(100), plugin.util.colorCurrency(0))
+                String.format(
+                    plugin.bundle.getString("info.balance"),
+                    plugin.util.colorCurrency(100),
+                    plugin.util.colorCurrency(100),
+                    plugin.util.colorCurrency(0)
+                )
             ), sender.nextMessage()
         )
     }
@@ -696,7 +701,11 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format(plugin.bundle.getString("info.sender.moneyset"), target.name, plugin.util.colorCurrency(100))
+                String.format(
+                    plugin.bundle.getString("info.sender.moneyset"),
+                    target.name,
+                    plugin.util.colorCurrency(100)
+                )
             ), sender.nextMessage()
         )
     }
@@ -769,7 +778,10 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format("=== " + plugin.bundle.getString("info.baltop.header") + " ===", plugin.util.colorCurrency(10))
+                String.format(
+                    "=== " + plugin.bundle.getString("info.baltop.header") + " ===",
+                    plugin.util.colorCurrency(10)
+                )
             ),
             sender.nextMessage()
         )
@@ -779,10 +791,12 @@ class BankCommandTest {
             assertEquals(
                 plugin.util.formatMessage(
                     String.format(
-                        plugin.bundle.getString("info.baltop.entry"),
+                        $$"#%1$s %2$s - " +
+                                String.format(
+                                    plugin.bundle.getString("info.currency"), plugin.util.colorCurrency(expectedBalance)
+                                ),
                         index + 1,
                         player.name,
-                        plugin.util.colorCurrency(expectedBalance)
                     )
                 ),
                 sender.nextMessage()
@@ -805,17 +819,9 @@ class BankCommandTest {
 
         assertEquals(
             plugin.util.formatMessage(
-                String.format("=== " + plugin.bundle.getString("info.baltop.header") + " ===", plugin.util.colorCurrency(2))
-            ),
-            sender.nextMessage()
-        )
-        assertEquals(
-            plugin.util.formatMessage(
                 String.format(
-                    plugin.bundle.getString("info.baltop.entry"),
-                    1,
-                    "RichPlayer",
-                    plugin.util.colorCurrency(1000)
+                    "=== " + plugin.bundle.getString("info.baltop.header") + " ===",
+                    plugin.util.colorCurrency(2)
                 )
             ),
             sender.nextMessage()
@@ -823,10 +829,25 @@ class BankCommandTest {
         assertEquals(
             plugin.util.formatMessage(
                 String.format(
-                    plugin.bundle.getString("info.baltop.entry"),
+                    $$"#%1$s %2$s - " +
+                            String.format(
+                                plugin.bundle.getString("info.currency"), plugin.util.colorCurrency(1000)
+                            ),
+                    1,
+                    "RichPlayer",
+                )
+            ),
+            sender.nextMessage()
+        )
+        assertEquals(
+            plugin.util.formatMessage(
+                String.format(
+                    $$"#%1$s %2$s - " +
+                            String.format(
+                                plugin.bundle.getString("info.currency"), plugin.util.colorCurrency(500)
+                            ),
                     2,
                     "MiddlePlayer",
-                    plugin.util.colorCurrency(500)
                 )
             ),
             sender.nextMessage()

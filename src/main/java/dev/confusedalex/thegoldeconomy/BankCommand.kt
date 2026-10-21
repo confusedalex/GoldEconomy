@@ -296,11 +296,12 @@ class BankCommand(val bank: Bank, val bundle: ResourceBundle, val util: Util) : 
             player.sendMessage(
                 util.formatMessage(
                     String.format(
-                        bundle.getString("info.baltop.entry"),
+                        $$"#%1$s %2$s - " +
+                                String.format(bundle.getString("info.currency"),
+                        util.colorCurrency(balance.value)),
                         index + 1,
                         playerName,
-                        util.colorCurrency(balance.value)
-                    )
+                                )
                 )
             )
         }
